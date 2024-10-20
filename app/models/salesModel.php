@@ -5,7 +5,7 @@ class SalesModel extends BaseModel
     public function createSale($tree_id, $buyer_id)
     {
         $query = "INSERT INTO `sales`( `tree_id`, `buyer_id`) 
-                  VALUES ( :tree_id, :buyer_id)";
+                  VALUES ( :tree_id, :buyer_id)";//no need to add sale_date since it has current date as Default
 
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':tree_id', $tree_id);
