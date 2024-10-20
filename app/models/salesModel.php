@@ -3,6 +3,7 @@ require_once 'databaseModel.php';
 
 class SalesModel extends BaseModel
 {
+    
     /**
      * Creates a sale record in the database.
      *

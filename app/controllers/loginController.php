@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once '../models/loginModel.php';
+require_once '../models/usersModel.php';
 class loginController {
     public function __construct() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['action'] == 'login') {
-                self::handleLogin();
+                self::authLogin();
             } if ($_POST['action'] == 'register') {
                 self::routeRegister();
                         
@@ -13,14 +13,18 @@ class loginController {
         }
     }
     
-    public static function handleLogin() {
-        $userModel = new loginModel('login');
-        $username = $_POST['username'];
+    public static function authLogin() {
+        $userModel = new UsersModel();
+        $email = $_POST['email'];
         $password = $_POST['password'];
-        $hashedInputPassword = md5($password);
-        $user = $userModel->getUserByUsername($username);
+    
+        // Intentar recuperar el usuario por el correo electrónico
+        $user = $userModel->handleLogin($email, $password);
+    
         if ($user) {
-            if ($hashedInputPassword === $user['password']) {
+            // Verificar la contraseña con la que se recuperó el usuario
+            if (password_verify($password, $user['password'])) {
+                // Iniciar sesión
                 $_SESSION['user_id'] = $user['id'];
                 echo "<script>
                         alert('Login exitoso');
@@ -40,11 +44,8 @@ class loginController {
                     window.location.href = 'http://userpractice.com/app/views/login.php';
                   </script>";
             exit(); 
-        
-        
         }
-    }
-    public static function routeRegister(){
+    }    public static function routeRegister(){
         header('Location:http://userpractice.com/app/views/register.php');
         exit();
     }

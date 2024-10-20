@@ -3,6 +3,10 @@ require_once 'databaseModel.php';
 
 class UsersModel extends BaseModel
 {
+    public function __construct() {
+        parent::__construct('users'); 
+    }
+ 
     /**
      * Creates a new user record.
      *
