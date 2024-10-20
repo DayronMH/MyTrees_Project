@@ -32,7 +32,7 @@ class baseModel
     private function connectToDatabase(): void
     {
         try {
-            $this->db = Database::connect('my_trees');
+            $this->db = Database::connect('mytrees');
         } catch (Exception $e) {
             // Handle the error, log it, or rethrow it
             throw new Exception("Database connection failed: " . $e->getMessage());
