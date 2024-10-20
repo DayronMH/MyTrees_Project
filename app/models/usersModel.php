@@ -1,39 +1,90 @@
 <?php
 require_once 'databaseModel.php';
-class usersModel extends BaseModel
-{
-    public function createUser($name, $email, $password, $role, $phone, $address, $country)
-    {
-        $query = "INSERT INTO `users`( `name`, `email`, `password`, `phone`, `address`, `country`) 
-                  VALUES ( :name, :email, :password, :phone, :address, :country)";
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':phone', $phone);
-        $stmt->bindParam(':address', $address);
-        $stmt->bindParam(':country', $country);
-        return $stmt->execute();
+class UsersModel extends BaseModel
+{
+    /**
+     * Creates a new user record.
+     *
+     * @param string $name The name of the user.
+     * @param string $email The email of the user.
+     * @param string $password The password of the user.
+     * @param string $role The role of the user.
+     * @param string $phone The phone number of the user.
+     * @param string $address The address of the user.
+     * @param string $country The country of the user.
+     * @return bool Returns true on success, false on failure.
+     */
+    public function createUser (string $name, string $email, string $password, string $role, string $phone, string $address, string $country): bool
+    {
+        // Hash the password before storing it
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        
+        $query = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `phone`, `address`, `country`) 
+                  VALUES (:name, :email, :password, :role, :phone, :address, :country)";
+        
+        return $this->executeQuery($query, [
+            ':name' => $name,
+            ':email' => $email,
+            ':password' => $hashedPassword,
+            ':role' => $role,
+            ':phone' => $phone,
+            ':address' => $address,
+            ':country' => $country
+        ]);
     }
 
-    public function handleLogin($email, $password)
+    /**
+     * Handles user login by checking email and password.
+     *
+     * @param string $email The user's email.
+     * @param string $password The user's password.
+     * @return array|null Returns user data if successful, null otherwise.
+     */
+    public function handleLogin(string $email, string $password): ?array
     {
         $query = "SELECT * FROM `users` WHERE `email` = :email";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Verify the password
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
+        
+        return null; // Return null if login fails
     }
 
-    public function getUsers()
+    /**
+     * Retrieves all users.
+     *
+     * @return array Returns an array of users.
+     */
+    public function getUsers(): array
     {
         $query = "SELECT * FROM `users`";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->executeQuery($query);
     }
-    
+
+    /**
+     * Executes a query and fetches the results.
+     *
+     * @param string $query The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @return mixed Returns the result of the query execution.
+     */
+    private function executeQuery(string $query, array $params = []): mixed
+    {
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($params);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Handle the error, log it, or rethrow it
+            throw new Exception("Database query failed: " . $e->getMessage());
+        }
+    }
 }
