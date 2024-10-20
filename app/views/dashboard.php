@@ -12,7 +12,6 @@
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <?php
-            // Aquí deberías obtener los datos reales de tu base de datos
             $amigosRegistrados = 0; // Placeholder
             $arbolesDisponibles = 0; // Placeholder
             $arbolesVendidos = 0; // Placeholder
