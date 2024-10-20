@@ -11,7 +11,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #d4e6d9;
+    background-color: #DDDBAE;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,7 +40,7 @@ body {
 .leaf:nth-child(5) { left: 90%; animation: fall 14s linear infinite 8s; }
 
 .login-container {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: #d4e6d9;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -56,7 +56,7 @@ body {
 
 /* Remaining styles unchanged */
 h1 {
-    color: #2e7d32;
+    color: #4b9023;
     text-align: center;
     margin-bottom: 1.5rem;
 }
@@ -75,17 +75,17 @@ input {
 }
 
 input:hover {
-    border-color: #2e7d32;
+    border-color: #4b9023;
 }
 
 input:focus {
     outline: none;
-    border-color: #2e7d32;
+    border-color: #4b9023;
     box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
 }
 
 button {
-    background-color: #2e7d32;
+    background-color: #4b9023;
     color: white;
     border: none;
     padding: 0.75rem;
@@ -142,15 +142,15 @@ button:active::after {
 p {
     text-align: center;
     margin: 1rem 0;
-    color: #2e7d32;
+    color: #4b9023;
 }
 
 .register-button {
-    background-color: #c62828;
+    background-color: #CF3A29;
 }
 
 .register-button:hover {
-    background-color: #b71c1c;
+    background-color: #CF3A29;
 }
 
 .tree-icon {
@@ -172,7 +172,7 @@ p {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    border: 3px solid #2e7d32;
+    border: 3px solid #4b9023;
 }
 
 .tree-circle span {

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MyTrees</title>
-    <link rel="stylesheet" href="http://mytrees.com/public/login.css">
+    <link rel="stylesheet" href="http://miproyecto.local.com/MyTrees_Project/public/login.css">
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <div class="leaf"><span>🍁</span></div>
     <div class="leaf"><span>🌿</span></div>
     <div class="leaf"><span>🌱</span></div>
-    <div class="leaf"><span>🍀</span></div>
+
 
     <div class="login-container">
         <div class="tree-icon">
