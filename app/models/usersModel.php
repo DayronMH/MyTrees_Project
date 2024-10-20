@@ -15,6 +15,7 @@ class UsersModel extends BaseModel
      * @param string $country The country of the user.
      * @return bool Returns true on success, false on failure.
      */
+
     public function createUser (string $name, string $email, string $password, string $role, string $phone, string $address, string $country): bool
     {
         // Hash the password before storing it
@@ -33,6 +34,36 @@ class UsersModel extends BaseModel
             ':country' => $country
         ]);
     }
+
+
+    /**
+     * Creates a new default Friend user record.
+     *
+     * @param string $name The name of the user.
+     * @param string $email The email of the user.
+     * @param string $password The password of the user.
+     * @param string $phone The phone number of the user.
+     * @param string $address The address of the user.
+     * @param string $country The country of the user.
+     * @return bool Returns true on success, false on failure.
+     */
+    public function createFriendUser(string $name, string $email, string $password, string $phone, string $address, string $country): bool
+    {
+    // Hash the password before storing it
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+    $query = "INSERT INTO `users` (`name`, `email`, `password`, `phone`, `address`, `country`) 
+              VALUES (:name, :email, :password, :phone, :address, :country)";
+    
+    return $this->executeQuery($query, [
+        ':name' => $name,
+        ':email' => $email,
+        ':password' => $hashedPassword,
+        ':phone' => $phone,
+        ':address' => $address,
+        ':country' => $country
+    ]);
+}
 
     /**
      * Handles user login by checking email and password.
