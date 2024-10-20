@@ -36,7 +36,7 @@ class UsersModel extends BaseModel
     }
 
 
-      /**
+    /**
      * Creates a new default Friend user record.
      *
      * @param string $name The name of the user.
