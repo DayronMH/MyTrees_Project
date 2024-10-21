@@ -1,71 +1,69 @@
 <?php
-require_once '../models/registerModel.php';
-session_start();
+require_once '../models/usersModel.php';
 
-class Register {
+class RegisterController {
     public function __construct() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ($_POST['action'] == 'save') {
-                $this->addUser();
+            if ($_POST['action'] === 'register') {
+                $this->registerUser();
+            } elseif ($_POST['action'] === 'login') {
+                $this->redirectToLogin();
             }
         }
     }
 
-    public function addUser() {
-        $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_NUMBER_INT);
-        $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $province_id = $this->getProvince();
+    /**
+     * Register a new user.
+     */
+    public function registerUser() {
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $phone = $_POST['phone'] ?? '';
+        $address = $_POST['address'] ?? '';
 
-        if (empty($username)) $mistakes[] = 'El nombre de usuario no puede estar vacío.';
-        if (empty($password) || strlen($password) < 8) $mistakes[] = 'La contraseña debe tener más de 8 caracteres.';
-        if (empty($name)) $mistakes[] = 'El nombre no puede estar vacío.';
-        if (empty($lastname)) $mistakes[] = 'El apellido no puede estar vacío.';
-        if (empty($phone) || !preg_match('/^[0-9]{8}$/', $phone)) $mistakes[] = 'El número de teléfono debe tener 8 dígitos.';
-        if (empty($address)) $mistakes[] = 'La dirección no puede estar vacía.';
-        if (empty($province_id)) $mistakes[] = 'Debe seleccionar una provincia válida.';
-        if (empty($mistakes)) {
-            $loginModel = new loginModel('login');
-            $registerModel = new RegisterModel('users');
-            $hashedPassword = md5($password); 
-            $totalUsers = $registerModel->getAllUsers(); // Obtén todos los usuarios
-            $role_id = (count($totalUsers) == 0) ? 1 : 2;
-            $_SESSION['role_id'] = $role_id;
-            $loginId = $loginModel->createLogin($username, $hashedPassword);
-
-            if ($loginId) {
-                echo '<div class="alert alert-success">Login registrado correctamente.</div>';
-                 
-                $registerModel->createUser($name,$lastname,$phone,$address,$loginId,$province_id,$role_id);
-                echo '<div class="alert alert-success">Usuario registrado correctamente.</div>';
-                header('Location: http://userpractice.com/');
-                exit();
-            } else {
-                $mistakes[] = 'Error al registrar el login.';
-            }
-        }
-        if (!empty($mistakes)) {
-            foreach ($mistakes as $error) {
-                echo "<script>alert('Error: {$error}');
-                    window.location.href = 'http://userpractice.com/app/views/register.php';    
-               </script>";
-            }
+        // Input validation (you can add more validation rules as needed)
+        if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($address)) {
+            echo "<script>
+                    alert('Todos los campos son obligatorios.');
+                    window.history.back();
+                  </script>";
             exit();
         }
-    }
 
-    private function getProvince() {
-        $province_id = filter_input(INPUT_POST, 'province', FILTER_VALIDATE_INT);
+        // Use UsersModel to create a new user
+        $userModel = new UsersModel();
 
-        if ($province_id && $province_id >= 1 && $province_id <= 7) {
-            return $province_id; 
+        // Check if the user already exists
+        $existingUser = $userModel->handleLogin($email);  // Assuming this method returns user data if found
+        if ($existingUser) {
+            echo "<script>
+                    alert('El usuario con este correo ya existe.');
+                    window.history.back();
+                  </script>";
+            exit();
+        }
+
+        // Register the new user
+        $isCreated = $userModel->createUser($name, $email, $password, 'friend', $phone, $address, 'Costa Rica');  // Change role and country as needed
+
+        if ($isCreated) {
+            echo "<script>
+                    alert('Registro exitoso. Ahora puedes iniciar sesión.');
+                    window.location.href = 'http://mytrees.com/app/views/login.php';
+                  </script>";
         } else {
-            return null; 
+            echo "<script>
+                    alert('Ocurrió un error al registrar el usuario. Por favor, inténtalo de nuevo.');
+                    window.history.back();
+                  </script>";
         }
     }
-}
 
-$regis = new Register();
+  
+    public function redirectToLogin() {
+        header('Location: http://mytrees.com/app/views/login.php');
+        exit();
+    }
+}
+$registerController = new RegisterController();

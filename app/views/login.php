@@ -7,7 +7,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MyTrees</title>
-    <link rel="stylesheet" href="http://miproyecto.local.com/MyTrees_Project/public/login.css">
+    <link rel="stylesheet" href="http://mytrees.com/public/login.css">
 </head>
 <body>
     
@@ -34,11 +34,7 @@ session_start();
         <div class="right-section">
             <h1>Bienvenido</h1>
             <form method="POST" action="http://mytrees.com/app/controllers/loginController.php">
-<<<<<<< HEAD
                 <input type="text" name="email" placeholder="Usuario" required>
-=======
-                <input type="text" name="username" placeholder="Usuario" required>
->>>>>>> origin/morera
                 <input type="password" name="password" placeholder="Contraseña" required>
                 <button type="submit" name="action" value="login">Iniciar sesión</button>
                 <p>¿No tienes usuario?</p>

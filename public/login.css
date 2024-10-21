@@ -33,17 +33,14 @@ body {
 
 .leaf {
     position: absolute;
-<<<<<<< HEAD
     font-size: 60px;
     opacity: 0.4;
     z-index: 1;
     top: -10%;
-=======
     font-size: 60px; /* Increased size */
     opacity: 0.4; /* Added transparency */
     z-index: 1; /* Increased z-index to be above the container */
     top: -10%; /* Start all leaves above the viewport */
->>>>>>> origin/morera
 }
 
 .leaf span {
