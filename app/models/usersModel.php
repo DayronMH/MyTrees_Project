@@ -76,21 +76,14 @@ class UsersModel extends BaseModel
      * @param string $password The user's password.
      * @return array|null Returns user data if successful, null otherwise.
      */
-    public function handleLogin(string $email, string $password): ?array
+    public function handleLogin(string $email): ?array
     {
         $query = "SELECT * FROM `users` WHERE `email` = :email";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        // Verify the password
-        if ($user && password_verify($password, $user['password'])) {
-            return $user;
-        }
-        
-        return null; // Return null if login fails
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -103,6 +96,7 @@ class UsersModel extends BaseModel
         $query = "SELECT * FROM `users`";
         return $this->executeQuery($query);
     }
+    
 
     /**
      * Executes a query and fetches the results.

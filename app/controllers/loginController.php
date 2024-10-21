@@ -1,8 +1,11 @@
 <?php
-session_start();
 require_once '../models/usersModel.php';
 class loginController {
     public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['action'] == 'login') {
                 self::authLogin();
@@ -17,18 +20,13 @@ class loginController {
         $userModel = new UsersModel();
         $email = $_POST['email'];
         $password = $_POST['password'];
-    
-        // Intentar recuperar el usuario por el correo electrónico
-        $user = $userModel->handleLogin($email, $password);
-    
+        $user = $userModel->handleLogin($email);
         if ($user) {
-            // Verificar la contraseña con la que se recuperó el usuario
-            if (password_verify($password, $user['password'])) {
-                // Iniciar sesión
+            if ($password == $user['password']) {
                 $_SESSION['user_id'] = $user['id'];
                 echo "<script>
                         alert('Login exitoso');
-                        window.location.href = 'http://userpractice.com/app/views/table.php';
+                        window.location.href = 'http://mytrees.com/app/views/dashboard';
                       </script>";
                 exit();
             } else {
@@ -41,8 +39,9 @@ class loginController {
         } else {
             echo "<script>
                     alert('Usuario no encontrado');
-                    window.location.href = 'http://userpractice.com/app/views/login.php';
-                  </script>";
+
+                  </script>" . $email;
+
             exit(); 
         }
     }    public static function routeRegister(){

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,7 +34,7 @@
         <div class="right-section">
             <h1>Bienvenido</h1>
             <form method="POST" action="http://mytrees.com/app/controllers/loginController.php">
-                <input type="text" name="username" placeholder="Usuario" required>
+                <input type="text" name="email" placeholder="Usuario" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
                 <button type="submit" name="action" value="login">Iniciar sesión</button>
                 <p>¿No tienes usuario?</p>
