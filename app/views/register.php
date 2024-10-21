@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - MyTrees</title>
-    <link rel="stylesheet" href="http://miproyecto.local.com/MyTrees_Project/public/register.css">
+    <link rel="stylesheet" href="http://mytrees.com/public/register.css">
 </head>
 <body>
     <div class="leaf"><span>🍂</span></div>
@@ -28,6 +28,7 @@
             <input type="password" name="password" placeholder="Contraseña" required>
             <input type="text" name="phone" placeholder="Número de teléfono" required>
             <input type="text" name="address" placeholder="Dirección" required>
+            <input type="text" name="country" placeholder="Pais" required>
             <button type="submit" name="action" value="register">Registrar</button>
             <button type="submit" name="action" value="login" class="register-button">Atrás</button>
         </form>

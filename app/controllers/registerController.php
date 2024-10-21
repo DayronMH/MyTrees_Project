@@ -1,8 +1,10 @@
 <?php
 require_once '../models/usersModel.php';
 
-class RegisterController {
-    public function __construct() {
+class RegisterController
+{
+    public function __construct()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['action'] === 'register') {
                 $this->registerUser();
@@ -15,15 +17,19 @@ class RegisterController {
     /**
      * Register a new user.
      */
-    public function registerUser() {
-        $name = $_POST['name'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $phone = $_POST['phone'] ?? '';
-        $address = $_POST['address'] ?? '';
+    public function registerUser()
+    {
+        // Sanitiza las entradas
+        $name = htmlspecialchars(filter_input(INPUT_POST, 'name', FILTER_DEFAULT));
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $password = htmlspecialchars(filter_input(INPUT_POST, 'password', FILTER_DEFAULT));
+        $phone = htmlspecialchars(filter_input(INPUT_POST, 'phone', FILTER_DEFAULT));
+        $address = htmlspecialchars(filter_input(INPUT_POST, 'address', FILTER_DEFAULT));
+        $country = htmlspecialchars(filter_input(INPUT_POST, 'country', FILTER_DEFAULT));
+        // Assuming this is a dropdown select field
 
         // Input validation (you can add more validation rules as needed)
-        if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($address)) {
+        if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($address) || empty($country)) {
             echo "<script>
                     alert('Todos los campos son obligatorios.');
                     window.history.back();
@@ -44,8 +50,7 @@ class RegisterController {
             exit();
         }
 
-        // Register the new user
-        $isCreated = $userModel->createUser($name, $email, $password, 'friend', $phone, $address, 'Costa Rica');  // Change role and country as needed
+        $isCreated = $userModel->createFriendUser($name, $email, $password, $phone, $address, $country);
 
         if ($isCreated) {
             echo "<script>
@@ -60,10 +65,11 @@ class RegisterController {
         }
     }
 
-  
-    public function redirectToLogin() {
+    public function redirectToLogin()
+    {
         header('Location: http://mytrees.com/app/views/login.php');
         exit();
     }
 }
+
 $registerController = new RegisterController();

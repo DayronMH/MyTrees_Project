@@ -3,10 +3,11 @@ require_once 'baseModel.php';
 
 class UsersModel extends BaseModel
 {
-    public function __construct() {
-        parent::__construct('users'); 
+    public function __construct()
+    {
+        parent::__construct('users');
     }
- 
+
     /**
      * Creates a new user record.
      *
@@ -19,16 +20,15 @@ class UsersModel extends BaseModel
      * @param string $country The country of the user.
      * @return bool Returns true on success, false on failure.
      */
-
-    public function createUser (string $name, string $email, string $password, string $role, string $phone, string $address, string $country): bool
+    public function createUser(string $name, string $email, string $password, string $role, string $phone, string $address, string $country): bool
     {
         // Hash the password before storing it
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        
+
         $query = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `phone`, `address`, `country`) 
                   VALUES (:name, :email, :password, :role, :phone, :address, :country)";
-        
-        return $this->executeQuery($query, [
+
+        return $this->executeNonQuery($query, [
             ':name' => $name,
             ':email' => $email,
             ':password' => $hashedPassword,
@@ -38,7 +38,6 @@ class UsersModel extends BaseModel
             ':country' => $country
         ]);
     }
-
 
     /**
      * Creates a new default Friend user record.
@@ -53,28 +52,44 @@ class UsersModel extends BaseModel
      */
     public function createFriendUser(string $name, string $email, string $password, string $phone, string $address, string $country): bool
     {
-    // Hash the password before storing it
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
-    $query = "INSERT INTO `users` (`name`, `email`, `password`, `phone`, `address`, `country`) 
-              VALUES (:name, :email, :password, :phone, :address, :country)";
-    
-    return $this->executeQuery($query, [
-        ':name' => $name,
-        ':email' => $email,
-        ':password' => $hashedPassword,
-        ':phone' => $phone,
-        ':address' => $address,
-        ':country' => $country
-    ]);
-}
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO `users` (`name`, `email`, `password`, `phone`, `address`, `country`) 
+                  VALUES (:name, :email, :password, :phone, :address, :country)";
+
+        return $this->executeNonQuery($query, [
+            ':name' => $name,
+            ':email' => $email,
+            ':password' => $hashedPassword,
+            ':phone' => $phone,
+            ':address' => $address,
+            ':country' => $country
+        ]);
+    }
 
     /**
-     * Handles user login by checking email and password.
+     * Executes a non-query SQL statement like INSERT, UPDATE, DELETE.
+     *
+     * @param string $query The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @return bool Returns true if the query was successful, false otherwise.
+     */
+    private function executeNonQuery(string $query, array $params = []): bool
+    {
+        try {
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Handle the error, log it, or rethrow it
+            throw new Exception("Database query failed: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Handles user login by checking email.
      *
      * @param string $email The user's email.
-     * @param string $password The user's password.
-     * @return array|null Returns user data if successful, null otherwise.
+     * @return array|null Returns user data if found, null otherwise.
      */
     public function handleLogin(string $email): ?array
     {
@@ -83,7 +98,9 @@ class UsersModel extends BaseModel
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        // Devuelve el resultado como un array o null si no se encuentra el usuario
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null; // Devuelve null si no hay resultados
     }
 
     /**
@@ -96,16 +113,15 @@ class UsersModel extends BaseModel
         $query = "SELECT * FROM `users`";
         return $this->executeQuery($query);
     }
-    
 
     /**
-     * Executes a query and fetches the results.
+     * Executes a query and fetches the results (used for SELECT queries).
      *
      * @param string $query The SQL query to execute.
      * @param array $params The parameters to bind to the query.
-     * @return mixed Returns the result of the query execution.
+     * @return array Returns the result set as an array.
      */
-    private function executeQuery(string $query, array $params = []): mixed
+    private function executeQuery(string $query, array $params = []): array
     {
         try {
             $stmt = $this->db->prepare($query);

@@ -21,12 +21,19 @@ class loginController {
         $email = $_POST['email'];
         $password = $_POST['password'];
         $user = $userModel->handleLogin($email);
+        if (empty($email) || empty($password)){
+            echo "<script>
+                    alert('Debes llenar los campos de email y contraseña');
+                    window.location.href = 'http://mytrees.com/app/views/login.php';
+                  </script>";
+            exit();
+        }
         if ($user) {
-            if ($password == $user['password']) {
+            if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 echo "<script>
                         alert('Login exitoso');
-                        window.location.href = 'http://mytrees.com/app/views/dashboard';
+                        window.location.href = 'http://mytrees.com/app/views/dashboard.php';
                       </script>";
                 exit();
             } else {
@@ -44,8 +51,8 @@ class loginController {
 
             exit(); 
         }
-    }    public static function routeRegister(){
-        header('Location:http://userpractice.com/app/views/register.php');
+    } public static function routeRegister(){
+        header('Location:http://mytrees.com/app/views/register.php');
         exit();
     }
     
