@@ -1,8 +1,13 @@
 <?php
-require_once 'databaseModel.php';
+require_once 'baseModel.php';
 
 class speciesModel extends BaseModel
 {
+    public function __construct()
+    {
+        parent::__construct('species');
+    }
+
     /**
      * Retrieves all species from the database.
      *
@@ -10,7 +15,7 @@ class speciesModel extends BaseModel
      */
     public function getAllSpecies(): array
     {
-        $query = "SELECT id, commercial_name, scientific_name FROM Species";
+        $query = "SELECT id, commercial_name, scientific_name FROM species"; // Asegúrate de que el nombre de la tabla sea correcto.
         return $this->executeQuery($query);
     }
 
@@ -22,7 +27,53 @@ class speciesModel extends BaseModel
      */
     public function getSpeciesById(int $speciesId)
     {
-        $query = "SELECT id, commercial_name, scientific_name FROM Species WHERE id = :species_id";
+        $query = "SELECT id, commercial_name, scientific_name FROM species WHERE id = :species_id";
+        return $this->executeQuery($query, [':species_id' => $speciesId]);
+    }
+
+    /**
+     * Creates a new species in the database.
+     *
+     * @param string $commercialName The commercial name of the species.
+     * @param string $scientificName The scientific name of the species.
+     * @return bool Returns true on success or false on failure.
+     */
+    public function createSpecies(string $commercialName, string $scientificName): bool
+    {
+        $query = "INSERT INTO species (commercial_name, scientific_name) VALUES (:commercial_name, :scientific_name)";
+        return $this->executeQuery($query, [
+            ':commercial_name' => $commercialName,
+            ':scientific_name' => $scientificName
+        ]);
+    }
+
+    /**
+     * Updates a species in the database.
+     *
+     * @param int $speciesId The ID of the species to update.
+     * @param string $commercialName The new commercial name of the species.
+     * @param string $scientificName The new scientific name of the species.
+     * @return bool Returns true on success or false on failure.
+     */
+    public function updateSpecies(int $speciesId, string $commercialName, string $scientificName): bool
+    {
+        $query = "UPDATE species SET commercial_name = :commercial_name, scientific_name = :scientific_name WHERE id = :species_id";
+        return $this->executeQuery($query, [
+            ':species_id' => $speciesId,
+            ':commercial_name' => $commercialName,
+            ':scientific_name' => $scientificName
+        ]);
+    }
+
+    /**
+     * Deletes a species from the database.
+     *
+     * @param int $speciesId The ID of the species to delete.
+     * @return bool Returns true on success or false on failure.
+     */
+    public function deleteSpecies(int $speciesId): bool
+    {
+        $query = "DELETE FROM species WHERE id = :species_id";
         return $this->executeQuery($query, [':species_id' => $speciesId]);
     }
 

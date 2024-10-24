@@ -100,7 +100,17 @@ class UsersModel extends BaseModel
 
         // Devuelve el resultado como un array o null si no se encuentra el usuario
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ?: null; // Devuelve null si no hay resultados
+        return $result 
+        ?: null; // Devuelve null si no hay resultados
+    }
+    public function countFriends(): int {
+        $query = "SELECT COUNT(*) as count FROM `users` WHERE `role` = 'friend'";
+        
+        // Ejecutar la consulta
+        $result = $this->executeQuery($query);
+        
+        // Asegurarte de que estás retornando solo el valor del conteo
+        return (int)$result[0]['count'];
     }
 
     /**
@@ -131,5 +141,12 @@ class UsersModel extends BaseModel
             // Handle the error, log it, or rethrow it
             throw new Exception("Database query failed: " . $e->getMessage());
         }
+    }
+    public function getUserById($id)
+    {
+        $query = $this->db->prepare("SELECT * FROM users " . " WHERE id = :id");
+        $query->bindParam(':id', $id);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 }

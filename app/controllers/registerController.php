@@ -39,7 +39,6 @@ class RegisterController
 
         // Use UsersModel to create a new user
         $userModel = new UsersModel();
-
         // Check if the user already exists
         $existingUser = $userModel->handleLogin($email);  // Assuming this method returns user data if found
         if ($existingUser) {

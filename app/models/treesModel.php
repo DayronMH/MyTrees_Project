@@ -1,8 +1,13 @@
 <?php
-require_once 'databaseModel.php';
+require_once 'baseModel.php';
+
 
 class TreesModel extends BaseModel
 {
+    public function __construct()
+    {
+        parent::__construct('users');
+    }
     /**
      * Creates a new tree with default values for owner, height, and availability.
      *
@@ -144,6 +149,26 @@ class TreesModel extends BaseModel
         $query = "DELETE FROM `trees` WHERE `id` = :id";
         return $this->executeQuery($query, [':id' => $id]);
     }
+    public function countAvailableTrees(): int {
+        $query = "SELECT COUNT(*) as count FROM `trees` WHERE `available` = 1";
+        
+        // Ejecutar la consulta
+        $result = $this->executeQuery($query);
+        
+        // Asegurarte de que estás retornando solo el valor del conteo
+        return (int)$result[0]['count'];
+    }
+    
+    public function countSoldTrees(): int {
+        $query = "SELECT COUNT(*) as count FROM `trees` WHERE `available` = 0";
+        
+        // Ejecutar la consulta
+        $result = $this->executeQuery($query);
+        
+        // Asegurarte de que estás retornando solo el valor del conteo
+        return (int)$result[0]['count'];
+    }
+    
 
     /**
      * Executes a query and fetches the results.
