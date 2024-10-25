@@ -3,6 +3,10 @@ require_once 'databaseModel.php';
 
 class TreesModel extends BaseModel
 {
+    public function __construct()
+    {
+        parent::__construct('trees');
+    }
     /**
      * Creates a new tree with default values for owner, height, and availability.
      *
@@ -88,9 +92,19 @@ class TreesModel extends BaseModel
      *
  * @return array Returns an array of available trees.
      */
-    public function getAvailableTrees(): array
+    public function countAvailableTrees(): array
     {
         $query = "SELECT * FROM Trees WHERE available = TRUE ORDER BY price ASC";
+        return $this->executeQuery($query);
+    }
+     /**
+     * Retrieves all sold trees.
+     *
+ * @return array Returns an array of sold trees.
+     */
+    public function countSoldTrees(): array
+    {
+        $query = "SELECT * FROM Trees WHERE available = 0 ORDER BY price ASC";
         return $this->executeQuery($query);
     }
 
@@ -105,6 +119,7 @@ class TreesModel extends BaseModel
         $query = "SELECT * FROM Trees WHERE species_id = :species_id ORDER BY height DESC";
         return $this->executeQuery($query, [':species_id' => $species_id]);
     }
+    
 
     /**
      * Retrieves information about a tree by ID.

@@ -3,6 +3,10 @@ require_once 'databaseModel.php';
 
 class speciesModel extends BaseModel
 {
+    public function __construct()
+    {
+        parent::__construct('species');
+    }
     /**
      * Retrieves all species from the database.
      *
@@ -25,6 +29,23 @@ class speciesModel extends BaseModel
         $query = "SELECT id, commercial_name, scientific_name FROM Species WHERE id = :species_id";
         return $this->executeQuery($query, [':species_id' => $speciesId]);
     }
+    public function getCommercialNames()
+    {
+        $query = "SELECT id, commercial_name FROM Species";
+        return $this->executeQuery($query);
+    }
+    public function getScientificNames()
+    {
+        $query = "SELECT id, scientific_name FROM Species ";
+        return $this->executeQuery($query);
+    }
+
+    public function deleteSpecies($id)
+    {
+        $query = "DELETE FROM Species WHERE id = ?";
+        $this->executeQuery($query, [$id]);
+    }
+
 
     /**
      * Executes a query and returns results.

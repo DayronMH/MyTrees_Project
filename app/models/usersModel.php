@@ -103,6 +103,18 @@ class UsersModel extends BaseModel
         return $result ?: null; // Devuelve null si no hay resultados
     }
 
+    public function countFriends(): int
+    {
+        $query = "SELECT COUNT(*) as friend_count 
+              FROM `users` 
+              WHERE `role` = 'friend'";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) $result['friend_count'];
+    }
     /**
      * Retrieves all users.
      *
@@ -112,6 +124,11 @@ class UsersModel extends BaseModel
     {
         $query = "SELECT * FROM `users`";
         return $this->executeQuery($query);
+    }
+    public function getUserByLoginId($loginId): array
+    {
+        $query = "SELECT * FROM `users` WHERE 'login_id = :login_id";
+        return $this->executeQuery($query, $loginId);
     }
 
     /**
