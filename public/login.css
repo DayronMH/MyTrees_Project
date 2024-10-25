@@ -7,17 +7,31 @@
     --background-color: #DDDBAE;
     --container-bg: #d4e6d9;
 }
+
 @keyframes fall {
     0% {
         top: -30%;
         transform: translateX(0) rotateZ(90deg);
     }
     100% {
-        top: 110%; /* Fall down past the bottom of the viewport */
+        top: 110%;
         transform: translateX(90px) rotateZ(360deg);
     }
 }
 
+/* Reset básico y estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow: hidden; /* Bloquea el scroll vertical y horizontal */
+    height: 100%; /* Asegura que el body ocupe toda la altura de la ventana */
+    position: fixed; /* Previene el scroll en dispositivos móviles */
+    width: 100%; /* Asegura que el body ocupe todo el ancho */
+}
 
 body {
     font-family: Arial, sans-serif;
@@ -25,23 +39,28 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-    overflow: hidden;
     position: relative;
+    padding: 1rem;
 }
 
+/* Resto del código permanece igual */
 .leaf {
     position: absolute;
-    font-size: 60px; /* Increased size */
-    opacity: 0.4; /* Added transparency */
-    z-index: 2; /* Increased z-index to be above the container */
-    top: -10%; /* Start all leaves above the viewport */
+    font-size: clamp(30px, 5vw, 60px);
+    opacity: 0.4;
+    z-index: 2;
+    top: -10%;
 }
-
 
 .leaf span {
     display: inline-block;
+}
+
+/* Ajuste de posiciones de hojas para diferentes tamaños */
+@media (max-width: 768px) {
+    .leaf:nth-child(even) { display: none; }
 }
 
 .leaf:nth-child(1) { left: 10%; animation: fall 5s linear infinite 1s; }
@@ -55,25 +74,38 @@ body {
 .leaf:nth-child(9) { left: 80%; animation: fall 8s linear infinite 2s; }
 .leaf:nth-child(10) { left: 95%; animation: fall 6s linear infinite 1s; }
 
+/* Contenedor principal responsive */
 .login-container {
     background-color: var(--container-bg);
-    padding: 2rem;
+    padding: clamp(1rem, 3vw, 2rem);
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 800px;
+    width: 100%;
+    max-width: 800px;
     display: flex;
+    flex-direction: row;
     transition: all 0.5s ease;
     z-index: 2;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        max-width: 400px;
+        gap: 1rem;
+    }
 }
 
 .login-container:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(168, 52, 13, 0.5)
+    box-shadow: 0 10px 25px rgba(168, 52, 13, 0.5);
 }
 
+/* Secciones izquierda y derecha */
 .left-section, .right-section {
     flex: 1;
-    padding: 1rem;
+    padding: clamp(0.5rem, 2vw, 1rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -83,27 +115,23 @@ body {
     align-items: center;
 }
 
+/* Títulos responsivos */
 h1 {
     color: var(--primary-color);
     text-align: center;
-    margin: 1rem 0;
-    font-size: 3rem;
+    margin: clamp(0.5rem, 2vw, 1rem) 0;
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tree-icon {
-    margin-bottom: 1rem;
-    
-}
-.tree-icon:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 14, 14, 0.5)
+    margin-bottom: clamp(0.5rem, 2vw, 1rem);
 }
 
 .tree-circle {
-    width: 180px;
-    height: 180px;
+    width: clamp(120px, 30vw, 180px);
+    height: clamp(120px, 30vw, 180px);
     background-color: transparent;
     border-radius: 50%;
     display: flex;
@@ -120,23 +148,27 @@ h1 {
 }
 
 .tree-circle span {
-    font-size: 7rem;
+    font-size: clamp(4rem, 8vw, 7rem);
     transform: translateY(-2px);
     position: relative;
     z-index: 2;
 }
 
+/* Formulario responsive */
 form {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 input {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
+    margin-bottom: clamp(0.5rem, 2vw, 1rem);
+    padding: clamp(0.4rem, 1.5vw, 0.5rem);
     border: 2px solid var(--primary-light);
     border-radius: 4px;
     transition: all 0.3s ease;
+    width: 100%;
+    font-size: clamp(14px, 2vw, 16px);
 }
 
 input:hover {
@@ -149,21 +181,23 @@ input:focus {
     box-shadow: 0 0 0 3px rgba(207, 58, 41, 0.2);
 }
 
+/* Botones responsivos */
 button {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 0.75rem;
+    padding: clamp(0.5rem, 2vw, 0.75rem);
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+    margin-bottom: clamp(0.5rem, 2vw, 1rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
+    width: 100%;
 }
 
 button:hover {
@@ -180,9 +214,30 @@ button:hover {
     background-color: #a52a1d;
 }
 
+/* Texto responsive */
 p {
     text-align: center;
-    margin: 1rem 0;
+    margin: clamp(0.5rem, 2vw, 1rem) 0;
     color: var(--primary-color);
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+}
+
+/* Ajustes adicionales para dispositivos muy pequeños */
+@media (max-width: 360px) {
+    .login-container {
+        padding: 1rem;
+    }
+    
+    .tree-circle {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .tree-circle span {
+        font-size: 3.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
 }

@@ -18,6 +18,16 @@ class speciesModel extends BaseModel
         $query = "SELECT id, commercial_name, scientific_name FROM species"; // Asegúrate de que el nombre de la tabla sea correcto.
         return $this->executeQuery($query);
     }
+    public function getCommercialNames(): array
+    {
+        $query = "SELECT id, commercial_name FROM species";
+        return $this->executeQuery($query);
+    }
+    public function getScientificNames(): array
+    {
+        $query = "SELECT scientific_name FROM species";
+        return $this->executeQuery($query);
+    }
 
     /**
      * Retrieves a species by its ID.

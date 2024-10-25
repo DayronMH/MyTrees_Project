@@ -1,172 +1,306 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: content-box;
 }
 
 body {
-    background-color: #f0f5f1;
-    padding: 2rem;
-    color: #2c3e50;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #DDDBAE 0%, #96ec857f 100%);
+    min-height: 100vh;
+    overflow-y: auto;
 }
 
-.dashboard {
-    max-width: 1200px;
-    margin: 0 auto;
+/* Arreglando el header y el h2 */
+.dashboard-header {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 40px;
+    position: relative;
+    color: #34495e;
+    text-transform: uppercase;
+    height: auto;
 }
 
-.welcome-message {
-    background: #2e7d32;
+.dashboard-header h1 {
+    margin-bottom: 20px;
+    color: #34495e;
+ 
+}
+
+/* Estilos para el hr (línea decorativa) */
+.dashboard-header hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    width: 80%;
+    margin: 0 auto 20px auto;
+    border-radius: 2px;
+    margin-bottom: 5em;
+}
+
+.species-description {
+    transition: all 0.3s ease;
+    margin: 10px 0;
+}
+
+.action-button {
+    padding: 5px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background-color: #4CAF50;
     color: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.dashboard-header h2 {
+    margin-top: 20px;
+    color: #34495eab;
+    font-size: 1.5em;
 }
 
-.welcome-message h1 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-}
-
-.welcome-message p {
-    font-size: 1.1rem;
-    opacity: 0.9;
-}
-
+/* Estilos para las estadísticas */
 .stats-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
 }
 
 .stat-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border-left: 5px solid #4caf50;
-}
-
-.stat-card h3 {
-    color: #2e7d32;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-card .number {
-    color: #1b5e20;
-    font-size: 2.2rem;
-    font-weight: bold;
-}
-
-.species-table {
-    width: 100%;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border-collapse: collapse;
-    margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
     overflow: hidden;
 }
 
-.species-table th {
-    background: #2e7d32;
-    color: white;
-    padding: 1rem;
-    text-align: left;
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.species-table td {
-    padding: 1rem;
-    border-bottom: 1px solid #e8f5e9;
+.stat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
 }
 
-.species-table tr:hover {
-    background-color: #f1f8e9;
+.stat-card:hover::before {
+    opacity: 1;
 }
 
-.species-table tr:last-child td {
-    border-bottom: none;
+.stat-content {
+    text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
-.btn {
-    padding: 0.5rem 1rem;
+.stat-number {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background: linear-gradient(45deg, #3498db, #2ecc71);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.stat-title {
+    color: #34495e;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Colores específicos para cada card */
+.stat-card:nth-child(1) .stat-number {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(2) .stat-number {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(3) .stat-number {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Efecto de brillo en hover */
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.2) 0%,
+        rgba(255,255,255,0.2) 40%,
+        rgba(255,255,255,0.6) 50%,
+        rgba(255,255,255,0.2) 60%,
+        rgba(255,255,255,0.2) 100%
+    );
+    transform: rotate(30deg);
+    opacity: 0;
+    transition: transform 0.7s ease, opacity 0.7s ease;
+}
+
+.stat-card:hover::after {
+    opacity: 1;
+    transform: rotate(30deg) translate(150%, -150%);
+}
+
+
+.species-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
+
+.species-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.species-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.species-info {
+    text-align: center;
+}
+
+.species-name {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.species-content {
+    margin-bottom: 20px;
+}
+
+.species-description {
+    font-size: 1em;
+    color: #555;
+}
+
+.species-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.action-button {
+    padding: 10px 15px;
     border: none;
     border-radius: 5px;
+    color: #fff;
+    font-size: 0.9em;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
-.btn-primary {
-    background: #43a047;
-    color: white;
+.view-btn {
+    background-color: #3498db;
 }
 
-.btn-danger {
-    background: #e53935;
-    color: white;
+.view-btn:hover {
+    background-color: #2980b9;
 }
 
-.btn-primary:hover {
-    background: #2e7d32;
-    transform: translateY(-2px);
+.edit-btn {
+    background-color: #2ecc71;
 }
 
-.btn-danger:hover {
-    background: #c62828;
-    transform: translateY(-2px);
+.edit-btn:hover {
+    background-color: #27ae60;
 }
 
-.logout-form {
-    text-align: right;
-    margin-bottom: 1rem;
+.delete-btn {
+    background-color: #e74c3c;
 }
 
-.input-field {
-    padding: 0.5rem;
-    border: 1px solid #c8e6c9;
-    border-radius: 4px;
-    margin-right: 0.5rem;
-    font-size: 0.9rem;
+.delete-btn:hover {
+    background-color: #c0392b;
 }
 
-.input-field:focus {
-    outline: none;
-    border-color: #43a047;
-    box-shadow: 0 0 0 2px rgba(67, 160, 71, 0.2);
-}
-
-.species-form {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
+    .species-container {
+        gap: 20px;
+    }
+
+    .species-card {
+        padding: 15px;
+    }
+    
+    .species-name {
+        font-size: 1.6em;
+    }
+    
+    .species-description {
+        font-size: 0.9em;
+    }
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-header h1 {
+        font-size: 28px;
+    }
+    
+    .stat-number {
+        font-size: 36px;
+    }
+    
+    .stat-title {
+        font-size: 16px;
+    }
+    
     .stats-container {
-        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
     }
+}
 
-    .species-form {
-        flex-direction: column;
-        align-items: stretch;
+@media (max-width: 480px) {
+    .dashboard-header {
+        padding: 20px 10px;
     }
-
-    .species-table td {
-        padding: 0.5rem;
-    }
-
-    .welcome-message {
-        padding: 1rem;
-    }
-
-    .welcome-message h1 {
-        font-size: 1.5rem;
+    
+    .stat-card {
+        padding: 20px;
     }
 }

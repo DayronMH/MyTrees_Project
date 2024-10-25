@@ -2,158 +2,118 @@
 require_once '../models/usersModel.php';
 require_once '../models/treesModel.php';
 require_once '../models/speciesModel.php';
-session_start();
 
-class AdminDashboardController
-{
-    private $trees;
-    private $users;
-    private $species;
-    private $userData = null;
-    private $data;
+class AdminDashboardController {
+    private $userModel;
+    private $treeModel;
+    private $speciesModel;
+    private $user;
+    private $roleId;
 
-    public function __construct()
-    {
-        if ($this->checkAuth()) {
-            $this->initializeModels();
+    public $friendsCount, $availableTreesCount, $soldTreesCount;
+
+    public function __construct() {
+        // Iniciar sesión si no está iniciada
+        if(session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
+        $this->userModel = new UsersModel();
+        $this->treeModel = new TreesModel();
+        $this->speciesModel = new SpeciesModel();
+
+        $this->checkAuth();
+        $this->fetch_stats();
+        $this->speciesCRUD();
+        $this->handlePostActions();
     }
 
-    private function initializeModels()
-    {
-        $this->users = new UsersModel();
-        $this->trees = new TreesModel();
-        $this->species = new SpeciesModel();
-        $this->data = [];
-    }
-
-    public function renderDashboard()
-    {
-        // Verificamos de nuevo la autenticación por seguridad
-        if (!$this->checkAuth()) {
-            $this->redirectToLogin("Se requiere autenticación para acceder.");
-            return;
-        }
-
-        $this->loadData();
-        $data = $this->getData();
-        include 'adminDashboard.php';
-    }
-    private function checkAuth()
-    {
+    private function checkAuth() {
         if (!isset($_SESSION['user_id'])) {
-            $this->redirectToLogin("Debes iniciar sesión para acceder.");
-        } else {
-            if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
-                $this->redirectToLogin("Error de sesión. Por favor, vuelve a iniciar sesión.");
-                return false;
-            }
-
-            $this->userData = $_SESSION['user'];
-            if (!isset($this->userData['role']) || $this->userData['role'] !== 'admin') {
-                $this->redirectToLogin("No tienes permisos para acceder al panel de administración.");
-                return false;
-            }
-            return true;
+            header("Location: http://mytrees.com");
+            exit();
         }
-        if (isset($_SESSION['user_id'])) {
-            $loginId = $_SESSION['user_id'];
-            $user = $userModel->getUserByLoginId($loginId);
-            $roleId = $user['role_id'];
-        } else {
-            echo "No se ha encontrado login_id en la sesión.";
+        $this->user = $this->userModel->getUserById($_SESSION['user_id']);
+        $this->roleId = $this->user['role'];
+
+        if ($this->roleId !== 'admin') {
+            exit();
         }
+        $_SESSION['username'] = $this->user['name'];
     }
 
-    private function redirectToLogin($message)
-    {
-        $_SESSION['error_message'] = $message;
-        header('Location: http://mytrees.com/app/views/login.php');
-        exit();
-    }
-
-    private function loadData()
-    {
-        if (empty($this->data)) {
-            try {
-                // Realizamos todas las consultas en un solo paso
-                $this->data = [
-                    'userName' => $this->userData['name'],
-                    'countUsers' => $this->users->countFriends(),
-                    'countAvailableTrees' => $this->trees->countAvailableTrees(),
-                    'countSoldTrees' => $this->trees->countSoldTrees(),
-                    'speciesList' => $this->species->getAllSpecies()
-                ];
-            } catch (Exception $e) {
-                error_log("Error cargando datos: " . $e->getMessage());
-                // Asignamos valores por defecto en caso de error
-                $this->data = [
-                    'userName' => $this->userData['name'],
-                    'countUsers' => 0,
-                    'treesStats' => ['available' => 0, 'sold' => 0],
-                    'speciesList' => []
-                ];
-            }
-        }
-    }
-
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    public function handlePostRequest()
-    {
+    private function handlePostActions() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $action = $_POST['action'] ?? '';
-            switch ($action) {
-                case 'logOut':
-                    $this->logOut();
-                    break;
-                case 'update_species':
-                    $this->updateSpecies($_POST['species_id'], $_POST['new_commercial_name'], $_POST['new_scientific_name']);
-                    break;
-                case 'delete_species':
-                    $this->deleteSpecies($_POST['species_id']);
-                    break;
+            if (isset($_POST['action'])) {
+                switch ($_POST['action']) {
+                    case 'view_species':
+                        $this->viewSpecies($_POST['species_id']);
+                        break;
+                    case 'edit_species':
+                        $this->editSpecies($_POST['species_id']);
+                        break;
+                    case 'delete_species':
+                        $this->deleteSpecies($_POST['species_id']);
+                        break;
+                }
             }
         }
     }
 
-    private function updateSpecies($id, $commercialName, $scientificName)
-    {
-        try {
-            // Actualizamos la especie
-            $this->species->updateSpecies($id, $commercialName, $scientificName);
-            $_SESSION['flash_message'] = "Especie actualizada con éxito.";
-        } catch (Exception $e) {
-            $_SESSION['flash_error'] = "Error al actualizar la especie.";
+    private function viewSpecies($speciesId) {
+        if (!isset($_SESSION['visible_species'])) {
+            $_SESSION['visible_species'] = [];
         }
-        header("Location: adminDashboard.php");
+
+        if (in_array($speciesId, $_SESSION['visible_species'])) {
+            $_SESSION['visible_species'] = array_diff($_SESSION['visible_species'], [$speciesId]);
+        } else {
+            $_SESSION['visible_species'][] = $speciesId;
+        }
+
+        header('Location: ' . $_SERVER['PHP_SELF']);
         exit();
     }
 
-    private function deleteSpecies($id)
-    {
-        try {
-            // Eliminamos la especie
-            $this->species->deleteSpecies($id);
-            $_SESSION['flash_message'] = "Especie eliminada con éxito.";
-        } catch (Exception $e) {
-            $_SESSION['flash_error'] = "Error al eliminar la especie.";
+    private function editSpecies($speciesId) {
+        $species = $this->speciesModel->getSpeciesById($speciesId);
+        if ($species) {
+            $_SESSION['editing_species'] = $speciesId;
+            $_SESSION['species_data'] = $species;
+            header('Location: ' . $_SERVER['PHP_SELF'] . '?edit=' . $speciesId);
+        } else {
+            $_SESSION['error'] = "Especie no encontrada";
+            header('Location: ' . $_SERVER['PHP_SELF']);
         }
-        header("Location: adminDashboard.php");
         exit();
     }
 
-    private function logOut()
-    {
+    private function deleteSpecies($speciesId) {
+        if ($this->speciesModel->deleteSpecies($speciesId)) {
+            $_SESSION['success'] = "Especie eliminada correctamente";
+            $this->speciesCRUD(); // Actualizar las listas
+        } else {
+            $_SESSION['error'] = "Error al eliminar la especie";
+        }
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit();
+    }
+
+    public function fetch_stats() {
+        $_SESSION['friendsCount'] = $this->userModel->countFriends();
+        $_SESSION['availableTreesCount'] = $this->treeModel->countAvailableTrees();
+        $_SESSION['soldTreesCount'] = $this->treeModel->countSoldTrees();
+        require_once '../views/adminDashboard.php';
+    }
+
+    public function speciesCRUD() {
+        $_SESSION['commercial_names'] = $this->speciesModel->getCommercialNames();
+        $_SESSION['scientific_names'] = $this->speciesModel->getScientificNames();
+        require_once '../views/adminDashboard.php';
+    }
+
+    private function logout() {
         session_destroy();
-        header("Location: http://mytrees.com");
+        header("Location: login.php");
         exit();
     }
 }
-
-// Crear instancia del controlador y manejar las peticiones POST
-$dashboard = new AdminDashboardController();
-$dashboard->handlePostRequest();

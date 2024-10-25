@@ -6,7 +6,7 @@ class TreesModel extends BaseModel
 {
     public function __construct()
     {
-        parent::__construct('users');
+        parent::__construct('trees');
     }
     /**
      * Creates a new tree with default values for owner, height, and availability.
@@ -17,6 +17,11 @@ class TreesModel extends BaseModel
      * @param string $photo_url The URL of the tree's photo.
      * @return bool Returns true on success, false on failure.
      */
+    public function getTreesByUserId($userId)
+    {
+        $query = "SELECT * FROM `trees` WHERE `owner_id` = :owner_id";
+        return $this->executeQuery($query, [':owner_id' => $userId]);
+    }
     public function createTreeBasic(int $species_id, string $location, float $price, string $photo_url): bool
     {
         $query = "INSERT INTO `trees` (`species_id`, `location`, `price`, `photo_url`)
