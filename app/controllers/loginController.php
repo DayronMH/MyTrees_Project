@@ -33,7 +33,7 @@ class loginController {
                 $_SESSION['user_id'] = $user['id'];
                 echo "<script>
                         alert('Login exitoso');
-                        window.location.href = 'http://mytrees.com/app/views/dashboard.php';
+                        window.location.href = 'http://mytrees.com/app/views/adminDashboard.php';
                       </script>";
                 exit();
             } else {

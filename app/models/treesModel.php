@@ -1,5 +1,5 @@
 <?php
-require_once 'databaseModel.php';
+require_once 'baseModel.php';
 
 class TreesModel extends BaseModel
 {
