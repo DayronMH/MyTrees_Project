@@ -32,7 +32,7 @@ class AdminDashboardController {
             header("Location: http://mytrees.com");
             exit();
         }
-        $this->user = $this->userModel->getUserByLoginId($_SESSION['user_id']);
+        $this->user = $this->userModel->getUserById($_SESSION['user_id']);
         $this->roleId = $this->user['role'];
 
         if ($this->roleId !== 'admin') {

@@ -91,7 +91,7 @@ class UsersModel extends BaseModel
      * @param string $email The user's email.
      * @return array|null Returns user data if found, null otherwise.
      */
-    public function handleLogin(string $email): ?array
+    public function handleLogin(string $email)
     {
         $query = "SELECT * FROM `users` WHERE `email` = :email";
         $stmt = $this->db->prepare($query);
@@ -99,8 +99,7 @@ class UsersModel extends BaseModel
         $stmt->execute();
 
         // Devuelve el resultado como un array o null si no se encuentra el usuario
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ?: null; // Devuelve null si no hay resultados
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function countFriends(): int
@@ -125,11 +124,16 @@ class UsersModel extends BaseModel
         $query = "SELECT * FROM `users`";
         return $this->executeQuery($query);
     }
-    public function getUserByLoginId($loginId): array
-    {
-        $query = "SELECT * FROM `users` WHERE 'login_id = :login_id";
-        return $this->executeQuery($query, $loginId);
-    }
+    public function getUserById($id): ?array
+{
+    $query = "SELECT * FROM `users` WHERE id = :id";
+    $stmt = $this->db->prepare($query);
+    $stmt->execute([':id' => $id]);
+    
+    // Usar fetch en lugar de fetchAll para obtener un solo registro
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ?: null;
+}
 
     /**
      * Executes a query and fetches the results (used for SELECT queries).

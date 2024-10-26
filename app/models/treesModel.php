@@ -1,6 +1,5 @@
 <?php
 require_once 'baseModel.php';
-
 class TreesModel extends BaseModel
 {
     public function __construct()
@@ -90,22 +89,36 @@ class TreesModel extends BaseModel
     /**
      * Retrieves all available trees.
      *
- * @return array Returns an array of available trees.
+     * @return array Returns an array of available trees.
      */
-    public function countAvailableTrees(): array
+    public function countAvailableTrees(): int
     {
-        $query = "SELECT * FROM Trees WHERE available = TRUE ORDER BY price ASC";
-        return $this->executeQuery($query);
+        $query = "SELECT COUNT(*) as availableTreesCount
+              FROM `trees` 
+              WHERE available = 1";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) $result['availableTreesCount'];
     }
-     /**
+    /**
      * Retrieves all sold trees.
      *
- * @return array Returns an array of sold trees.
+     * @return array Returns an array of sold trees.
      */
-    public function countSoldTrees(): array
+    public function countSoldTrees(): int
     {
-        $query = "SELECT * FROM Trees WHERE available = 0 ORDER BY price ASC";
-        return $this->executeQuery($query);
+        $query = "SELECT COUNT(*) as soldTreesCount
+              FROM `trees` 
+              WHERE available = 0";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) $result['soldTreesCount'];
     }
 
     /**
@@ -119,7 +132,7 @@ class TreesModel extends BaseModel
         $query = "SELECT * FROM Trees WHERE species_id = :species_id ORDER BY height DESC";
         return $this->executeQuery($query, [':species_id' => $species_id]);
     }
-    
+
 
     /**
      * Retrieves information about a tree by ID.
