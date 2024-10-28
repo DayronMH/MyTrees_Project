@@ -133,6 +133,16 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':species_id' => $species_id]);
     }
 
+    public function getTreesByOwner($owner_id):array
+    {
+        $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
+                  FROM Trees t 
+                  JOIN Species s ON t.species_id = s.id 
+                  LEFT JOIN Users u ON t.owner_id = u.id 
+                  WHERE t.owner_id = :id";
+        return $this->executeQuery($query, [':id' => $owner_id]);
+    }
+
 
     /**
      * Retrieves information about a tree by ID.
@@ -190,5 +200,10 @@ class TreesModel extends BaseModel
             // Handle the error, log it, or rethrow it
             throw new Exception("Database query failed: " . $e->getMessage());
         }
+    }
+    public function getAvailableTrees(): array
+    {
+        $query = "SELECT * FROM `trees` WHERE 'status' = '1'";
+        return $this->executeQuery($query);
     }
 }

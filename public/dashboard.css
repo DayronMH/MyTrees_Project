@@ -220,6 +220,38 @@ body {
     gap: 10px;
     margin-top: 10px;
 }
+.friends-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+
+/* Estilo para cada nombre de amigo */
+.friend-name {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    color: #34495e;
+    font-size: 1.4em;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+/* Efecto hover */
+.friend-name:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
 
 .action-button {
     padding: 10px 15px;
@@ -253,6 +285,174 @@ body {
 
 .delete-btn:hover {
     background-color: #c0392b;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e6f0d7 0%, #b8d9a3 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.view-header h1 {
+    color: #2c5530;
+    font-size: 2.5em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+    padding: 10px 20px;
+    background-color: #4a7555;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.back-button:hover {
+    background-color: #3d6146;
+    transform: translateX(-5px);
+}
+
+.trees-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.tree-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tree-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.tree-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 3px solid #4a7555;
+}
+
+.tree-details {
+    padding: 20px;
+}
+
+.specie_name {
+    color: #2c5530;
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(74, 117, 85, 0.2);
+    padding-bottom: 10px;
+}
+
+.tree-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tree-info p {
+    color: #444;
+    font-size: 1.1em;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.tree-info strong {
+    color: #2c5530;
+}
+
+.status {
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.available {
+    background-color: #c8e6c9;
+    color: #2e7d32;
+}
+
+.sold {
+    background-color: #ffcdd2;
+    color: #c62828;
+}
+
+@media (max-width: 768px) {
+    .view-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .view-header h1 {
+        font-size: 2em;
+    }
+
+    .trees-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .tree-card {
+        margin: 0 auto;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .view-header h1 {
+        font-size: 1.8em;
+    }
+
+    .tree-details {
+        padding: 15px;
+    }
+
+    .specie_name {
+        font-size: 1.2em;
+    }
+
+    .tree-info p {
+        font-size: 1em;
+    }
 }
 
 /* Responsive adjustments */

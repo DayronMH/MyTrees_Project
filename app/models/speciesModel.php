@@ -46,6 +46,10 @@ class speciesModel extends BaseModel
         $this->executeQuery($query, [$id]);
     }
 
+    public function editSpecies($speciesId, $commercialName, $scientificName) {
+        $stmt = $this->db->prepare("UPDATE species SET commercial_name = ?, scientific_name = ? WHERE id = ?");
+        return $stmt->execute([$commercialName, $scientificName, $speciesId]);
+    }
 
     /**
      * Executes a query and returns results.
