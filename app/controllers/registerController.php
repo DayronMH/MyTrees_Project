@@ -50,6 +50,7 @@ class RegisterController
             exit();
         }
 
+        
         $isCreated = $userModel->createFriendUser($name, $email, $password, $phone, $address, $country);
 
         if ($isCreated) {

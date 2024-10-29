@@ -40,13 +40,30 @@ class speciesModel extends BaseModel
         return $this->executeQuery($query);
     }
 
-    public function deleteSpecies($id)
+    public function deleteSpecie(int $id): bool
     {
-        $query = "DELETE FROM Species WHERE id = ?";
-        $this->executeQuery($query, [$id]);
-    }
 
-    public function editSpecies($speciesId, $commercialName, $scientificName) {
+        $deleteRelatedTreesQuery = "DELETE FROM `trees` WHERE `species_id` = :species_id";
+        $relatedTreesDeleted = $this->executeQuery($deleteRelatedTreesQuery, [':species_id' => $id]);
+
+        // Si los árboles relacionados fueron eliminados correctamente, proceder a eliminar la especie
+        if ($relatedTreesDeleted) {
+            $deleteSpeciesQuery = "DELETE FROM `species` WHERE `id` = :id";
+            return $this->executeQuery($deleteSpeciesQuery, [':id' => $id]);
+        }
+
+        return false;
+    }
+    public function hasTreesAssociated($speciesId): bool
+    {
+        $query = "SELECT COUNT(*) FROM `trees` WHERE `species_id` = :species_id";
+        $result = $this->executeQuery($query, [':species_id' => $speciesId]);
+
+        // Retorna true si hay al menos un árbol asociado
+        return $result > 0;
+    }
+    public function editSpecies($speciesId, $commercialName, $scientificName)
+    {
         $stmt = $this->db->prepare("UPDATE species SET commercial_name = ?, scientific_name = ? WHERE id = ?");
         return $stmt->execute([$commercialName, $scientificName, $speciesId]);
     }

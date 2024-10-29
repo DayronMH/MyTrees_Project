@@ -71,6 +71,33 @@ body {
     margin-bottom: 25px;
 }
 
+/* Estilos actualizados para el botón de eliminar */
+.delete-btn {
+    background: rgba(231, 76, 60, 0.9);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 12px 30px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
+}
+
+.delete-btn:hover {
+    background: rgba(192, 57, 43, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(192, 57, 43, 0.3);
+}
+
+.delete-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(192, 57, 43, 0.2);
+}
+
 .form-group label {
     display: block;
     color: #34495e;
@@ -102,7 +129,7 @@ body {
     margin-top: 30px;
 }
 
-.submit-button, .cancel-button {
+.submit-button, .cancel-button, .delete-btn {
     padding: 12px 30px;
     border: none;
     border-radius: 8px;
@@ -124,32 +151,74 @@ body {
 }
 
 .cancel-button {
-    background-color: #e74c3c;
+    background-color: #95a5a6;
 }
 
 .cancel-button:hover {
-    background-color: #c0392b;
+    background-color: #7f8c8d;
     transform: translateY(-2px);
 }
 
-.error-message, .success-message {
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 20px;
-    text-align: center;
-    backdrop-filter: blur(10px);
+.delete-btn {
+    background-color: #e74c3c;
 }
 
-.error-message {
-    background: rgba(231, 76, 60, 0.1);
-    color: #c0392b;
-    border: 1px solid rgba(231, 76, 60, 0.2);
+.delete-btn:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+.success-message, .error-message {
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 1em;
+    text-align: center;
+    position: relative;
+    animation: slideIn 0.3s ease-in-out;
+    font-weight: 500;
 }
 
 .success-message {
-    background: rgba(46, 204, 113, 0.1);
+    background-color: rgba(46, 204, 113, 0.2);
     color: #27ae60;
-    border: 1px solid rgba(46, 204, 113, 0.2);
+    border: 2px solid #2ecc71;
+    box-shadow: 0 4px 6px rgba(46, 204, 113, 0.1);
+}
+
+.error-message {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #c0392b;
+    border: 2px solid #e74c3c;
+    box-shadow: 0 4px 6px rgba(231, 76, 60, 0.1);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Ajuste responsive para los mensajes */
+@media (max-width: 768px) {
+    .success-message, .error-message {
+        padding: 12px;
+        font-size: 0.9em;
+    }
+}
+@media (max-width: 480px) {
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .submit-button, .cancel-button, .delete-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
 
 /* Responsive adjustments */
@@ -167,17 +236,7 @@ body {
         font-size: 1.5em;
     }
 
-    .submit-button, .cancel-button {
+    .submit-button, .cancel-button, .delete-btn {
         padding: 10px 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .form-actions {
-        flex-direction: column;
-    }
-
-    .submit-button, .cancel-button {
-        width: 100%;
     }
 }

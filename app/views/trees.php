@@ -59,7 +59,14 @@ if (empty($trees)) {
                     </div>
                 </div>
                 <div class="trees-actions">
-                 
+                    <form method="POST" action="" style="display: inline;" class="view-form">
+                        <input type="hidden" name="species_id" value="<?php echo $speciesId; ?>">
+                        <button type="submit" name="action" value="view_species" class="action-button view-btn">
+                            <?php echo (isset($_SESSION['visible_species']) &&
+                                in_array($speciesId, $_SESSION['visible_species'])) ? 'Ocultar' : 'Ver'; ?>
+                        </button>
+                    </form>
+
                     <button onclick="window.location.href='../views/edit.php?id=<?php echo $speciesId; ?>'"
                         class="action-button edit-btn"
                         name="action"

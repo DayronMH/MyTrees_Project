@@ -58,12 +58,6 @@ class AdminDashboardController
                         exit();
                     }
                     break;
-    
-                case 'delete_species':
-                    if (isset($_POST['species_id'])) {
-                        $this->deleteSpecies($_POST['species_id']);
-                    }
-                    break;
             }
         }
     }
@@ -81,17 +75,26 @@ class AdminDashboardController
     }
 
 
-    private function deleteSpecies($speciesId)
-    {
-        if ($this->speciesModel->deleteSpecies($speciesId)) {
+    public function deleteSpecie($speciesId)
+{
+    // Verificar si la especie tiene árboles asociados
+    $hasAssociatedTrees = $this->speciesModel->hasTreesAssociated($speciesId);
+    
+    if ($hasAssociatedTrees) {
+        $_SESSION['error'] = "No se puede eliminar la especie porque tiene árboles asociados.";
+    } else {
+        if ($this->speciesModel->deleteSpecie($speciesId)) {
             $_SESSION['success'] = "Especie eliminada correctamente";
             $this->speciesCRUD(); // Actualizar las listas
         } else {
             $_SESSION['error'] = "Error al eliminar la especie";
         }
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit();
     }
+
+    // Redirigir de vuelta a la página actual
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit();
+}
     public function getFriends()
     {
         $_SESSION['friends'] = $this->userModel->getFriends();
