@@ -3,6 +3,7 @@ require_once 'baseModel.php';
 
 class UsersModel extends BaseModel
 {
+    createFirstAdmin();
     public function __construct()
     {
         parent::__construct('users');
@@ -156,5 +157,37 @@ class UsersModel extends BaseModel
             // Handle the error, log it, or rethrow it
             throw new Exception("Database query failed: " . $e->getMessage());
         }
+    }
+    public function createFirstAdmin(): bool 
+    {
+        // Check for previous admins
+        $checkAdminQuery = "SELECT COUNT(*) as admin_count FROM `users` WHERE `role` = 'admin'";
+        $result = $this->executeQuery($checkAdminQuery);
+        $adminExists = $result[0]['admin_count'] > 0;
+
+        if (!$adminExists && $role === 'admin') {
+            $name = "Admin";
+            $email = "Admin@gmail.com";
+            $password = "123";
+            $phone = "123";
+            $address = "123";
+            $country = $country = "123";
+        }
+
+        // Hash the password before storing it
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `phone`, `address`, `country`)
+                VALUES (:name, :email, :password, :role, :phone, :address, :country)";
+
+        return $this->executeNonQuery($query, [
+            ':name' => $name,
+            ':email' => $email,
+            ':password' => $hashedPassword,
+            ':role' => $role,
+            ':phone' => $phone,
+            ':address' => $address,
+            ':country' => $country
+        ]);
     }
 }
