@@ -12,8 +12,12 @@ class speciesModel extends BaseModel
      *
      * @return array Returns an array of species records.
      */
-    public function createSpecie(string $commercial_name, string $scientific_name, string $date): bool
+    public function createSpecie(string $commercial_name, string $scientific_name): bool
     {
+        date_default_timezone_set('America/Costa_Rica'); // Cambia la zona horaria según tu ubicación
+
+// Obtener la fecha y hora actual
+        $date = date('Y-m-d H:i:s');
         
         $query = "INSERT INTO `species` (`commercial_name`, `scientific_name`, `availability_date`)
                   VALUES (:commercial_name, :scientific_name, :availability_date)";

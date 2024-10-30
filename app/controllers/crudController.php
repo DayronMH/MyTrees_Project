@@ -74,11 +74,9 @@ private function handlePostActions()
     
     }
     
-    public function createSpecie($commercial_name,$scientific_name,$date){
-        date_default_timezone_set('America/Costa_Rica');
-
-        $date = date('Y-m-d H:i:s');
-        if($this->speciesModel->createSpecie($commercial_name,$scientific_name,$date)){
+    public function createSpecie($commercial_name,$scientific_name){
+        
+        if($this->speciesModel->createSpecie($commercial_name,$scientific_name)){
             $_SESSION['success'] = "Especie creada correctamente";
         } else {
             $_SESSION['error'] = "Error al crear la especie";
