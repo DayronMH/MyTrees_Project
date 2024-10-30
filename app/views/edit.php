@@ -1,9 +1,10 @@
 <?php
 session_start();
 require_once '../controllers/adminDashboardController.php';
+require_once '../controllers/crudController.php';
 require_once '../models/speciesModel.php';
 $controller = new AdminDashboardController();
-
+$crud = new crudController();
 // Obtener el ID de la especie de la URL
 $speciesId = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
@@ -25,22 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $success = $species->editSpecies($speciesId, $commercialName, $scientificName);
 
         if ($success) {
-            $_SESSION['success'] = "Especie actualizada correctamente";
+            $success_message = "Especie actualizada correctamente";
         } else {
-            $_SESSION['error'] = "Error al actualizar la especie";
+            $error_message = "Error al actualizar la especie";
         }
     } elseif ($_POST['action'] === 'delete_species') {
-        // Verificar si la especie tiene árboles asociados
-        if ($species->hasTreesAssociated($speciesId)) {
-            $_SESSION['error'] = "No se puede eliminar la especie porque tiene árboles asociados.";
-        } else {
-            if ($species->deleteSpecie($speciesId)) {
-                $_SESSION['success'] = "Especie eliminada correctamente";
-                header("Location: adminDashboard.php");
-                exit();
-            } else {
-                $_SESSION['error'] = "Error al eliminar la especie";
-            }
+        $delete = $crud->deleteSpecie($speciesId);
+        // Verificar si hubo un mensaje de éxito o error
+        if (!empty($delete['success'])) {
+            // Si hay un mensaje de éxito
+            $success_message = $delete['success'];
+            echo $success_message;
+        } elseif (!empty($delete['error'])) {
+            // Si hay un mensaje de error
+            $error_message = $delete['error'];
+            echo $error_message;
         }
     }
 }
@@ -65,12 +65,14 @@ if ($currentSpecies) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://mytrees.com/public/edit.css">
     <title>Editar Especie</title>
 </head>
+
 <body>
     <div class="container">
         <div class="edit-header">
@@ -138,12 +140,13 @@ if ($currentSpecies) {
     </div>
 
     <script>
-    function validateForm(form) {
-        if (form.action.value === 'delete_species') {
-            return confirm('¿Estás seguro de eliminar esta especie?');
+        function validateForm(form) {
+            if (form.action.value === 'delete_species') {
+                return confirm('¿Estás seguro de eliminar esta especie?');
+            }
+            return true;
         }
-        return true;
-    }
     </script>
 </body>
+
 </html>

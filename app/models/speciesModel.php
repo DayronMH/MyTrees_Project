@@ -12,6 +12,19 @@ class speciesModel extends BaseModel
      *
      * @return array Returns an array of species records.
      */
+    public function createSpecie(string $commercial_name, string $scientific_name, string $date): bool
+    {
+        
+        $query = "INSERT INTO `species` (`commercial_name`, `scientific_name`, `availability_date`)
+                  VALUES (:commercial_name, :scientific_name, :availability_date)";
+
+        return $this->executeNonQuery($query, [
+            ':commercial_name' => $commercial_name,
+            ':scientific_name' => $scientific_name,
+            ':availability_date' => $date
+        ]);
+    }
+
     public function getAllSpecies(): array
     {
         $query = "SELECT id, commercial_name, scientific_name FROM Species";
@@ -55,17 +68,27 @@ class speciesModel extends BaseModel
         return false;
     }
     public function hasTreesAssociated($speciesId): bool
-    {
-        $query = "SELECT COUNT(*) FROM `trees` WHERE `species_id` = :species_id";
-        $result = $this->executeQuery($query, [':species_id' => $speciesId]);
+{
+    $query = "SELECT COUNT(*) FROM `trees` WHERE `species_id` = :species_id";
+    $stmt = $this->db->prepare($query);
+    $stmt->execute([':species_id' => $speciesId]);
+    return $stmt->fetchColumn() > 0; // Devuelve true si hay árboles asociados
+}
 
-        // Retorna true si hay al menos un árbol asociado
-        return $result > 0;
-    }
     public function editSpecies($speciesId, $commercialName, $scientificName)
     {
         $stmt = $this->db->prepare("UPDATE species SET commercial_name = ?, scientific_name = ? WHERE id = ?");
         return $stmt->execute([$commercialName, $scientificName, $speciesId]);
+    }
+    private function executeNonQuery(string $query, array $params = []): bool
+    {
+        try {
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Handle the error, log it, or rethrow it
+            throw new Exception("Database query failed: " . $e->getMessage());
+        }
     }
 
     /**
