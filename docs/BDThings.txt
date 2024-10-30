@@ -63,7 +63,12 @@ CREATE TABLE Sales (
 INSERT INTO Users (name, email, password, role, phone, address, country) VALUES 
 ('Admin1', 'admin1@example.com', 'AdminPass', 'admin', '123', '123 Main St', 'USA'),
 ('Operator1', 'ope1@example.com', 'OperatorPass', 'operator', '123', '456 Elm', 'USA'),
-('Friend1', 'friend1@example.com', 'FriendPass', 'friend', '123', '789 Oak St', 'USA');
+('Friend1', 'friend1@example.com', 'FriendPass', 'friend', '123', '789 Oak St', 'USA'),
+('Friend2', 'friend2@example.com', 'FriendPass', 'friend', '555', '101 Pine St', 'USA'),
+('Friend3', 'friend3@example.com', 'FriendPass', 'friend', '556', '102 Cedar St', 'USA'),
+('Friend4', 'friend4@example.com', 'FriendPass', 'friend', '557', '103 Maple St', 'USA'),
+('Friend5', 'friend5@example.com', 'FriendPass', 'friend', '558', '104 Birch St', 'USA'),
+('Friend6', 'friend6@example.com', 'FriendPass', 'friend', '559', '105 Spruce St', 'USA');
 
 -- Insert Especies
 INSERT INTO Species (commercial_name, scientific_name, availability_date) VALUES 
