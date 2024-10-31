@@ -4,10 +4,7 @@ require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 $controller = new AdminDashboardController();
 $crud = new crudController();
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 // Procesar el formulario cuando se envía
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'createSpecies') {
