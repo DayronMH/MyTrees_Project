@@ -4,7 +4,10 @@ require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 $controller = new AdminDashboardController();
 $crud = new crudController();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 // Procesar el formulario cuando se envía
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'createSpecies') {
@@ -16,11 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $_SESSION['error'] = "Todos los campos son requeridos";
         } else {
             // Intentar crear la especie
+<<<<<<< Updated upstream
             $success = $crud->createSpecie($commercialName, $scientificName);
+=======
+            $success = $controller->createSpecie($speciesId,$commercialName, $scientificName);
+>>>>>>> Stashed changes
             
             if ($success) {
                 $_SESSION['success'] = "Especie creada correctamente";
-                header('Location: adminDashboard.php');
+               
                 exit();
             } else {
                 $_SESSION['error'] = "Error al crear la especie";

@@ -3,61 +3,57 @@ session_start();
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 require_once '../models/speciesModel.php';
-$controller = new AdminDashboardController();
-$crud = new crudController();
-// Obtener el ID de la especie de la URL
-$speciesId = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
-// Si no hay ID válido, redirigir al dashboard
-if (!$speciesId || $speciesId <= 0) {
+// Inicializar controladores
+$crud = new CrudController();
+
+// Validación del ID
+$speciesId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if (!$speciesId) {
+    $_SESSION['error'] = "ID de especie inválido";
     header("Location: adminDashboard.php");
     exit();
 }
 
-// Verificar si es una solicitud POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    $speciesId = (int)$_POST['species_id'];
-    $species = new SpeciesModel();
+// Manejar POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['action'])) {
+        $_SESSION['error'] = "Acción no especificada";
+        header("Location: adminDashboard.php");
+        exit();
+    }
 
-    if ($_POST['action'] === 'updateSpecies') {
+    $speciesId = filter_input(INPUT_POST, 'species_id', FILTER_VALIDATE_INT);
+
+    if ($_POST['action'] === 'delete_species') {
+        $result = $speciesController->deleteSpecie($speciesId);
+
+        // Comprobamos el resultado
+        if (isset($result['success'])) {
+            $success_message = $result['success']; // Mensaje de éxito si la eliminación fue exitosa
+        } elseif (isset($result['error'])) {
+            $error_message = $result['error']; // Mensaje de error si hubo algún problema
+        }
+    } else if ($_POST['action'] === 'updateSpecies') {
         $commercialName = $_POST['commercial_name'];
         $scientificName = $_POST['scientific_name'];
 
+        $species = new SpeciesModel();
         $success = $species->editSpecies($speciesId, $commercialName, $scientificName);
 
         if ($success) {
-            $success_message = "Especie actualizada correctamente";
+            $_SESSION['success'] = "Especie actualizada correctamente";
+            header("Location: adminDashboard.php");
+            exit();
         } else {
-            $error_message = "Error al actualizar la especie";
-        }
-    } elseif ($_POST['action'] === 'delete_species') {
-        $delete = $crud->deleteSpecie($speciesId);
-        // Verificar si hubo un mensaje de éxito o error
-        if (!empty($delete['success'])) {
-            // Si hay un mensaje de éxito
-            $success_message = $delete['success'];
-            echo $success_message;
-        } elseif (!empty($delete['error'])) {
-            // Si hay un mensaje de error
-            $error_message = $delete['error'];
-            echo $error_message;
+            $_SESSION['error'] = "Error al actualizar la especie";
         }
     }
 }
-
-// Buscar la especie específica
-$speciesData = null;
-$species = new SpeciesModel();
-$currentSpecies = $species->getSpeciesById($speciesId);
-
-if ($currentSpecies) {
-    $speciesData = [
-        'commercial_name' => $currentSpecies['commercial_name'],
-        'scientific_name' => $currentSpecies['scientific_name'],
-        'id' => $speciesId
-    ];
-} else {
-    $_SESSION['error'] = "No se encontró la especie.";
+// Obtener datos de la especie usando el método correcto
+$currentSpecies = $crud->getSpecieById($speciesId);
+if (!$currentSpecies) {
+    $_SESSION['error'] = "No se encontró la especie especificada";
     header("Location: adminDashboard.php");
     exit();
 }
@@ -90,7 +86,7 @@ if ($currentSpecies) {
                         type="text"
                         id="commercial_name"
                         name="commercial_name"
-                        value="<?php echo htmlspecialchars($speciesData['commercial_name']); ?>"
+                        value="<?php echo htmlspecialchars($currentSpecies['commercial_name']); ?>"
                         required
                         class="form-input">
                 </div>
@@ -101,7 +97,7 @@ if ($currentSpecies) {
                         type="text"
                         id="scientific_name"
                         name="scientific_name"
-                        value="<?php echo htmlspecialchars($speciesData['scientific_name']); ?>"
+                        value="<?php echo htmlspecialchars($currentSpecies['scientific_name']); ?>"
                         required
                         class="form-input">
                 </div>

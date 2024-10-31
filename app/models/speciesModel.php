@@ -17,8 +17,12 @@ class speciesModel extends BaseModel
         date_default_timezone_set('America/Costa_Rica'); // Cambia la zona horaria según tu ubicación
 
 // Obtener la fecha y hora actual
+<<<<<<< Updated upstream
         $date = date('Y-m-d H:i:s');
         
+=======
+        $date = date('Y-m-d H:i:s'); 
+>>>>>>> Stashed changes
         $query = "INSERT INTO `species` (`commercial_name`, `scientific_name`, `availability_date`)
                   VALUES (:commercial_name, :scientific_name, :availability_date)";
 
@@ -57,27 +61,60 @@ class speciesModel extends BaseModel
         return $this->executeQuery($query);
     }
 
-    public function deleteSpecie(int $id): bool
-    {
-
-        $deleteRelatedTreesQuery = "DELETE FROM `trees` WHERE `species_id` = :species_id";
-        $relatedTreesDeleted = $this->executeQuery($deleteRelatedTreesQuery, [':species_id' => $id]);
-
-        // Si los árboles relacionados fueron eliminados correctamente, proceder a eliminar la especie
-        if ($relatedTreesDeleted) {
-            $deleteSpeciesQuery = "DELETE FROM `species` WHERE `id` = :id";
-            return $this->executeQuery($deleteSpeciesQuery, [':id' => $id]);
+    public function deleteSpecie(int $id): array
+{
+    try {
+        // Primero verificamos si hay árboles asociados
+        if ($this->hasTreesAssociated($id)) {
+            // Si hay árboles asociados, intentamos eliminarlos primero
+            $deleteRelatedTreesQuery = "DELETE FROM `trees` WHERE `species_id` = :species_id";
+            $relatedTreesDeleted = $this->executeQuery($deleteRelatedTreesQuery, [':species_id' => $id]);
+            
+            if (!$relatedTreesDeleted) {
+                return [
+                    'error' => 'No se pudieron eliminar los árboles asociados a esta especie'
+                ];
+            }
         }
+        
+        // Una vez que no hay árboles (ya sea porque se eliminaron o porque no había),
+        // procedemos a eliminar la especie
+        $deleteSpeciesQuery = "DELETE FROM `species` WHERE `id` = :id";
+        $speciesDeleted = $this->executeQuery($deleteSpeciesQuery, [':id' => $id]);
+        
+        if ($speciesDeleted) {
+            return [
+                'success' => 'La especie y sus árboles asociados fueron eliminados correctamente'
+            ];
+        } else {
+            return [
+                'error' => 'No se pudo eliminar la especie'
+            ];
+        }
+    } catch (PDOException $e) {
+        // Log del error para el administrador
+        error_log("Error al eliminar especie: " . $e->getMessage());
+        
+        return [
+            'error' => 'Ocurrió un error al procesar la eliminación'
+        ];
+    }
+}
 
+public function hasTreesAssociated($speciesId): bool 
+{
+    try {
+        $query = "SELECT COUNT(*) FROM `trees` WHERE `species_id` = :species_id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':species_id' => $speciesId]);
+        return $stmt->fetchColumn() > 0;
+    } catch (PDOException $e) {
+        // Log del error para el administrador
+        error_log("Error al verificar árboles asociados: " . $e->getMessage());
         return false;
     }
-    public function hasTreesAssociated($speciesId): bool
-{
-    $query = "SELECT COUNT(*) FROM `trees` WHERE `species_id` = :species_id";
-    $stmt = $this->db->prepare($query);
-    $stmt->execute([':species_id' => $speciesId]);
-    return $stmt->fetchColumn() > 0; // Devuelve true si hay árboles asociados
 }
+
 
     public function editSpecies($speciesId, $commercialName, $scientificName)
     {

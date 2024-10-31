@@ -265,6 +265,121 @@ body {
 .create-btn:active {
     transform: translateX(-50%) translateY(-1px);
     box-shadow: 0 2px 10px rgba(46, 204, 113, 0.4);
+}/* Friends Container */
+.friends-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.friend-link {
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.friend-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.friend-link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.friend-link:hover::before {
+    opacity: 1;
+}
+
+.friend-name {
+    color: #34495e;
+    font-size: 1.4em;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.friend-link:hover .friend-name {
+    background-image: linear-gradient(45deg, #3498db, #2ecc71);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 200;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.back-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+    background: linear-gradient(45deg, #c0392b, #a93226);
+}
+
+.back-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(231, 76, 60, 0.4);
+}
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .friends-container {
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .friend-link {
+        padding: 15px;
+    }
+    
+    .friend-name {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .friends-container {
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .friend-link {
+        padding: 12px;
+    }
 }
 
 /* Media Queries */

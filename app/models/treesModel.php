@@ -26,6 +26,20 @@ class TreesModel extends BaseModel
             ':photo_url' => $photo_url
         ]);
     }
+    public function editTree($treeId, $height, $location, $available)
+    {
+        $query = "UPDATE `trees` 
+        SET `height` = :height, 
+            `location` = :location, 
+            `available` = :available, 
+            WHERE `id` = :id";
+        return $this->executeQuery($query, [
+            ':id' => $treeId,
+            ':height' => $height,
+            ':location' => $location,
+            ':available' => $available
+        ]);
+    }
 
     /**
      * Creates a new tree with all specified fields.
@@ -133,7 +147,7 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':species_id' => $species_id]);
     }
 
-    public function getTreesByOwner($owner_id):array
+    public function getTreesByOwner($owner_id): array
     {
         $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
                   FROM Trees t 
