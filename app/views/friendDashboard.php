@@ -1,13 +1,29 @@
 <?php
 session_start();
 require_once '../controllers/friendDashboardController.php';
-$data = new FriendDashboardController();
+
+$friendDashboardController = new FriendDashboardController();
+$availableTrees = $friendDashboardController ->getAvailableTrees();
+
+// Verificar si el ID del usuario está disponible
+$userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+$purchasedTrees = [];
+
+if ($userId !== null) {
+    $purchasedTrees = $friendDashboardController->getUserPurchasedTrees($userId);
+} else {
+    // Manejar el caso donde no hay usuario autenticado
+    echo "<script>alert('Debes iniciar sesión para ver tus árboles.'); window.location.href = '../login.php';</script>";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://mytrees.com/public/friend.css">
     <title>Amigo - Panel de Control</title>
     <style>
         /* Estilos generales */
@@ -155,7 +171,11 @@ $data = new FriendDashboardController();
         }
     </style>
 </head>
+
+
 <body>
+
+
     <div class="dashboard-container">
         <div class="dashboard-header">
             <h1>Bienvenido <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
@@ -164,50 +184,70 @@ $data = new FriendDashboardController();
         </div>
 
         <div class="trees-container">
-            <?php
-            $trees = $_SESSION['tree_species'];
-            $heights = $_SESSION['tree_heights'];
-            $locations = $_SESSION['tree_locations'];
-            $prices = $_SESSION['tree_prices'];
-            $photos = $_SESSION['tree_photos'];
-
-            for ($i = 0; $i < count($trees); $i++) {
-                $treeId = $i + 1; // Asumiendo que necesitamos un ID único
-            ?>
+            <?php foreach ($availableTrees as $tree): ?>
                 <div class="tree-card">
-                    <img src="<?php echo htmlspecialchars($photos[$i]); ?>" alt="Árbol" class="tree-image">
+                    <img src="<?php echo htmlspecialchars($tree['photo_url']); ?>" alt="Árbol" class="tree-image">
                     <div class="tree-info">
-                        <h3 class="tree-name"><?php echo htmlspecialchars($trees[$i]); ?></h3>
-                        
+                        <span class="tree-name"><?php echo htmlspecialchars($tree['species']); ?></span>
                         <div class="tree-details">
                             <div class="detail-item">
+                                <span class="detail-label">ID</span>
+                                <span class="detail-value"><?php echo htmlspecialchars($tree['id']); ?></span>
+                            </div>
+                            <div class="detail-item">
                                 <span class="detail-label">Altura</span>
-                                <span class="detail-value"><?php echo htmlspecialchars($heights[$i]); ?> metros</span>
+                                <span class="detail-value"><?php echo htmlspecialchars($tree['height']); ?> metros</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Ubicación</span>
-                                <span class="detail-value"><?php echo htmlspecialchars($locations[$i]); ?></span>
+                                <span class="detail-value"><?php echo htmlspecialchars($tree['location']); ?></span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Precio</span>
-                                <span class="detail-value">$<?php echo htmlspecialchars($prices[$i]); ?></span>
+                                <span class="detail-value">$<?php echo htmlspecialchars($tree['price']); ?></span>
                             </div>
                         </div>
-
                         <div class="action-buttons">
-                            <form method="POST" action="" style="display: flex; gap: 10px;">
-                                <input type="hidden" name="tree_id" value="<?php echo $treeId; ?>">
-                                <button type="submit" name="action" value="view_details" class="action-button view-btn">
-                                    Ver Detalles
-                                </button>
-                                <button type="submit" name="action" value="buy_tree" class="action-button buy-btn">
-                                    Comprar
-                                </button>
+                            <form method="POST" action="comprar.php"> <input type="hidden" name="tree_id" value="<?php echo htmlspecialchars($tree['id']); ?>">
+                                <button type="submit" name="action" value="buy_tree" class="action-button buy-btn">Comprar</button>
                             </form>
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="dashboard-header">
+            <h2>Árboles Comprados</h2>
+            <hr>
+            <div class="trees-container">
+                <?php if (empty($purchasedTrees)): ?>
+                    <p>No has comprado ningún árbol todavía.</p>
+                <?php else: ?>
+                    <?php foreach ($purchasedTrees as $purchasedTree): ?>
+                        <div class="tree-card">
+                            <img src="<?php echo htmlspecialchars($purchasedTree['photo_url']); ?>" alt="Árbol Comprado" class="tree-image">
+                            <div class="tree-info">
+                                <span class="tree-name"><?php echo htmlspecialchars($purchasedTree['species']); ?></span>
+                                <div class="tree-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Altura</span>
+                                        <span class="detail-value"><?php echo htmlspecialchars($purchasedTree['height']); ?> metros</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Ubicación</span>
+                                        <span class="detail-value"><?php echo htmlspecialchars($purchasedTree['location']); ?></span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Precio</span>
+                                        <span class="detail-value">$<?php echo htmlspecialchars($purchasedTree['price']); ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </body>
