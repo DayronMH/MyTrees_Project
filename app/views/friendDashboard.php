@@ -17,12 +17,9 @@ $purchasedTrees = [];
 //try
 
 if (!isset($_SESSION['user_id'])) {
-<<<<<<< Updated upstream
-    echo "<script>alert('Debes iniciar sesión para comprar un árbol.'); window.location.href = '../login.php';</script>";
-=======
+
     $_SESSION['error']=( "Debes iniciar sesión para comprar un árbol.");
     header('Location: ../login.php');
->>>>>>> Stashed changes
     exit;
 }
 
@@ -34,19 +31,13 @@ if (isset($_POST['tree_id'])) {
     $result = $salesController->createSale($userId, $treeId);
 
     if ($result) {
-<<<<<<< Updated upstream
-        echo "<script>alert('Árbol comprado exitosamente.'); window.location.href = 'friendDashboard.php';</script>";
-    } else {
-        echo "<script>alert('Error al comprar el árbol. Intenta nuevamente.'); window.location.href = 'friendDashboard.php';</script>";
-=======
         $_SESSION['success']=("Árbol comprado exitosamente.");
         header('Location: friendDashboard.php');
         exit;
     } else {
-        $_SESSION['error']("fallonazo.");
+        $_SESSION['error' ] = ("fallonazo.");
         header('Location: friendDashboard.php');
         exit;
->>>>>>> Stashed changes
     }
 } else {
     echo "<script>alert('No se ha proporcionado un ID de árbol válido.'); window.location.href = 'friendDashboard.php';</script>";
