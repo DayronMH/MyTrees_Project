@@ -1,6 +1,7 @@
 <?php
-require_once 'SalesModel.php';
-require_once 'TreesModel.php';
+
+require_once __DIR__ . '/../models/salesModel.php';
+require_once '../models/treesModel.php';
 
 class SalesController
 {
@@ -36,7 +37,9 @@ class SalesController
         // Create the sale record
         if ($this->salesModel->createSale($treeId, $buyerId)) {
             // Update tree availability after successful sale
-            $this->treesModel->editTree($treeId, $tree[0]['height'], $tree[0]['location'], false);
+            if (!$this->treesModel->editTree($treeId, $tree[0]['height'], $tree[0]['location'], false)) {
+                return ['status' => 'error', 'message' => 'Failed to update tree availability.'];
+            }
             return ['status' => 'success', 'message' => 'Sale created successfully.'];
         } else {
             return ['status' => 'error', 'message' => 'Failed to create sale.'];
