@@ -1,22 +1,22 @@
 <?php
 session_start();
+require_once 'targetPage.php';
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
-require_once '../models/speciesModel.php';
 
-// Inicializar controladores
 $crud = new CrudController();
 
-// Validación del ID
+// Validate species ID from GET request
 $speciesId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$speciesId) {
-    $_SESSION['error'] = "ID de especie inválido";
+    setTargetMessage('error', "ID de especie inválido");
     header("Location: adminDashboard.php");
     exit();
 }
 
-// Manejar POST requests
+// Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check for action in POST request
     if (!isset($_POST['action'])) {
         $_SESSION['error'] = "Acción no especificada";
         header("Location: adminDashboard.php");
@@ -25,32 +25,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $speciesId = filter_input(INPUT_POST, 'species_id', FILTER_VALIDATE_INT);
 
-    if ($_POST['action'] === 'delete_species') {
-        $result = $speciesController->deleteSpecie($speciesId);
+    switch ($_POST['action']) {
+        case 'delete_species':
+            $result = $crud->deleteSpecie($speciesId);
+            if (isset($result['success'])) {
+                setTargetMessage('success', "Especie actualizada");
+                
+            } elseif (isset($result['error'])) {
+                setTargetMessage('error', $result['error']);
+            }
+            break;
 
-        // Comprobamos el resultado
-        if (isset($result['success'])) {
-            $success_message = $result['success']; // Mensaje de éxito si la eliminación fue exitosa
-        } elseif (isset($result['error'])) {
-            $error_message = $result['error']; // Mensaje de error si hubo algún problema
-        }
-    } else if ($_POST['action'] === 'updateSpecies') {
-        $commercialName = $_POST['commercial_name'];
-        $scientificName = $_POST['scientific_name'];
+        case 'updateSpecies':
+            $commercialName = trim($_POST['commercial_name']);
+            $scientificName = trim($_POST['scientific_name']);
 
-        $species = new SpeciesModel();
-        $success = $species->editSpecies($speciesId, $commercialName, $scientificName);
+            $species = new SpeciesModel();
+            if ($species->editSpecies($speciesId, $commercialName, $scientificName)) {
+                
+                setTargetMessage('success', "Especie actualizada");
+                
+            } else {
+                setTargetMessage('error', "ERror al actualizar la especie");
+            }
+            break;
 
-        if ($success) {
-            $_SESSION['success'] = "Especie actualizada correctamente";
-            header("Location: adminDashboard.php");
-            exit();
-        } else {
-            $_SESSION['error'] = "Error al actualizar la especie";
-        }
+        default:
+        setTargetMessage('error', "Accion no valida");
+        
     }
 }
-// Obtener datos de la especie usando el método correcto
+
+// Retrieve current species data
 $currentSpecies = $crud->getSpecieById($speciesId);
 if (!$currentSpecies) {
     $_SESSION['error'] = "No se encontró la especie especificada";
@@ -61,14 +67,12 @@ if (!$currentSpecies) {
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://mytrees.com/public/edit.css">
     <title>Editar Especie</title>
 </head>
-
 <body>
     <div class="container">
         <div class="edit-header">
@@ -109,7 +113,7 @@ if (!$currentSpecies) {
                     <button type="button" class="cancel-button" onclick="window.location.href='adminDashboard.php'">
                         Cancelar
                     </button>
-                    <button type="submit" name="action" value="delete_species" class="delete-btn" onclick="return confirm('¿Estás seguro de eliminar esta especie?');">
+                    <button type="submit" name="action" value="delete_species" class="delete-btn">
                         Eliminar
                     </button>
                 </div>
@@ -117,23 +121,30 @@ if (!$currentSpecies) {
 
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="error-message">
-                    <?php
-                    echo htmlspecialchars($_SESSION['error']);
-                    unset($_SESSION['error']);
-                    ?>
+                    <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
                 </div>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['success'])): ?>
                 <div class="success-message">
-                    <?php
-                    echo htmlspecialchars($_SESSION['success']);
-                    unset($_SESSION['success']);
-                    ?>
+                    <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
                 </div>
             <?php endif; ?>
         </div>
     </div>
+    <script>
+    // Espera 3 segundos (3000 milisegundos) y luego oculta los mensajes
+    setTimeout(function() {
+        var errorMessage = document.querySelector('.error-message');
+        var successMessage = document.querySelector('.success-message');
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
+        if (successMessage) {
+            successMessage.style.display = 'none';
+        }
+    }, 3000);
+</script>
 
     <script>
         function validateForm(form) {
@@ -144,5 +155,4 @@ if (!$currentSpecies) {
         }
     </script>
 </body>
-
 </html>

@@ -108,6 +108,12 @@ if (empty($trees)) {
                 ?>
             </div>
         <?php endif; ?>
+        <button onclick="window.location.href='../views/createTree.php?id=<?php echo $treeId; ?>'"
+                                class="create-btn"
+                                name="action"
+                                value="create_tree">
+                                Crear Arbol
+                </button>
     </div>
 </body>
 

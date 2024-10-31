@@ -4,6 +4,32 @@ require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 $controller = new AdminDashboardController();
 $crud = new crudController();
+$species = $crud->getSpeciesNames();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = processImageUpload('image');
+    
+    if ($result['success']) {
+        // Ejemplo: Guardar en la base de datos
+        $imagePath = $result['path'];
+        $userId = $_SESSION['user_id']; // Asumiendo que tienes el ID del usuario en sesión
+        
+        $sql = "UPDATE users SET profile_image = ? WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        
+        if ($stmt->execute([$imagePath, $userId])) {
+            setTargetMessage('success', "Imagen de perfil actualizada");
+        } else {
+            setTargetMessage('error', "Error al actualizar la base de datos");
+        }
+        
+    } else {
+        setTargetMessage('error', $result['error']);
+    }
+    
+    header("Location: target.php");
+    exit();
+}
+?>
 
 // Procesar el formulario cuando se envía
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -65,32 +91,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
             <form method="POST" action="">
                 <div class="form-group">
-                    <label for="commercial_name">Nombre Comercial:</label>
+                    <label for="location">Ubicacion Geografica:</label>
                     <input
                         type="text"
-                        id="commercial_name"
-                        name="commercial_name"
-                        required
+                        id="location"
+                        name="location"
                         class="form-input"
-                        placeholder="Ingrese el nombre comercial"
-                        value="<?php echo isset($_POST['commercial_name']) ? htmlspecialchars($_POST['commercial_name']) : ''; ?>">
+                        placeholder="Ingrese la ubicacion"
+                        value="<?php echo isset($_POST['location']) ? htmlspecialchars($_POST['location']) : ''; ?>">
                 </div>
                 
                 <div class="form-group">
-                    <label for="scientific_name">Nombre Científico:</label>
+                    <label for="price">Precio:</label>
                     <input
-                        type="text"
-                        id="scientific_name"
-                        name="scientific_name"
+                        type="number"
+                        id="price"
+                        name="price"
                         required
                         class="form-input"
-                        placeholder="Ingrese el nombre científico"
-                        value="<?php echo isset($_POST['scientific_name']) ? htmlspecialchars($_POST['scientific_name']) : ''; ?>">
+                        placeholder="Ingrese el precio"
+                        value="<?php echo isset($_POST['price']) ? htmlspecialchars($_POST['price']) : ''; ?>">
                 </div>
-                
+                <label for="province">Provincia:</label><br>
+        <select id="specie" name="specie">
+        <?php
+        if (!empty($species) && is_array($species)) {
+            foreach ($species as $specie) {
+                $specie_id = isset($specie['id']) ? $specie['id'] : null;
+                $specie_name = isset($specie['commercial_name']) ? $specie['commercial_name'] : null;
+
+                if ( $specie_id !== null && $specie_id ) {
+                    ?>
+                    <option value="<?php echo htmlspecialchars($province_id); ?>">
+                        <?php echo htmlspecialchars($specie_name); ?>
+                    </option>
+                    <?php
+                }
+            }
+            } else {
+                echo '<option>No hay provincias disponibles</option>';
+            }
+            ?>
+        </select>
                 <div class="form-actions">
-                    <button type="submit" name="action" value="createSpecies" class="submit-button">
-                        Crear Especie
+                    <button type="submit" name="action" value="createTrees" class="submit-button">
+                        Crear Arbol
                     </button>
                     <a href="adminDashboard.php" class="cancel-button">
                         Cancelar
@@ -100,4 +145,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         </div>
     </div>
 </body>
-</html>
+</html>sr

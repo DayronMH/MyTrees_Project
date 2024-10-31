@@ -67,4 +67,8 @@ class CrudController {
     public function getSpecieById($id) {
         return $this->speciesModel->getSpeciesById($id);
     }
+    public function getSpeciesNames($id) {
+        return $this->speciesModel->getCommercialNames();
+    }
+    
 }
