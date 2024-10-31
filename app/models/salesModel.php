@@ -30,7 +30,7 @@ class SalesModel extends BaseModel
      */
     public function getSalesByBuyerId(int $buyerId): array
     {
-        $query = "SELECT * FROM `Sales` WHERE `buyer_id` = :buyer_id";
+        $query = "SELECT * FROM `sales` WHERE `buyer_id` = :buyer_id";
         return $this->fetchRecords($query, [':buyer_id' => $buyerId]);
     }
     public function getPurchasedTree(int $buyerId): array

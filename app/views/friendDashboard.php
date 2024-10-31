@@ -17,7 +17,12 @@ $purchasedTrees = [];
 //try
 
 if (!isset($_SESSION['user_id'])) {
+<<<<<<< Updated upstream
     echo "<script>alert('Debes iniciar sesión para comprar un árbol.'); window.location.href = '../login.php';</script>";
+=======
+    $_SESSION['error']=( "Debes iniciar sesión para comprar un árbol.");
+    header('Location: ../login.php');
+>>>>>>> Stashed changes
     exit;
 }
 
@@ -29,9 +34,19 @@ if (isset($_POST['tree_id'])) {
     $result = $salesController->createSale($userId, $treeId);
 
     if ($result) {
+<<<<<<< Updated upstream
         echo "<script>alert('Árbol comprado exitosamente.'); window.location.href = 'friendDashboard.php';</script>";
     } else {
         echo "<script>alert('Error al comprar el árbol. Intenta nuevamente.'); window.location.href = 'friendDashboard.php';</script>";
+=======
+        $_SESSION['success']=("Árbol comprado exitosamente.");
+        header('Location: friendDashboard.php');
+        exit;
+    } else {
+        $_SESSION['error']("fallonazo.");
+        header('Location: friendDashboard.php');
+        exit;
+>>>>>>> Stashed changes
     }
 } else {
     echo "<script>alert('No se ha proporcionado un ID de árbol válido.'); window.location.href = 'friendDashboard.php';</script>";
@@ -86,9 +101,23 @@ $purchasedTrees = $treesController->getPurchasedTreesByUser($userId); // Impleme
                             </div>
                         </div>
                         <div class="action-buttons">
-                            <form method="POST" action="comprar.php">
+                            <form method="POST" action="">
                                 <input type="hidden" name="tree_id" value="<?php echo htmlspecialchars($tree['id']); ?>">
                                 <button type="submit" name="action" value="buy_tree" class="action-button buy-btn">Comprar</button>
+                                <?php 
+                                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'buy_tree' && isset($_POST['tree_id'])) {
+                                    $treeId = $_POST['tree_id'];
+                                    
+                                    // Intentar realizar la compra usando el controlador de ventas
+                                    $result = $salesController->createSale($userId, $treeId);
+                                
+                                    if ($result) {
+                                        $_SESSION['success'] = "Árbol comprado exitosamente.";
+                                    } else {
+                                        $_SESSION['error'] = "Ocurrió un problema al intentar comprar el árbol.";
+                                    }
+                                }
+                                ?>
                             </form>
                         </div>
                     </div>
@@ -130,6 +159,4 @@ $purchasedTrees = $treesController->getPurchasedTreesByUser($userId); // Impleme
         </div>
     </div>
 </body>
-<script src="http://mytrees.com/public/js/modal.js"></script>
-
 </html>
