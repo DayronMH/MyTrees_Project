@@ -234,9 +234,9 @@ body {
 
 /* Create Button */
 .create-btn {
+    transform: translateX(-50%) translateY(-1px);
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    
     display: inline-block;
     margin: 30px 0;
     padding: 15px 30px;

@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'targetPage.php';
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 
@@ -8,7 +9,7 @@ $crud = new CrudController();
 // Validate species ID from GET request
 $speciesId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$speciesId) {
-    $_SESSION['error'] = "ID de especie inválido";
+    setTargetMessage('error', "ID de especie inválido");
     header("Location: adminDashboard.php");
     exit();
 }
@@ -28,9 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'delete_species':
             $result = $crud->deleteSpecie($speciesId);
             if (isset($result['success'])) {
-                $success_message = $result['success'];
+                setTargetMessage('success', "Especie actualizada");
+                
             } elseif (isset($result['error'])) {
-                $error_message = $result['error'];
+                setTargetMessage('error', $result['error']);
             }
             break;
 
@@ -41,16 +43,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $species = new SpeciesModel();
             if ($species->editSpecies($speciesId, $commercialName, $scientificName)) {
                 
-                $_SESSION['success'] = "Especie actualizada correctamente";
+                setTargetMessage('success', "Especie actualizada");
                 
             } else {
-                $error_message = "Error al actualizar la especie";
+                setTargetMessage('error', "ERror al actualizar la especie");
             }
             break;
 
         default:
-            $_SESSION['error'] = "Acción no válida";
-            exit();
+        setTargetMessage('error', "Accion no valida");
+        
     }
 }
 
