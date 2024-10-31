@@ -62,20 +62,6 @@ class CrudController {
             return ['error' => 'Error en el servidor: ' . $e->getMessage()];
         }
     }
-<<<<<<< Updated upstream
-    
-    public function createSpecie($commercial_name,$scientific_name){
-        
-        if($this->speciesModel->createSpecie($commercial_name,$scientific_name)){
-            $_SESSION['success'] = "Especie creada correctamente";
-        } else {
-            $_SESSION['error'] = "Error al crear la especie";
-        }
-        // Redirigir de vuelta a la página actual
-        header('Location: '. $_SERVER['PHP_SELF']);
-        exit();
-=======
->>>>>>> Stashed changes
 
     // Método para obtener una especie por ID (nombre consistente)
     public function getSpecieById($id) {

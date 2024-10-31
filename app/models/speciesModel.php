@@ -16,13 +16,9 @@ class speciesModel extends BaseModel
     {
         date_default_timezone_set('America/Costa_Rica'); // Cambia la zona horaria según tu ubicación
 
-// Obtener la fecha y hora actual
-<<<<<<< Updated upstream
+
         $date = date('Y-m-d H:i:s');
         
-=======
-        $date = date('Y-m-d H:i:s'); 
->>>>>>> Stashed changes
         $query = "INSERT INTO `species` (`commercial_name`, `scientific_name`, `availability_date`)
                   VALUES (:commercial_name, :scientific_name, :availability_date)";
 

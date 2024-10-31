@@ -157,7 +157,7 @@ class UsersModel extends BaseModel
             throw new Exception("Database query failed: " . $e->getMessage());
         }
     }
-    public function createFirstAdmin(): bool 
+    public function createFirstAdmin($role): bool 
     {
         // Check for previous admins
         $checkAdminQuery = "SELECT COUNT(*) as admin_count FROM `users` WHERE `role` = 'admin'";

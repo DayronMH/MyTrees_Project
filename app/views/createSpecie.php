@@ -18,13 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         if (empty($commercialName) || empty($scientificName)) {
             $_SESSION['error'] = "Todos los campos son requeridos";
         } else {
-            // Intentar crear la especie
-<<<<<<< Updated upstream
-            $success = $crud->createSpecie($commercialName, $scientificName);
-=======
+
             $success = $controller->createSpecie($speciesId,$commercialName, $scientificName);
->>>>>>> Stashed changes
-            
+
             if ($success) {
                 $_SESSION['success'] = "Especie creada correctamente";
                
