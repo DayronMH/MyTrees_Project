@@ -29,17 +29,8 @@ class TreesModel extends BaseModel
 
     public function editTree($treeId, $height, $location, $available)
     {
-        $query = "UPDATE `trees` 
-        SET `height` = :height, 
-            `location` = :location, 
-            `available` = :available, 
-            WHERE `id` = :id";
-        return $this->executeQuery($query, [
-            ':id' => $treeId,
-            ':height' => $height,
-            ':location' => $location,
-            ':available' => $available
-        ]);
+        $query = "UPDATE `trees`  SET `height` = :height,   `location` = :location, `available` = :available  WHERE `id` = :id";
+        return $this->executeQuery($query, [':id' => $treeId, ':height' => $height, ':location' => $location, ':available' => $available ]);
     }
 
     /**
@@ -84,14 +75,10 @@ class TreesModel extends BaseModel
      */
     public function updateTree(int $id, int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): bool
     {
-        $query = "UPDATE trees 
-        SET species_id = :species_id, owner_id = :owner_id, height = :height, location = :location, available = :available, price = :price, photo_url = :photo_url WHERE id = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':owner_id', $ownerId, PDO::PARAM_INT);
-        $stmt->bindParam(':available', $available, PDO::PARAM_BOOL);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    
-        return $stmt->execute();
+        $query = "UPDATE trees  SET species_id = :species_id,   owner_id = :owner_id,   height = :height,  location = :location,
+         available = :available,  price = :price,  photo_url = :photo_url  WHERE id = :id";
+        return $this->executeQuery($query, [':species_id' => $species_id, ':owner_id' => $owner_id, ':height' => $height, ':location' => $location,
+         ':available' => $available, ':price' => $price, ':photo_url' => $photo_url, ':id' => $id]);
     }
 
     /**
@@ -212,7 +199,7 @@ class TreesModel extends BaseModel
     
     public function getAvailableTrees(): array
     {
-        $query = "SELECT * FROM `trees` WHERE 'status' = '1'";
+        $query = "SELECT * FROM `trees` WHERE `available` = TRUE";
         return $this->executeQuery($query);
     }
 

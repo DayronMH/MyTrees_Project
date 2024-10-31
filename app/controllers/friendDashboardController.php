@@ -65,22 +65,41 @@ class FriendDashboardController {
 
     public function buyTree($userId, $treeId) {
         if (!$this->isTreeAvailable($treeId)) {
-            return false;
+            return false; // El árbol no está disponible
         }
-        $this->registerSale($userId, $treeId);
-        $this->markTreeAsSold($treeId);
-        return true;
+        
+        // Registrar la venta
+        if ($this->registerSale($userId, $treeId)) {
+            // Marcar el árbol como vendido
+            $this->markTreeAsSold($treeId);
+            return true; // Compra exitosa
+        }
+        
+        return false; // Fallo en el registro de la venta
     }
     
     private function isTreeAvailable($treeId) {
         $query = "SELECT available FROM Trees WHERE id = :treeId";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':treeId' => $treeId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result && $result['available'];
     }
     
     private function registerSale($userId, $treeId) {
         $query = "INSERT INTO Sales (tree_id, buyer_id) VALUES (:treeId, :userId)";
+        $stmt = $this->db->prepare($query);
+        
+        return $stmt->execute([
+            ':treeId' => $treeId,
+            ':userId' => $userId
+        ]);
     }
     
     private function markTreeAsSold($treeId) {
         $query = "UPDATE Trees SET available = FALSE WHERE id = :treeId";
-    }   
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':treeId' => $treeId]);
+    }
 }
