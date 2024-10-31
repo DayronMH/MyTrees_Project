@@ -3,7 +3,6 @@ require_once 'baseModel.php';
 
 class UsersModel extends BaseModel
 {
-    createFirstAdmin();
     public function __construct()
     {
         parent::__construct('users');
