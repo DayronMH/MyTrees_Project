@@ -2,11 +2,13 @@
 require_once '../models/usersModel.php';
 require_once '../models/treesModel.php';
 require_once '../models/speciesModel.php';
-
+require_once '../models/salesModel.php';
 class FriendDashboardController {
     private $userModel;
     private $treeModel;
+    private $salesModel;
     private $speciesModel;
+    private $sales;
     private $user;
     private $roleId;
     
@@ -21,7 +23,7 @@ class FriendDashboardController {
         $this->userModel = new UsersModel();
         $this->treeModel = new TreesModel();
         $this->speciesModel = new SpeciesModel();
-        
+        $this->salesModel = new salesModel();
         // Comprobar si el ID del usuario está en la sesión
         if (isset($_SESSION['user_id'])) {
             $this->user = (int)$_SESSION['user_id']; // Asegúrate de que sea un entero
@@ -32,21 +34,11 @@ class FriendDashboardController {
         }
     }
 
-    public function getAvailableTrees(): array {
+    public function getAvailableTrees() {
         $availableTrees = $this->treeModel->getAvailableTreesWithSpecies();
-
-        foreach ($availableTrees as $tree) {
-            $trees[] = [
-                'id' => $tree['id'],
-                'height' => $tree['height'],
-                'location' => htmlspecialchars($tree['location']), // Escape output
-                'price' => number_format($tree['price'], 2), // Format price
-                'photo_url' => $tree['photo_url'],
-                'species' => htmlspecialchars($tree['commercial_name']) // Species information
-            ];
-        }
+        $trees = $availableTrees;
         return $trees;
-    } 
+    }
     public function getUserPurchasedTrees(int $userId): array {
         $purchasedTrees = $this->treeModel->getPurchasedTreesByUser($userId);
         $trees = [];
@@ -64,42 +56,18 @@ class FriendDashboardController {
     }
 
     public function buyTree($userId, $treeId) {
-        if (!$this->isTreeAvailable($treeId)) {
+        if (!$this->salesModel->isTreeAvailable($treeId)) {
             return false; // El árbol no está disponible
         }
         
         // Registrar la venta
-        if ($this->registerSale($userId, $treeId)) {
+        if ($this->salesModel->createSale($userId, $userId)) {
             // Marcar el árbol como vendido
-            $this->markTreeAsSold($treeId);
+            $this->salesModel->markTreeAsSold($treeId);
             return true; // Compra exitosa
         }
         
         return false; // Fallo en el registro de la venta
     }
     
-    private function isTreeAvailable($treeId) {
-        $query = "SELECT available FROM Trees WHERE id = :treeId";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([':treeId' => $treeId]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        return $result && $result['available'];
-    }
-    
-    private function registerSale($userId, $treeId) {
-        $query = "INSERT INTO Sales (tree_id, buyer_id) VALUES (:treeId, :userId)";
-        $stmt = $this->db->prepare($query);
-        
-        return $stmt->execute([
-            ':treeId' => $treeId,
-            ':userId' => $userId
-        ]);
-    }
-    
-    private function markTreeAsSold($treeId) {
-        $query = "UPDATE Trees SET available = FALSE WHERE id = :treeId";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([':treeId' => $treeId]);
-    }
 }

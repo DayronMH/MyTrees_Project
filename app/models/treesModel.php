@@ -199,13 +199,18 @@ class TreesModel extends BaseModel
     
     public function getAvailableTrees(): array
     {
-        $query = "SELECT * FROM `trees` WHERE `available` = TRUE";
+        $query = "SELECT * FROM `trees` WHERE `available` = 1";
+        return $this->executeQuery($query);
+    }
+    public function getPurchasedTrees(): array
+    {
+        $query = "SELECT * FROM `trees` WHERE `available` = False";
         return $this->executeQuery($query);
     }
 
     public function getAvailableTreesWithSpecies(){
         $query = " SELECT t.id, t.height, t.location, t.price, t.photo_url, s.commercial_name FROM trees t 
-            JOIN species s ON t.species_id = s.id WHERE t.available = TRUE"; 
+            JOIN species s ON t.species_id = s.id WHERE t.available = 1"; 
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         

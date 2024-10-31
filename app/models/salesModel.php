@@ -33,6 +33,11 @@ class SalesModel extends BaseModel
         $query = "SELECT * FROM `Sales` WHERE `buyer_id` = :buyer_id";
         return $this->fetchRecords($query, [':buyer_id' => $buyerId]);
     }
+    public function getPurchasedTree(int $buyerId): array
+    {
+        $query = "SELECT * FROM `trees` WHERE `available` = :available";
+        return $this->fetchRecords($query, [':buyer_id' => $buyerId]);
+    }
 
     /**
      * Retrieves sales records by tree ID.
@@ -82,4 +87,25 @@ class SalesModel extends BaseModel
             return false;
         }
     }
+    public function isTreeAvailable($treeId) {
+        $query = "SELECT available FROM Trees WHERE id = :treeId";
+        return $this->fetchRecords($query, [':tree_id' => $treeId]);
+    }
+    
+   public function registerSale($userId, $treeId) {
+        $query = "INSERT INTO Sales (tree_id, buyer_id) VALUES (:treeId, :userId)";
+        $stmt = $this->db->prepare($query);
+        
+        return $stmt->execute([
+            ':treeId' => $treeId,
+            ':userId' => $userId
+        ]);
+    }
+    
+    public function markTreeAsSold($treeId) {
+        $query = "UPDATE Trees SET available = FALSE WHERE id = :treeId";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':treeId' => $treeId]);
+    }
+
 }

@@ -40,6 +40,7 @@ class loginController {
                       </script>";
                     exit();
                 } else if ($user['role'] === 'friend') {
+                    $_SESSION['user_id'] = $user['id'];
                     echo "<script>
                         alert('Login exitoso');
                         window.location.href = 'http://mytrees.com/app/views/friendDashboard.php';
