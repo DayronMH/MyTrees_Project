@@ -16,7 +16,7 @@ class SalesModel extends BaseModel
      * @param int $buyerId The ID of the buyer.
      * @return bool Returns true on success, false on failure.
      */
-    public function createSale(int $buyerId, int $tree): bool
+    public function createSale(int $buyerId, int $treeId): bool
     {
         $query = "INSERT INTO `Sales` (`tree_id`, `buyer_id`) VALUES (:tree_id, :buyer_id)";
         return $this->executeQuery($query, [':tree_id' => $treeId, ':buyer_id' => $buyerId]);

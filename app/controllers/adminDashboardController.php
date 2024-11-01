@@ -38,35 +38,31 @@ class AdminDashboardController
         $_SESSION['username'] = $user['name'];
     }
 
-    private function handlePostActions()
-    {
+    public function handlePostActions() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             switch ($_POST['action']) {
-            
                 case 'view_species':
                     if (isset($_POST['species_id'])) {
                         $this->toggleSpeciesVisibility($_POST['species_id']);
-                    }
-                    break;
-    
-                case 'edit_species':
-                    if (isset($_POST['species_id'])) {
-                        $speciesId = $_POST['species_id'];
-                        header("Location: ../views/edit.php?id=$speciesId");
+                        // Redirigir a la misma página para refrescar
+                        header("Location: " . $_SERVER['PHP_SELF']);
                         exit();
                     }
                     break;
             }
         }
     }
-        private function toggleSpeciesVisibility($speciesId)
-    {
+    
+    private function toggleSpeciesVisibility($speciesId) {
         if (!isset($_SESSION['visible_species'])) {
-            $_SESSION['visible_species'] = array();
+            $_SESSION['visible_species'] = [];
         }
-
+        
+        // Asegúrate de que $speciesId sea un número
+        $speciesId = (int)$speciesId;
+        
         if (in_array($speciesId, $_SESSION['visible_species'])) {
-            $_SESSION['visible_species'] = array_diff($_SESSION['visible_species'], array($speciesId));
+            $_SESSION['visible_species'] = array_values(array_diff($_SESSION['visible_species'], [$speciesId]));
         } else {
             $_SESSION['visible_species'][] = $speciesId;
         }
