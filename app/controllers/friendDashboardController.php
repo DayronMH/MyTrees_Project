@@ -10,7 +10,6 @@ class FriendDashboardController {
     private $salesModel;
     private $speciesModel;
     private $user;
-
     public $purchasedTrees;
 
     public function __construct() {
@@ -27,7 +26,7 @@ class FriendDashboardController {
         // Obtener usuario de sesión
         if (isset($_SESSION['user_id'])) {
             $this->user = (int)$_SESSION['user_id'];
-            $this->purchasedTrees = $this->getUserPurchasedTrees($this->user);
+            $this->purchasedTrees = $this->getTreesByOwnerId($this->user);
         } else {
             $this->user = null;
             $this->purchasedTrees = [];
@@ -47,20 +46,8 @@ class FriendDashboardController {
         return $this->treeModel->getAvailableTreesWithSpecies();
     }
 
-    public function getUserPurchasedTrees(int $userId): array {
-        $purchasedTrees = $this->treeModel->getPurchasedTreesByUser($userId);
-        $trees = [];
-        
-        foreach ($purchasedTrees as $tree) {
-            $trees[] = [
-                'height' => $tree['height'],
-                'location' => htmlspecialchars($tree['location']),
-                'price' => number_format($tree['price'], 2),
-                'photo_url' => $tree['photo_url'],
-                'species' => htmlspecialchars($tree['commercial_name'])
-            ];
-        }
-        return $trees;
+    public function getTreesByOwnerId(int $userId) {
+       return $this->treeModel->getPurchasedTreesByUser($userId);
     }
 
     public function buyTree($userId, $treeId) {
@@ -71,5 +58,10 @@ class FriendDashboardController {
             }
         }
         return false;
+    }
+
+    public function getUserById($UserId) {
+
+        return $this->userModel->getUserById($UserId);
     }
 }

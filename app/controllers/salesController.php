@@ -21,25 +21,9 @@ class SalesController
      * @param int $buyerId The ID of the buyer.
      * @return array Returns an array with status and message.
      */
-    public function createSale(int $treeId, int $buyerId): array
+    public function createSale(int $buyerId, int $treeId): array
     {
-        // Check if the tree is available for sale
-        $tree = $this->treesModel->getTreeById($treeId);
-        
-        if (empty($tree)) {
-            return ['status' => 'error', 'message' => 'Tree not found.'];
-        }
-        
-        if (!$tree[0]['available']) {
-            return ['status' => 'error', 'message' => 'Tree is not available for sale.'];
-        }
-
-        // Create the sale record
-        if ($this->salesModel->createSale($treeId, $buyerId)) {
-            // Update tree availability after successful sale
-            if (!$this->treesModel->editTree($treeId, $tree[0]['height'], $tree[0]['location'], false)) {
-                return ['status' => 'error', 'message' => 'Failed to update tree availability.'];
-            }
+        if ($this->salesModel->createSale($buyerId, $treeId)) {
             $this->salesModel->markTreeAsSold($treeId);
             return ['status' => 'success', 'message' => 'Sale created successfully.'];
 

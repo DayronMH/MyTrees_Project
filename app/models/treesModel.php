@@ -73,13 +73,21 @@ class TreesModel extends BaseModel
      * @param string $photo_url The URL of the tree's photo.
      * @return bool Returns true on success, false on failure.
      */
-    public function updateTree(int $id, int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): bool
+    public function updateTree(int $id, int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): array
     {
         $query = "UPDATE trees  SET species_id = :species_id,   owner_id = :owner_id,   height = :height,  location = :location,
          available = :available,  price = :price,  photo_url = :photo_url  WHERE id = :id";
         return $this->executeQuery($query, [':species_id' => $species_id, ':owner_id' => $owner_id, ':height' => $height, ':location' => $location,
          ':available' => $available, ':price' => $price, ':photo_url' => $photo_url, ':id' => $id]);
     }
+
+    public function buyTree(int $id, int $owner_id): bool
+    {
+        $query = "UPDATE trees  SET owner_id = :owner_id, available = FALSE  WHERE id = :id";
+        $result = $this->executeQuery($query, [':owner_id' => $owner_id,':id' => $id]);
+        return $result > 0;
+    }
+
 
     /**
      * Retrieves all available trees.
@@ -199,7 +207,7 @@ class TreesModel extends BaseModel
     
     public function getAvailableTrees(): array
     {
-        $query = "SELECT * FROM `trees` WHERE `available` = 1";
+        $query = "SELECT * FROM `trees` WHERE `available` = TRUE";
         return $this->executeQuery($query);
     }
     public function getPurchasedTrees(): array
@@ -208,18 +216,18 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query);
     }
 
-    public function getAvailableTreesWithSpecies(){
-        $query = " SELECT t.id, t.height, t.location, t.price, t.photo_url, s.commercial_name FROM trees t 
-            JOIN species s ON t.species_id = s.id WHERE t.available = 1"; 
+    public function getAvailableTreesWithSpecies() {
+        $query = "SELECT t.*, s.commercial_name, s.scientific_name, s.availability_date FROM Trees t 
+        JOIN Species s ON t.species_id = s.id WHERE t.available = TRUE"; 
         $stmt = $this->db->prepare($query);
         $stmt->execute();
-        
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
+    
 
-    public function getPurchasedTreesByUser(int $userId): array {
-        $sql = "SELECT t.height, t.location, t.price, t.photo_url, s.commercial_name FROM trees t 
-            JOIN species s ON t.species_id = s.id JOIN sales sa ON sa.tree_id = t.id WHERE sa.buyer_id = :userId";
+    public function getPurchasedTreesByUser(int $userId) {
+        $sql = "SELECT * FROM Trees t 
+            JOIN species s ON t.species_id = s.id  WHERE owner_id = :userId";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
         $stmt->execute();

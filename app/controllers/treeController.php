@@ -26,10 +26,10 @@ class TreeController {
         $success = null;
 
         if ($treeId && $userId) {
-            $treeModel = new TreeModel();
+            $treesModel = new TreesModel();
     
             // Update the tree with the user ID and available status
-            $success = $treeModel->updateTree($treeId, $userId, false);
+            $success = $treesModel->buyTree($treeId, $userId);
     
             if ($success) {
                 // Redirect to success page or reload current page
