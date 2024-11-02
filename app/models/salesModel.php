@@ -33,12 +33,7 @@ class SalesModel extends BaseModel
         $query = "SELECT * FROM `sales` WHERE `buyer_id` = :buyer_id";
         return $this->fetchRecords($query, [':buyer_id' => $buyerId]);
     }
-    public function getPurchasedTree(int $buyerId): array
-    {
-        $query = "SELECT * FROM `trees` WHERE `available` = :available";
-        return $this->fetchRecords($query, [':buyer_id' => $buyerId]);
-    }
-
+ 
     /**
      * Retrieves sales records by tree ID.
      *

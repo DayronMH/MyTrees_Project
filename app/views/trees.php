@@ -1,112 +1,120 @@
 <?php
 session_start();
+require_once '../controllers/friendDashboardController.php';
 require_once '../models/treesModel.php';
+require_once '../controllers/salesController.php';
+require_once '../controllers/treeController.php';
 
-$friend_id = isset($_GET['friend_id']) ? $_GET['friend_id'] : null;
+// Initialize controllers
+$friendDashboardController = new FriendDashboardController();
+$salesController = new SalesController();
+$treeController = new TreeController();
 
+// Get user data
+$userId = $_SESSION['user_id'] ?? null;
+$friend_id = $_GET['friend_id'] ?? null;
+
+// Redirect if no friend_id
 if (is_null($friend_id)) {
     header('Location: adminDashboard.php');
     exit;
 }
 
+// Get trees data
 $treesModel = new TreesModel();
-$trees = $treesModel->getTreesByowner($friend_id);
+$trees = $treesModel->getTreesByOwner($friend_id);
 
+// Check if trees exist
 if (empty($trees)) {
     echo "<script>
-            alert('Este amigo no tiene arboles');
-            window.location.href = 'http://mytrees.com/app/views/adminDashboard.php';
+    alert('Este amigo no tiene árboles');
+            window.location.href = 'adminDashboard.php';
           </script>";
-    exit();
-}
+          exit();
+        }
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="http://mytrees.com/public/dashboard.css">
-    <title>Árboles de <?php echo htmlspecialchars($trees[0]['owner_name']); ?></title>
+    <link rel="stylesheet" href="../../public/tree.css">
+    <title>Árboles de <?php echo htmlspecialchars($trees[0]['owner_name'] ?? ''); ?></title>
 </head>
 
 <body>
     <div class="container">
         <div class="view-header">
-        <h1>Árboles de <?php echo htmlspecialchars($trees[0]['owner_name']); ?></h1>
-        <div class="header-buttons">
-        <a href="editUser.php?friend_id=<?php echo urlencode($friend_id); ?>" class="edit-user-button">Editar Usuario</a>
-        <a href="adminDashboard.php" class="back-button">← Volver al Dashboard</a>
-    </div>
+            <h1>Árboles de <?php echo htmlspecialchars($trees[0]['owner_name'] ?? ''); ?></h1>
+            <div class="header-buttons">
+                <a href="editUser.php?friend_id=<?php echo urlencode($friend_id); ?>" class="edit-user-button">
+                    Editar Usuario
+                </a>
+                <a href="adminDashboard.php" class="back-button">← Volver al Dashboard</a>
+            </div>
         </div>
-
+        
         <div class="trees-container">
-            <?php foreach ($trees as $tree): ?>
+            <?php foreach ($trees as $tree):
+                $treeId = $tree['id']; ?>
+                
                 <div class="tree-card">
-                    <?php if ($tree['photo_url']): ?>
-                        <img src="<?php echo htmlspecialchars($tree['photo_url']); ?>" alt="Foto del árbol" class="tree-image">
+                    <?php if (!empty($tree['photo_url'])): ?>
+                        <img src="<?php echo htmlspecialchars($tree['photo_url']); ?>" alt="Árbol" class="tree-image">
                     <?php endif; ?>
+                    
+                    <div class="tree-info">
+                        <span class="tree-name">
+                            <?php echo htmlspecialchars($tree['commercial_name'] ?? 'Nombre no disponible'); ?>
+                        </span>
+                        
+                        <div class="tree-details">
+                            <div class="detail-item">
+                                <span class="detail-label">ID:</span>
+                                <span class="detail-value"><?php echo htmlspecialchars($tree['id']); ?></span>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <span class="detail-label">Altura:</span>
+                                <span class="detail-value">
+                                    <?php echo htmlspecialchars($tree['height'] ?? '0'); ?> metros
+                                </span>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <span class="detail-label">Ubicación:</span>
+                                <span class="detail-value">
+                                    <?php echo htmlspecialchars($tree['location'] ?? 'No especificada'); ?>
+                                </span>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <span class="detail-label">Precio:</span>
+                                <span class="detail-value">
+                                    $<?php echo htmlspecialchars($tree['price'] ?? '0'); ?>
+                                </span>
+                            </div>
+                        </div>
 
-                    <div class="tree-details">
-                        <h2 class="specie_name"><strong>Especie:</strong> <?php echo htmlspecialchars($tree['commercial_name']); ?></h2>
+                        <div class="trees-actions">
+                       <button onclick="window.location.href='../views/editTrees.php?id=<?php echo htmlspecialchars($tree['id'], ENT_QUOTES); ?>'"
+                            action="editTree"
+                            class="edit-tree">
+                            Editar
+                         </button>
 
-                        <div class="tree-info">
-                            <p><strong>Altura:</strong> <?php echo htmlspecialchars($tree['height']); ?> metros</p>
-                            <p><strong>Ubicación:</strong> <?php echo htmlspecialchars($tree['location']); ?></p>
-                            <p><strong>Precio:</strong> $<?php echo htmlspecialchars($tree['price']); ?></p>
-                            <p class="status <?php echo $tree['available'] ? 'available' : 'sold'; ?>">
-                                <?php echo $tree['available'] ? 'Disponible' : 'Vendido'; ?>
-                            </p>
+                          
                         </div>
                     </div>
                 </div>
-                <div class="trees-actions">
-                    <button onclick="window.location.href='../views/edit.php?id=<?php echo $speciesId; ?>'"
-                        class="action-button edit-btn"
-                        name="action"
-                        value="edit_species">
-                        Editar
-                    </button>
-
-                    <form method="POST" action="" style="display: inline;" class="delete-form">
-                        <input type="hidden" name="species_id" value="<?php echo $speciesId; ?>">
-                        <button type="submit"
-                            name="action"
-                            value="delete_species"
-                            class="action-button delete-btn"
-                            onclick="return confirm('¿Estás seguro de eliminar esta especie?')">
-                            Eliminar
-                        </button>
-                    </form>
-                </div>
             <?php endforeach; ?>
         </div>
-
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="error-message">
-                <?php
-                echo htmlspecialchars($_SESSION['error']);
-                unset($_SESSION['error']);
-                ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION['success'])): ?>
-            <div class="success-message">
-                <?php
-                echo htmlspecialchars($_SESSION['success']);
-                unset($_SESSION['success']);
-                ?>
-            </div>
-        <?php endif; ?>
-        <button onclick="window.location.href='../views/createTree.php?id=<?php echo $treeId; ?>'"
-                                class="create-btn"
-                                name="action"
-                                value="create_tree">
-                                Crear Arbol
-                </button>
+        <!-- Create Tree Button -->
+        <button onclick="window.location.href='createTree.php?friend_id=<?php echo $friend_id; ?>'"
+                class="create-btn">
+            Crear Árbol
+        </button>
     </div>
 </body>
-
 </html>

@@ -145,7 +145,14 @@ class TreesModel extends BaseModel
                   WHERE t.owner_id = :id";
         return $this->executeQuery($query, [':id' => $owner_id]);
     }
-
+    public function getEditableTreeById($tree_id): array
+    {
+        $query = "SELECT t.id, t.height, s.commercial_name, t.location, t.available 
+                  FROM trees t 
+                  JOIN species s ON t.species_id = s.id 
+                  WHERE t.id = :tree_id";
+        return $this->executeQuery($query, [':tree_id' => $tree_id]);
+    }
 
     /**
      * Retrieves information about a tree by ID.
@@ -153,14 +160,13 @@ class TreesModel extends BaseModel
      * @param int $id The ID of the tree.
      * @return array Returns an array of tree information.
      */
-    public function getTreeById(int $id): array
-    {
+    public function getTreeById(int $treeId): array{
         $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
                   FROM Trees t 
                   JOIN Species s ON t.species_id = s.id 
                   LEFT JOIN Users u ON t.owner_id = u.id 
                   WHERE t.id = :id";
-        return $this->executeQuery($query, [':id' => $id]);
+        return $this->executeQuery($query, [':id' => $treeId]);
     }
 
     /**
