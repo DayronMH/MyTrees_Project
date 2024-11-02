@@ -27,11 +27,36 @@ class TreesModel extends BaseModel
         ]);
     }
 
-    public function editTree($treeId, $height, $location, $available)
-    {
-        $query = "UPDATE `trees`  SET `height` = :height,   `location` = :location, `available` = :available  WHERE `id` = :id";
-        return $this->executeQuery($query, [':id' => $treeId, ':height' => $height, ':location' => $location, ':available' => $available ]);
+    public function editTree($treeId, $specie, $height, $location, $available) {
+        try {
+            $query = "UPDATE trees t 
+                      JOIN species s ON t.species_id = s.id 
+                      SET t.height = :height,
+                          t.location = :location,
+                          t.available = :available,
+                          s.commercial_name = :commercial_name
+                      WHERE t.id = :id";
+            
+            $stmt = $this->db->prepare($query);
+            $result = $stmt->execute([
+                ':id' => $treeId,
+                ':height' => $height,
+                ':location' => $location,
+                ':available' => $available,
+                ':commercial_name' => $specie
+            ]);
+            
+            if ($result) {
+                return ['success' => 'Árbol y especie actualizados correctamente'];
+            } else {
+                return ['error' => 'Error al actualizar el árbol y la especie'];
+            }
+            
+        } catch (PDOException $e) {
+            return ['error' => 'Error al actualizar: ' . $e->getMessage()];
+        }
     }
+    
 
     /**
      * Creates a new tree with all specified fields.

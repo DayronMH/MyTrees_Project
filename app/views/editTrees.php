@@ -1,18 +1,15 @@
 <?php
 session_start();
-require_once '../controllers/adminDashboardController.php';
-require_once './targetPage.php';
-require_once '../controllers/crudController.php';
 require_once '../models/treesModel.php';
+require_once './targetPage.php';
 
-$crud = new CrudController();
 $trees = new TreesModel();
 
 // Validación del ID
 if (isset($_GET['id'])) {
     $treeId = htmlspecialchars($_GET['id'], ENT_QUOTES);
 } else {
-    header('Location: ../views/trees.php'); 
+    header('Location: ../views/trees.php');
     exit;
 }
 
@@ -27,14 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST['action'] === 'edit_tree') {
         // Obtener los valores del formulario
         $height = filter_input(INPUT_POST, 'height', FILTER_SANITIZE_STRING);
+        $specie = filter_input(INPUT_POST, 'specie', FILTER_SANITIZE_STRING);
         $location = filter_input(INPUT_POST, 'location', FILTER_SANITIZE_STRING);
-        $available = isset($_POST['available']) ? 1 : 0;
-        
-        $result = $trees->editTree($treeId, $height, $location, $available);
+        $available = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
 
-        if (isset($result['success'])) {
+        $result = $trees->editTree($treeId, $specie,$height, $location, $available);
+
+        if ($result) {
             setTargetMessage('success', "Árbol editado correctamente");
-        } elseif (isset($result['error'])) {
+            header("Location: trees.php");
+            exit();
+        } else {
             setTargetMessage('error', "Ocurrió un error al editar el árbol");
         }
     }
@@ -51,6 +51,7 @@ if (!$tree) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,7 +62,7 @@ if (!$tree) {
 <body>
     <div class="container">
         <div class="edit-header">
-            <h1>EDITAR ARBOL</h1>
+            <h1>EDITAR ÁRBOL</h1>
             <a href="trees.php" class="back-button">← VOLVER AL DASHBOARD</a>
         </div>
 
@@ -90,8 +91,9 @@ if (!$tree) {
                         required
                         class="form-input">
                 </div>
+
                 <div class="form-group">
-                    <label for="location">Ubicacion:</label>
+                    <label for="location">Ubicación:</label>
                     <input
                         type="text"
                         id="location"
@@ -100,7 +102,19 @@ if (!$tree) {
                         required
                         class="form-input">
                 </div>
-                
+
+                <div class="mydict">
+                    <div>
+                        <label>
+                            <input type="radio" name="available" value="1" <?php echo (!isset($tree[0]['available']) || $tree[0]['available'] == 1) ? 'checked' : ''; ?>>
+                            <span>Disponible</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="available" value="0" <?php echo (isset($tree[0]['available']) && $tree[0]['available'] == 0) ? 'checked' : ''; ?>>
+                            <span>Vendido</span>
+                        </label>
+                    </div>
+                </div>
 
                 <div class="form-actions">
                     <button type="submit" name="action" value="edit_tree" class="submit-button">
@@ -114,4 +128,5 @@ if (!$tree) {
         </div>
     </div>
 </body>
+
 </html>
