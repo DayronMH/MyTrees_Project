@@ -110,31 +110,7 @@ if (empty($trees)) {
                     </div>
                 </div>
             <?php endforeach; ?>
-        </div>
-        <!-- Create Tree Button -->
-        <button onclick="window.location.href='createTree.php?friend_id=<?php echo $friend_id; ?>'"
-            class="create-btn">
-            Crear Árbol
-        </button>
-
-
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="error-message">
-                <?php
-                echo htmlspecialchars($_SESSION['error']);
-                unset($_SESSION['error']);
-                ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION['success'])): ?>
-            <div class="success-message">
-                <?php
-                echo htmlspecialchars($_SESSION['success']);
-                unset($_SESSION['success']);
-                ?>
-            </div>
-        <?php endif; ?>
+                    </div>
         <button onclick="window.location.href='../views/createTree.php?id=<?php echo $treeId; ?>'"
             class="create-btn"
             name="action"

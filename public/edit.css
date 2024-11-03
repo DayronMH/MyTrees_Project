@@ -1,3 +1,4 @@
+/* Reset y estilos base */
 * {
     margin: 0;
     padding: 0;
@@ -6,254 +7,58 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #DDDBAE 0%, #96ec857f 100%);
+    background: linear-gradient(135deg, #e0f2e9 0%, #96ec857f 100%);
     min-height: 100vh;
     overflow-y: auto;
 }
 
+/* Contenedor principal */
 .container {
     padding: 20px;
     max-width: 800px;
     margin: 2rem auto;
 }
 
+/* Estilos del encabezado */
 .edit-header {
     text-align: center;
     padding: 20px;
     margin-bottom: 40px;
     position: relative;
-    color: #34495e;
+    color: #2c7a51;
     text-transform: uppercase;
     height: auto;
 }
 
 .edit-header h1 {
     margin-bottom: 20px;
-    color: #34495e;
+    color: #2c7a51;
 }
 
-.upload-form {
-    max-width: 500px;
-    margin: 20px auto;
-    padding: 20px;
+/* Formulario de árboles */
+.form-trees {
     background: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.file-input-container {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.file-input {
-    position: absolute;
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    z-index: -1;
-}
-
-.file-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.file-label:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-}
-
-.file-icon {
-    margin-right: 10px;
-    font-size: 1.2em;
-}
-
-.file-name {
-    margin-top: 10px;
-    text-align: center;
-    color: #666;
-    font-size: 0.9em;
-}
-
-.upload-button {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.1em;
-    transition: all 0.3s ease;
-}
-
-.upload-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-}
-.button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 9px 12px;
-    gap: 8px;
-    height: 40px;
-    width: 172px;
-    border: none;
-    background: #FF2849;
     border-radius: 20px;
-    cursor: pointer;
-  }
-  
-  .lable {
-    line-height: 22px;
-    font-size: 17px;
-    color: #fff;
-    font-family: sans-serif;
-    letter-spacing: 1px;
-  }
-  
-  .button:hover {
-    background: #e52441;
-  }
-  
-  .button:hover .svg-icon {
-    animation: flickering 2s linear infinite;
-  }
-  
-  @keyframes flickering {
-    0% {
-      opacity: 1;
-    }
-  
-    50% {
-      opacity: 1;
-    }
-  
-    52% {
-      opacity: 1;
-    }
-  
-    54% {
-      opacity: 0;
-    }
-  
-    56% {
-      opacity: 1;
-    }
-  
-    90% {
-      opacity: 1;
-    }
-  
-    92% {
-      opacity: 0;
-    }
-  
-    94% {
-      opacity: 1;
-    }
-  
-    96% {
-      opacity: 0;
-    }
-  
-    98% {
-      opacity: 1;
-    }
-  
-    99% {
-      opacity: 0;
-    }
-  
-    100% {
-      opacity: 1;
-    }
-  }
-  :focus {
-    outline: 0;
-    border-color: #2260ff;
-    box-shadow: 0 0 0 4px #b5c9fc;
-  }
-  
-  .mydict div {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-    justify-content: center;
-  }
-  
-  .mydict input[type="radio"] {
-    clip: rect(0 0 0 0);
-    clip-path: inset(100%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-  }
-  
-  .mydict input[type="radio"]:checked + span {
-    box-shadow: 0 0 0 0.0625em #0043ed;
-    background-color: #dee7ff;
-    z-index: 1;
-    color: #0043ed;
-  }
-  
-  label span {
-    display: block;
-    cursor: pointer;
-    background-color: #fff;
-    padding: 0.375em .75em;
+    padding: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     position: relative;
-    margin-left: .0625em;
-    box-shadow: 0 0 0 0.0625em #b5bfd9;
-    letter-spacing: .05em;
-    color: #3e4963;
-    text-align: center;
-    transition: background-color .5s ease;
-  }
-  
-  label:first-child span {
-    border-radius: .375em 0 0 .375em;
-  }
-  
-  label:last-child span {
-    border-radius: 0 .375em .375em 0;
-  }
-  
-@media (max-width: 768px) {
-    .upload-form {
-        margin: 10px;
-        padding: 15px;
-    }
-    
-    .file-label, .upload-button {
-        padding: 12px 15px;
-    }
-}
-.back-button {
-    display: inline-block;
-    text-decoration: none;
-    color: #3498db;
-    font-size: 1em;
-    margin-top: 10px;
-    transition: color 0.3s ease;
+    overflow: hidden;
 }
 
-.back-button:hover {
-    color: #2980b9;
+.form-trees::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #3cb371, #2e8b57);
+    opacity: 1;
 }
 
+/* Mantener form-species para compatibilidad */
 .form-species {
     background: rgba(255, 255, 255, 0.9);
     border-radius: 20px;
@@ -272,44 +77,66 @@ body {
     left: 0;
     width: 100%;
     height: 5px;
-    background: linear-gradient(90deg, #3498db, #2ecc71);
+    background: linear-gradient(90deg, #3cb371, #2e8b57);
     opacity: 1;
 }
 
+/* Grupos de formulario para árboles */
+.form-tree {
+    margin-bottom: 25px;
+}
+
+.form-tree label {
+    display: block;
+    color: #2c7a51;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-tree input[type="text"],
+.form-tree input[type="number"],
+.form-tree input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0f2e9;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.form-tree input[type="text"]:focus,
+.form-tree input[type="number"]:focus {
+    border-color: #3cb371;
+    outline: none;
+    box-shadow: 0 0 10px rgba(60, 179, 113, 0.1);
+}
+
+/* Radio buttons para disponibilidad */
+.form-tree input[type="radio"] {
+    margin-right: 5px;
+}
+
+.form-tree input[type="radio"] + span {
+    margin-right: 20px;
+    color: #2c7a51;
+}
+
+/* Estilos para el input de archivo */
+.form-tree input[type="file"] {
+    padding: 8px;
+    background: #fff;
+}
+
+/* Mantener los estilos existentes */
 .form-group {
     margin-bottom: 25px;
 }
 
-/* Estilos actualizados para el botón de eliminar */
-.delete-btn {
-    background: rgba(231, 76, 60, 0.9);
-    border: none;
-    border-radius: 8px;
-    color: white;
-    padding: 12px 30px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    font-weight: 500;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
-}
-
-.delete-btn:hover {
-    background: rgba(192, 57, 43, 0.95);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(192, 57, 43, 0.3);
-}
-
-.delete-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(192, 57, 43, 0.2);
-}
-
 .form-group label {
     display: block;
-    color: #34495e;
+    color: #2c7a51;
     font-size: 1.1em;
     margin-bottom: 8px;
     font-weight: 500;
@@ -318,19 +145,14 @@ body {
 .form-input {
     width: 100%;
     padding: 12px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid #e0f2e9;
     border-radius: 10px;
     font-size: 1em;
     transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.9);
 }
 
-.form-input:focus {
-    border-color: #3498db;
-    outline: none;
-    box-shadow: 0 0 10px rgba(52, 152, 219, 0.1);
-}
-
+/* Acciones del formulario */
 .form-actions {
     display: flex;
     justify-content: center;
@@ -348,19 +170,23 @@ body {
     transition: all 0.3s ease;
     text-transform: uppercase;
     font-weight: 500;
+    text-decoration: none;
 }
 
 .submit-button {
-    background-color: #2ecc71;
+    background-color: #3cb371;
 }
 
 .submit-button:hover {
-    background-color: #27ae60;
+    background-color: #2e8b57;
     transform: translateY(-2px);
 }
 
 .cancel-button {
     background-color: #95a5a6;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cancel-button:hover {
@@ -368,76 +194,39 @@ body {
     transform: translateY(-2px);
 }
 
-.delete-btn {
-    background-color: #e74c3c;
-}
-
-.delete-btn:hover {
-    background-color: #c0392b;
-    transform: translateY(-2px);
-}
-.success-message, .error-message {
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 20px;
-    font-size: 1em;
-    text-align: center;
-    position: relative;
-    animation: slideIn 0.3s ease-in-out;
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #3cb371;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
     font-weight: 500;
+    transition: all 0.3s ease;
+    gap: 8px;
 }
 
-.success-message {
-    background-color: rgba(46, 204, 113, 0.2);
-    color: #27ae60;
-    border: 2px solid #2ecc71;
-    box-shadow: 0 4px 6px rgba(46, 204, 113, 0.1);
+.back-button::before {
+    content: "←";
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
 }
 
-.error-message {
-    background-color: rgba(231, 76, 60, 0.2);
-    color: #c0392b;
-    border: 2px solid #e74c3c;
-    box-shadow: 0 4px 6px rgba(231, 76, 60, 0.1);
+.back-button:hover {
+    background-color: #2e8b57;
+    transform: translateX(-5px);
+    box-shadow: 0 4px 8px rgba(46, 139, 87, 0.2);
 }
 
-@keyframes slideIn {
-    from {
-        transform: translateY(-10px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Ajuste responsive para los mensajes */
-@media (max-width: 768px) {
-    .success-message, .error-message {
-        padding: 12px;
-        font-size: 0.9em;
-    }
-}
-@media (max-width: 480px) {
-    .form-actions {
-        flex-direction: column;
-    }
-
-    .submit-button, .cancel-button, .delete-btn {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
-/* Responsive adjustments */
+/* Media queries */
 @media (max-width: 768px) {
     .container {
         padding: 15px;
         margin: 1rem auto;
     }
 
-    .form-species {
+    .form-trees, .form-species {
         padding: 20px;
     }
 
@@ -445,7 +234,16 @@ body {
         font-size: 1.5em;
     }
 
-    .submit-button, .cancel-button, .delete-btn {
+    .submit-button, .cancel-button, .back-button {
         padding: 10px 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .submit-button, .cancel-button {
+        width: 100%;
+        margin-bottom: 10px;
     }
 }

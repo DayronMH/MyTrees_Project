@@ -1,6 +1,6 @@
 <?php
 require_once '../models/usersModel.php';
-
+require_once '../views/targetPage.php';
 class RegisterController
 {
     public function __construct()
@@ -30,10 +30,7 @@ class RegisterController
 
         // Input validation (you can add more validation rules as needed)
         if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($address) || empty($country)) {
-            echo "<script>
-                    alert('Todos los campos son obligatorios.');
-                    window.history.back();
-                  </script>";
+            setTargetMessage('error', 'Todos los campos son obligatorios');
             exit();
         }
 
@@ -43,27 +40,21 @@ class RegisterController
         // Check if the user already exists
         $existingUser = $userModel->handleLogin($email);  // Assuming this method returns user data if found
         if ($existingUser) {
-            echo "<script>
-                    alert('El usuario con este correo ya existe.');
-                    window.history.back();
-                  </script>";
+            setTargetMessage('error', 'El usuario con este correo ya existe.');
+            
             exit();
         }
 
-        
         $isCreated = $userModel->createFriendUser($name, $email, $password, $phone, $address, $country);
 
         if ($isCreated) {
-            echo "<script>
-                    alert('Registro exitoso. Ahora puedes iniciar sesión.');
-                    window.location.href = 'http://mytrees.com/app/views/login.php';
-                  </script>";
+            setTargetMessage('success', 'Registro exitoso. Ahora puedes iniciar sesión.');
+            header('Location: http://mytrees.com/app/views/login.php');
         } else {
-            echo "<script>
-                    alert('Ocurrió un error al registrar el usuario. Por favor, inténtalo de nuevo.');
-                    window.history.back();
-                  </script>";
+            setTargetMessage('error', 'Ocurrió un error al registrar el usuario. Por favor, inténtalo de nuevo.');
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
         }
+        exit();
     }
 
     public function redirectToLogin()
@@ -71,6 +62,11 @@ class RegisterController
         header('Location: http://mytrees.com/app/views/login.php');
         exit();
     }
+
+    /**
+     * Set a message to display to the user.
+     */
+  
 }
 
 $registerController = new RegisterController();
