@@ -16,6 +16,7 @@
 session_start();
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
+require_once 'targetPage.php';
 
 // Initialize dashboard controller
 $dashboard = new AdminDashboardController();
