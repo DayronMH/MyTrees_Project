@@ -3,6 +3,7 @@ session_start();
 require_once 'targetPage.php';
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
+require_once '../models/speciesModel.php';
 
 $crud = new CrudController();
 
