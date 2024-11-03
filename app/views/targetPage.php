@@ -1,13 +1,9 @@
 <?php
 
-// Función helper para mensajes (agregar al inicio del archivo)
 function setTargetMessage($type, $message) {
     $_SESSION[$type] = $message;
 }
-
 ?>
-
-<!-- Agregar esta sección donde quieras mostrar los mensajes -->
 <div class="message-container">
     <?php if (isset($_SESSION['error'])): ?>
         <div class="message error-message">
@@ -17,7 +13,6 @@ function setTargetMessage($type, $message) {
             ?>
         </div>
     <?php endif; ?>
-
     <?php if (isset($_SESSION['success'])): ?>
         <div class="message success-message">
             <?php 
@@ -27,7 +22,6 @@ function setTargetMessage($type, $message) {
         </div>
     <?php endif; ?>
 </div>
-
 <style>
 .message-container {
     position: fixed;
@@ -49,7 +43,6 @@ function setTargetMessage($type, $message) {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
 }
-
 .success-message, .error-message {
     padding: 15px;
     border-radius: 8px;
@@ -60,14 +53,12 @@ function setTargetMessage($type, $message) {
     animation: slideIn 0.3s ease-in-out;
     font-weight: 500;
 }
-
 .success-message {
     background-color: rgba(46, 204, 113, 0.2);
     color: #27ae60;
     border: 2px solid #2ecc71;
     box-shadow: 0 4px 6px rgba(46, 204, 113, 0.1);
 }
-
 .error-message {
     background-color: rgba(231, 76, 60, 0.2);
     color: #c0392b;
@@ -85,12 +76,9 @@ function setTargetMessage($type, $message) {
         opacity: 1;
     }
 }
-
-/* Para la animación de desvanecimiento */
 .fade-out {
     animation: fadeOut 0.5s ease-in forwards;
 }
-
 @keyframes fadeOut {
     from {
         opacity: 1;
@@ -101,7 +89,6 @@ function setTargetMessage($type, $message) {
         transform: translateY(-20px);
     }
 }
-
 /* Media Queries para responsividad */
 @media (max-width: 768px) {
     .message-container {
@@ -115,7 +102,6 @@ function setTargetMessage($type, $message) {
     }
 }
 </style>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const messages = document.querySelectorAll('.message');

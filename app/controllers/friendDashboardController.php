@@ -2,54 +2,66 @@
 require_once '../models/usersModel.php';
 require_once '../models/treesModel.php';
 require_once '../models/speciesModel.php';
+require_once '../models/salesModel.php';
 
 class FriendDashboardController {
     private $userModel;
     private $treeModel;
+    private $salesModel;
     private $speciesModel;
     private $user;
-    private $roleId;
-    
-    public $friendsCount, $availableTreesCount, $soldTreesCount;
-    
+    public $purchasedTrees;
+
     public function __construct() {
-        if(session_status() === PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+        
+        // Inicialización de modelos
         $this->userModel = new UsersModel();
         $this->treeModel = new TreesModel();
         $this->speciesModel = new SpeciesModel();
-        
-        $this->getAvailableTrees();
+        $this->salesModel = new SalesModel();
+
+        // Obtener usuario de sesión
+        if (isset($_SESSION['user_id'])) {
+            $this->user = (int)$_SESSION['user_id'];
+            $this->purchasedTrees = $this->getTreesByOwnerId($this->user);
+        } else {
+            $this->user = null;
+            $this->purchasedTrees = [];
+        }
+
+        // Procesar acciones de POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'buy-tree':
+                    header('location: http://mytrees.com');
+                    break;
+            }
+        }
     }
 
     public function getAvailableTrees() {
-        // Obtener los árboles disponibles
-        $availableTrees = $this->treeModel->getAvailableTrees();
-        
-        // Inicializar arrays para almacenar la información separada
-        $treeSpecies = [];
-        $treeHeights = [];
-        $treeLocations = [];
-        $treePrices = [];
-        $treePhotos = [];
+        return $this->treeModel->getAvailableTreesWithSpecies();
+    }
 
-        // Procesar cada árbol disponible
-        foreach ($availableTrees as $tree) {
-            // Asumiendo que $tree es un array asociativo con los datos del árbol
-            $treeSpecies[] = $tree['commercial_name'];
-            $treeHeights[] = $tree['height'];
-            $treeLocations[] = $tree['location'];
-            $treePrices[] = $tree['price'];
-            $treePhotos[] = $tree['photo_url'];
+    public function getTreesByOwnerId(int $userId) {
+       return $this->treeModel->getPurchasedTreesByUser($userId);
+    }
+
+    public function buyTree($userId, $treeId) {
+        if ($this->salesModel->isTreeAvailable($treeId)) {
+            if ($this->salesModel->createSale($userId, $treeId)) {
+                $this->salesModel->markTreeAsSold($treeId);
+                return true;
+            }
         }
-        
-        // Almacenar la información en la sesión
-        $_SESSION['tree_species'] = $treeSpecies;
-        $_SESSION['tree_heights'] = $treeHeights;
-        $_SESSION['tree_locations'] = $treeLocations;
-        $_SESSION['tree_prices'] = $treePrices;
-        $_SESSION['tree_photos'] = $treePhotos;
-        
+        return false;
+    }
+
+    public function getUserById($UserId) {
+
+        return $this->userModel->getUserById($UserId);
     }
 }

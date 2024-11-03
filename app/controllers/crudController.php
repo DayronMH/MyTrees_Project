@@ -1,14 +1,15 @@
 <?php
 require_once '../models/speciesModel.php';
-
+require_once '../models/treesModel.php';
 class CrudController {
     private $speciesModel;
-
+    private $treesModel;
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
         $this->speciesModel = new SpeciesModel();
+        $this->treesModel = new treesModel();
         $this->handlePostActions();
     }
 
@@ -70,5 +71,14 @@ class CrudController {
     public function getSpeciesNames($id) {
         return $this->speciesModel->getCommercialNames();
     }
-    
+
+    public function getEditableTreeById($treeId){
+        $tree =$this->getEditableTreeById($treeId);
+        $_SESSION['height'] = $tree['height'];
+        $_SESSION['specie'] = $tree['commercial_name'];
+        $_SESSION['location'] = $tree['location'];
+        $_SESSION['available'] = $tree['available'];
+    }
+
+
 }

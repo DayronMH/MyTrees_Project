@@ -129,15 +129,15 @@ class UsersModel extends BaseModel
         return $this->executeQuery($query);
     }
     public function getUserById($id): ?array
-{
-    $query = "SELECT * FROM `users` WHERE id = :id";
-    $stmt = $this->db->prepare($query);
-    $stmt->execute([':id' => $id]);
-    
-    // Usar fetch en lugar de fetchAll para obtener un solo registro
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result ?: null;
-}
+    {
+        $query = "SELECT * FROM `users` WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':id' => $id]);
+        
+        // Usar fetch en lugar de fetchAll para obtener un solo registro
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
 
     /**
      * Executes a query and fetches the results (used for SELECT queries).
