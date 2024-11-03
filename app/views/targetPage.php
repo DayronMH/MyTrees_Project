@@ -1,10 +1,9 @@
 <?php
-// Función helper para mensajes (agregar al inicio del archivo)
+
 function setTargetMessage($type, $message) {
     $_SESSION[$type] = $message;
 }
 ?>
-<!-- Agregar esta sección donde quieras mostrar los mensajes -->
 <div class="message-container">
     <?php if (isset($_SESSION['error'])): ?>
         <div class="message error-message">
@@ -33,6 +32,7 @@ function setTargetMessage($type, $message) {
     width: 90%;
     max-width: 500px;
 }
+
 .message {
     padding: 15px 20px;
     border-radius: 15px;
@@ -65,6 +65,7 @@ function setTargetMessage($type, $message) {
     border: 2px solid #e74c3c;
     box-shadow: 0 4px 6px rgba(231, 76, 60, 0.1);
 }
+
 @keyframes slideDown {
     from {
         transform: translateY(-100%);
@@ -75,7 +76,6 @@ function setTargetMessage($type, $message) {
         opacity: 1;
     }
 }
-/* Para la animación de desvanecimiento */
 .fade-out {
     animation: fadeOut 0.5s ease-in forwards;
 }

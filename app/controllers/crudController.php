@@ -71,6 +71,7 @@ class CrudController {
     public function getSpeciesNames($id) {
         return $this->speciesModel->getCommercialNames();
     }
+
     public function getEditableTreeById($treeId){
         $tree =$this->getEditableTreeById($treeId);
         $_SESSION['height'] = $tree['height'];
@@ -79,5 +80,5 @@ class CrudController {
         $_SESSION['available'] = $tree['available'];
     }
 
-    
+
 }

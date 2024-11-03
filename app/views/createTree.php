@@ -4,29 +4,9 @@ require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 $controller = new AdminDashboardController();
 $crud = new crudController();
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    if ($result['success']) {
-        // Ejemplo: Guardar en la base de datos
-        $imagePath = $result['path'];
-        $userId = $_SESSION['user_id']; // Asumiendo que tienes el ID del usuario en sesión
-        
-        $sql = "UPDATE users SET profile_image = ? WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        
-        if ($stmt->execute([$imagePath, $userId])) {
-            setTargetMessage('success', "Imagen de perfil actualizada");
-        } else {
-            setTargetMessage('error', "Error al actualizar la base de datos");
-        }
-        
-    } else {
-        setTargetMessage('error', $result['error']);
-    }
-    
-    header("Location: target.php");
-    exit();
-}
+
+
+
 
 
 // Procesar el formulario cuando se envía
@@ -59,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://mytrees.com/public/edit.css">
+
     <title>Crear Nuevo Especie</title>
 </head>
 <body>

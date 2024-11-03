@@ -31,7 +31,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -52,7 +51,6 @@ if (!isset($_SESSION['username'])) {
 
         <!-- Statistics Cards Section -->
         <div class="stats-container">
-            <!-- Registered Friends Stat -->
             <div class="stat-card">
                 <div class="stat-content">
                     <div class="stat-number">
@@ -62,7 +60,6 @@ if (!isset($_SESSION['username'])) {
                 </div>
             </div>
 
-            <!-- Available Trees Stat -->
             <div class="stat-card">
                 <div class="stat-content">
                     <div class="stat-number">
@@ -72,7 +69,6 @@ if (!isset($_SESSION['username'])) {
                 </div>
             </div>
 
-            <!-- Sold Trees Stat -->
             <div class="stat-card">
                 <div class="stat-content">
                     <div class="stat-number">
@@ -91,11 +87,9 @@ if (!isset($_SESSION['username'])) {
 
             <div class="species-container">
                 <?php
-                // Get species data from session
                 $commercial_names = $_SESSION['commercial_names'] ?? [];
                 $scientific_names = $_SESSION['scientific_names'] ?? [];
 
-                // Loop through each species
                 for ($i = 0; $i < count($commercial_names); $i++):
                     $commercial = $commercial_names[$i]['commercial_name'];
                     $scientific = $scientific_names[$i]['scientific_name'];
@@ -103,7 +97,6 @@ if (!isset($_SESSION['username'])) {
                     $isVisible = isset($_SESSION['visible_species']) && in_array($speciesId, $_SESSION['visible_species']);
                 ?>
                     <div class="species-card">
-                        <!-- Species Information -->
                         <div class="species-info">
                             <h3 class="species-name"><?php echo htmlspecialchars($commercial); ?></h3>
                             <div class="species-content">
@@ -114,7 +107,6 @@ if (!isset($_SESSION['username'])) {
                                 </p>
                             </div>
                             
-                            <!-- Species Action Buttons -->
                             <div class="species-actions">
                                 <form method="POST" action="" class="view-form">
                                     <input type="hidden" name="species_id" value="<?php echo $speciesId; ?>">
@@ -131,7 +123,6 @@ if (!isset($_SESSION['username'])) {
                     </div>
                 <?php endfor; ?>
 
-                <!-- Create New Species Button -->
                 <button onclick="window.location.href='../views/createSpecie.php'"
                         class="create-btn">
                     Crear Especie
@@ -147,7 +138,6 @@ if (!isset($_SESSION['username'])) {
 
             <div class="friends-container">
                 <?php
-                // Display friends list
                 $friends = $_SESSION['friends'] ?? [];
                 foreach ($friends as $friend): ?>
                     <a href="trees.php?friend_id=<?php echo htmlspecialchars($friend['id']); ?>" 

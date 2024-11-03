@@ -30,13 +30,14 @@ if (empty($trees)) {
     alert('Este amigo no tiene árboles');
             window.location.href = 'adminDashboard.php';
           </script>";
-          exit();
-        }
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-    <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../public/tree.css">
@@ -54,41 +55,41 @@ if (empty($trees)) {
                 <a href="adminDashboard.php" class="back-button">← Volver al Dashboard</a>
             </div>
         </div>
-        
+
         <div class="trees-container">
             <?php foreach ($trees as $tree):
                 $treeId = $tree['id']; ?>
-                
+
                 <div class="tree-card">
                     <?php if (!empty($tree['photo_url'])): ?>
                         <img src="<?php echo htmlspecialchars($tree['photo_url']); ?>" alt="Árbol" class="tree-image">
                     <?php endif; ?>
-                    
+
                     <div class="tree-info">
                         <span class="tree-name">
                             <?php echo htmlspecialchars($tree['commercial_name'] ?? 'Nombre no disponible'); ?>
                         </span>
-                        
+
                         <div class="tree-details">
                             <div class="detail-item">
                                 <span class="detail-label">ID:</span>
                                 <span class="detail-value"><?php echo htmlspecialchars($tree['id']); ?></span>
                             </div>
-                            
+
                             <div class="detail-item">
                                 <span class="detail-label">Altura:</span>
                                 <span class="detail-value">
                                     <?php echo htmlspecialchars($tree['height'] ?? '0'); ?> metros
                                 </span>
                             </div>
-                            
+
                             <div class="detail-item">
                                 <span class="detail-label">Ubicación:</span>
                                 <span class="detail-value">
                                     <?php echo htmlspecialchars($tree['location'] ?? 'No especificada'); ?>
                                 </span>
                             </div>
-                            
+
                             <div class="detail-item">
                                 <span class="detail-label">Precio:</span>
                                 <span class="detail-value">
@@ -98,13 +99,13 @@ if (empty($trees)) {
                         </div>
 
                         <div class="trees-actions">
-                       <button onclick="window.location.href='../views/editTrees.php?id=<?php echo htmlspecialchars($tree['id'], ENT_QUOTES); ?>'"
-                            action="editTree"
-                            class="edit-tree">
-                            Editar
-                         </button>
+                            <button onclick="window.location.href='../views/editTrees.php?id=<?php echo htmlspecialchars($tree['id'], ENT_QUOTES); ?>'"
+                                action="editTree"
+                                class="edit-tree">
+                                Editar
+                            </button>
 
-                          
+
                         </div>
                     </div>
                 </div>
@@ -112,9 +113,35 @@ if (empty($trees)) {
         </div>
         <!-- Create Tree Button -->
         <button onclick="window.location.href='createTree.php?friend_id=<?php echo $friend_id; ?>'"
-                class="create-btn">
+            class="create-btn">
             Crear Árbol
+        </button>
+
+
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="error-message">
+                <?php
+                echo htmlspecialchars($_SESSION['error']);
+                unset($_SESSION['error']);
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="success-message">
+                <?php
+                echo htmlspecialchars($_SESSION['success']);
+                unset($_SESSION['success']);
+                ?>
+            </div>
+        <?php endif; ?>
+        <button onclick="window.location.href='../views/createTree.php?id=<?php echo $treeId; ?>'"
+            class="create-btn"
+            name="action"
+            value="create_tree">
+            Crear Arbol
         </button>
     </div>
 </body>
+
 </html>

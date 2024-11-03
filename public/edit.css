@@ -231,7 +231,6 @@ body {
     border-radius: 0 .375em .375em 0;
   }
   
-
 @media (max-width: 768px) {
     .upload-form {
         margin: 10px;
