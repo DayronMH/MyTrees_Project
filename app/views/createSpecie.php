@@ -2,32 +2,11 @@
 session_start();
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
+require_once 'targetPage.php';
 $controller = new AdminDashboardController();
 $crud = new crudController();
 
-// Procesar el formulario cuando se envía
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'createSpecies') {
-        $commercialName = trim($_POST['commercial_name']);
-        $scientificName = trim($_POST['scientific_name']);
-        
-        // Validar que los campos no estén vacíos
-        if (empty($commercialName) || empty($scientificName)) {
-            $_SESSION['error'] = "Todos los campos son requeridos";
-        } else {
 
-            $success = $controller->createSpecie($speciesId,$commercialName, $scientificName);
-
-            if ($success) {
-                $_SESSION['success'] = "Especie creada correctamente";
-               
-                exit();
-            } else {
-                $_SESSION['error'] = "Error al crear la especie";
-            }
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -43,25 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             <h1>Crear Nueva Especie</h1>
             <a href="adminDashboard.php" class="back-button">← Volver al Dashboard</a>
         </div>
-        
-        <div class="form-species">
-            <?php if (isset($_SESSION['error'])): ?>
-                <div class="error-message">
-                    <?php 
-                    echo htmlspecialchars($_SESSION['error']);
-                    unset($_SESSION['error']);
-                    ?>
-                </div>
-            <?php endif; ?>
-            
-            <?php if (isset($_SESSION['success'])): ?>
-                <div class="success-message">
-                    <?php
-                    echo htmlspecialchars($_SESSION['success']);
-                    unset($_SESSION['success']);
-                    ?>
-                </div>
-            <?php endif; ?>
 
             <form method="POST" action="">
                 <div class="form-group">

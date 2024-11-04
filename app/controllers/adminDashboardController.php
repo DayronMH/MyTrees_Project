@@ -86,28 +86,5 @@ class AdminDashboardController
         $_SESSION['commercial_names'] = $this->speciesModel->getCommercialNames();
         $_SESSION['scientific_names'] = $this->speciesModel->getScientificNames();
     }
-    public function createSpecie($speciesId,$commercial_name, $scientific_name) {
-        try {
-            // Validar datos de entrada
-            if (empty($commercial_name) || empty($scientific_name)) {
-                return ['error' => 'Los nombres comercial y científico son requeridos.'];
-            }
 
-            // Verificar si la especie ya existe
-            if ($this->speciesModel->hasTreesAssociated($speciesId)) {
-                return ['error' => 'La especie ya existe en la base de datos.'];
-            }
-
-            // Crear la especie
-            if ($this->speciesModel->createSpecie($commercial_name, $scientific_name)) {
-                $_SESSION['message'] = 'Especie creada correctamente';
-                header('Location: ../views/admindashboard.php');
-                exit();
-            } else {
-                return ['error' => 'Error al crear la especie'];
-            }
-        } catch (Exception $e) {
-            return ['error' => 'Error en el servidor: ' . $e->getMessage()];
-        }
-    }
 }

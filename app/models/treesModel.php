@@ -19,12 +19,13 @@ class TreesModel extends BaseModel
     {
         $query = "INSERT INTO `trees` (`species_id`, `location`, `price`, `photo_url`)
                   VALUES (:species_id, :location, :price, :photo_url)";
-        return $this->executeQuery($query, [
+        return $this->executeNonQuery($query, [
             ':species_id' => $species_id,
             ':location' => $location,
             ':price' => $price,
             ':photo_url' => $photo_url
         ]);
+        
     }
 
     public function editTree($treeId, $specie, $height, $location, $available) {
@@ -54,6 +55,16 @@ class TreesModel extends BaseModel
             
         } catch (PDOException $e) {
             return ['error' => 'Error al actualizar: ' . $e->getMessage()];
+        }
+    }
+    private function executeNonQuery(string $query, array $params = []): bool
+    {
+        try {
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Handle the error, log it, or rethrow it
+            throw new Exception("Database query failed: " . $e->getMessage());
         }
     }
     
