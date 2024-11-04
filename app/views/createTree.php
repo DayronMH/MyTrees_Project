@@ -19,7 +19,7 @@ $species = $speciesModel->getAllSpecies() ;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://mytrees.com/public/edit.css">
 
-    <title>Crear Nuevo Especie</title>
+    <title>Crear Nuevo Arbol</title>
 </head>
 <form method="POST" action="" enctype="multipart/form-data">
     <div class="form-tree">
@@ -31,7 +31,7 @@ $species = $speciesModel->getAllSpecies() ;
                 name="location"
                 class="form-input"
                 placeholder="Ingrese la ubicacion"
-                value="<?php echo isset($_POST['location']) ? htmlspecialchars($_POST['location']) : ''; ?>">
+                value="<?php echo isset($_POST['']) ? htmlspecialchars($_POST['location']) : ''; ?>">
         </div>
         
         <div class="form-tree">

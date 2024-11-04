@@ -104,6 +104,11 @@ if (empty($trees)) {
                                 class="edit-tree">
                                 Editar
                             </button>
+                            <button onclick="window.location.href='../views/updateTree.php?id=<?php echo htmlspecialchars($tree['id'], ENT_QUOTES); ?>'"
+                                action="updateTree"
+                                class="update-tree">
+                                Actualizar
+                            </button>
 
 
                         </div>

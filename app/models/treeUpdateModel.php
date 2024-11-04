@@ -1,8 +1,12 @@
 <?php
 require_once 'baseModel.php';
 
-class treeUpdatesModel extends BaseModel
+class treesUpdatesModel extends BaseModel
 {
+    public function __construct()
+    {
+        parent::__construct('tree_updates');
+    }
     /**
      * Creates a new tree update record.
      *
@@ -15,20 +19,29 @@ class treeUpdatesModel extends BaseModel
      * @param string $status The status of the update.
      * @return bool Returns true on success, false on failure.
      */
-    public function createTreeUpdate(int $tree_id, float $size, float $height, float $growth_rate, string $health_status, string $image_url, string $status): bool
+    public function createTreeUpdate( $tree_id, $height, $image_url,$status, $updateDate): bool
     {
-        $query = "INSERT INTO `tree_updates` (`tree_id`, `size`, `height`, `growth_rate`, `health_status`, `image_url`, `status`) 
-                  VALUES (:tree_id, :size, :height, :growth_rate, :health_status, :image_url, :status)";
-        return $this->executeQuery($query, [
+        $query = "INSERT INTO `tree_updates` (`tree_id`, `height`, `image_url`, `status`, `update_date`) 
+                  VALUES (:tree_id,:height, :image_url, :status, :updateDate)";
+        return $this->executeNonQuery($query, [
             ':tree_id' => $tree_id,
-            ':size' => $size,
             ':height' => $height,
-            ':growth_rate' => $growth_rate,
-            ':health_status' => $health_status,
             ':image_url' => $image_url,
-            ':status' => $status
+            ':status' => $status,
+            ':updateDate' => $updateDate,
         ]);
     }
+    private function executeNonQuery(string $query, array $params = []): bool
+    {
+        try {
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Handle the error, log it, or rethrow it
+            throw new Exception("Database query failed: " . $e->getMessage());
+        }
+    }
+    
 
     /**
      * Retrieves all updates for a specific tree by its ID.

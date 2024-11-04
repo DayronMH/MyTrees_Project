@@ -1,11 +1,13 @@
 <?php
 require_once '../models/speciesModel.php';
 require_once '../models/treesModel.php';
+require_once '../models/treeUpdateModel.php';
 require_once '../views/targetPage.php';
 class CrudController
 {
     private $speciesModel;
     private $treesModel;
+    private $updateModel;
     public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -13,6 +15,7 @@ class CrudController
         }
         $this->speciesModel = new SpeciesModel();
         $this->treesModel = new treesModel();
+        $this->updateModel = new treesUpdatesModel() ;
         $this->handlePostActions();
     }
 
@@ -23,6 +26,13 @@ class CrudController
 
                 case 'createTrees':
                     $this->createTree();
+                    break;
+
+                case 'updateTrees':
+                    if (isset($_POST['tree_id'])) {
+                        $treeId = $_POST['tree_id'];
+                        $this->updateTree($treeId);
+                    }
                     break;
                 case 'edit_species':
                     if (isset($_POST['species_id'])) {
@@ -92,6 +102,39 @@ class CrudController
             return ['error' => 'Error en el servidor: ' . $e->getMessage()];
         }
     }
+    public function updateTree($tree_id)
+    {
+        $fileName = basename($_FILES['treeUpd']['name']);
+        $targetDir = $_SERVER['DOCUMENT_ROOT'] . "http://mytrees.com/public/images/";
+        $image_url = $targetDir . $fileName;
+        date_default_timezone_set('America/Costa_Rica');
+        $updateDate = date("Y-m-d H:i:s");
+    
+        if (isset($_POST['available'])) {
+            $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
+            setTargetMessage('debug', 'Status del árbol: ' . $status);
+        }
+    
+        if (isset($_POST['height'])) {
+            $height = $_POST['height'];
+            setTargetMessage('debug', 'Altura del árbol: ' . $height);
+        }
+    
+        try {
+            $height = filter_input(INPUT_POST, 'height', FILTER_SANITIZE_STRING);
+            $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
+            $result = $this->updateModel->createTreeUpdate($tree_id, $height, $image_url, $status, $updateDate);
+    
+            if ($result) {
+                setTargetMessage('success', 'Árbol actualizado correctamente');
+            } else {
+                setTargetMessage('error', 'Error al actualizar el árbol. Por favor, inténtalo de nuevo.');
+            }
+        } catch (Exception $e) {
+            setTargetMessage('error', 'Error en el servidor: ' . $e->getMessage());
+            return ['error' => 'Error en el servidor: ' . $e->getMessage()];
+        }
+    }
     public function deleteSpecie($speciesId)
     {
         try {
@@ -144,7 +187,6 @@ class CrudController
             $price = filter_var($_POST['price'] ?? 0, FILTER_VALIDATE_FLOAT);            
             $fileName = basename($_FILES['treepic']['name']);
             $targetDir = $_SERVER['DOCUMENT_ROOT'] . "http://mytrees.com/public/images/";
-            $typeImage = strtolower(pathinfo($targetDir, PATHINFO_EXTENSION));
             $photo_url = $targetDir . $fileName;
             echo $fileName;
             // Validación de campos requeridos

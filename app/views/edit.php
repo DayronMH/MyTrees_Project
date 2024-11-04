@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setTargetMessage('success', "Especie actualizada");
                 
             } else {
-                setTargetMessage('error', "ERror al actualizar la especie");
+                setTargetMessage('error', "Error al actualizar la especie");
             }
             break;
 
