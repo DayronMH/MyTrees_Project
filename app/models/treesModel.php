@@ -130,6 +130,7 @@ class TreesModel extends BaseModel
                   WHERE t.owner_id = :id";
         return $this->executeQuery($query, [':id' => $owner_id]);
     }
+    
     public function getEditableTreeById($tree_id): array
     {
         $query = "SELECT t.id, t.height, s.commercial_name, t.location, t.available 
@@ -189,5 +190,27 @@ class TreesModel extends BaseModel
     {
         $sql = "SELECT * FROM Trees t JOIN species s ON t.species_id = s.id WHERE owner_id = :userId";
         return $this->executeQuery($sql, [':userId' => $userId]);
+    }
+
+    public function getAllTrees(): array
+    {
+        $query = "SELECT * FROM `trees`";
+        return $this->executeQuery($query);
+    }
+
+    public function getAllTreesWithSpecies(): array
+    {
+        $query = "SELECT Trees.id AS tree_id,Trees.height,Trees.location,Trees.available,Trees.price,Trees.photo_url,Species.id AS
+        species_id,Species.commercial_name,Species.scientific_name,Species.availability_date FROM Trees JOIN Species ON Trees.species_id = Species.id";
+        return $this->executeQuery($query);
+    }
+
+    public function getAllTreesWithSpeciesAndUpdates(): array
+    {
+        $query = "SELECT Trees.id AS tree_id,Species.commercial_name,Tree_Updates.update_date FROM Trees
+            JOIN Species ON Trees.species_id = Species.id LEFT JOIN Tree_Updates ON Trees.id = Tree_Updates.tree_id
+            ORDER BY Trees.id, Tree_Updates.update_date";
+        
+        return $this->executeQuery($query);
     }
 }

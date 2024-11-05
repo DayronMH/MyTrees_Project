@@ -1,6 +1,8 @@
 <?php
 require_once '../models/usersModel.php';
 require_once '../views/targetPage.php';
+require_once '../../scripts/script.php'; 
+
 
 class loginController {
     public function __construct() {
@@ -20,6 +22,7 @@ class loginController {
         $email = $_POST['email'];
         $password = $_POST['password'];
         $user = $userModel->handleLogin($email);
+
         
         if (empty($email) || empty($password)) {
             setTargetMessage('error', 'Debe llenar los campos de correo y contraseña');
@@ -29,6 +32,7 @@ class loginController {
         if ($user) {
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
+
                 if ($user['role'] === 'admin') {
                     setTargetMessage('success', 'Bienvenido, Administrador');
                     header('Location: http://mytrees.com/app/views/adminDashboard.php');

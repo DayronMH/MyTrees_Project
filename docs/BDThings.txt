@@ -61,7 +61,7 @@ CREATE TABLE Sales (
 
 -- Insert Usuarios
 INSERT INTO Users (name, email, password, role, phone, address, country) VALUES 
-('Admin1', 'admin1@example.com', 'AdminPass', 'admin', '123', '123 Main St', 'USA'),
+('Admin1', 'admin@gmail.com', 'AdminPass', 'admin', '123', '123 Main St', 'USA'),
 ('Operator1', 'ope1@example.com', 'OperatorPass', 'operator', '123', '456 Elm', 'USA'),
 ('Friend1', 'friend1@example.com', 'FriendPass', 'friend', '123', '789 Oak St', 'USA'),
 ('Friend2', 'friend2@example.com', 'FriendPass', 'friend', '555', '101 Pine St', 'USA'),
@@ -152,6 +152,8 @@ INSERT INTO Sales (tree_id, buyer_id) VALUES
 
     -- Actualizar la disponibilidad de los árboles en tanto su usuario tenga como roll Admin u Operador
     UPDATE Trees t JOIN Users u ON t.owner_id = u.id SET t.available = TRUE WHERE u.role IN ('admin', 'operator');
+
+    UPDATE users SET email = 'jofermorera@gmail.com' WHERE email = 'admin1@example.com';
 
 -- Drops//
     DROP TABLE IF EXISTS Sales;

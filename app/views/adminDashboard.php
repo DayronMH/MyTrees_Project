@@ -5,6 +5,7 @@ session_start();
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 require_once 'targetPage.php';
+require_once '../../scripts/script.php'; 
 
 if (!isset($_SESSION['user_id'])) {
     setTargetMessage('error', 'Username must be');
@@ -13,6 +14,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $dashboard = new AdminDashboardController();
+sendTreesNotificationsTest();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dashboard->handlePostActions();
