@@ -41,6 +41,11 @@ class loginController {
                     header('Location: http://mytrees.com/app/views/friendDashboard.php');
                     exit();
                 }
+                else {
+                    setTargetMessage('error', 'Rol no válido');
+                    header('Location: http://mytrees.com/app/views/login.php');
+                    exit();
+                }
             } else {
                 setTargetMessage('error', 'Contraseña incorrecta');
                 header('Location: http://mytrees.com/app/views/login.php');

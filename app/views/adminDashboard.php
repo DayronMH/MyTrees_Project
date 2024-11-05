@@ -18,10 +18,12 @@ session_start();
 
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
+require_once 'targetPage.php';
 
 // Authentication check
-if (!isset($_SESSION['username'])) {
-    header('Location: http://mytrees');
+if (!isset($_SESSION['user_id'])) {
+    setTargetMessage('error', 'Username must be');
+    header('Location: http://mytrees.com');
     exit();
 }
 

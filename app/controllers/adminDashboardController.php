@@ -2,6 +2,7 @@
 require_once '../models/usersModel.php';
 require_once '../models/treesModel.php';
 require_once '../models/speciesModel.php';
+require_once '../views/targetPage.php';
 
 class AdminDashboardController
 {

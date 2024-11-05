@@ -8,7 +8,7 @@ require_once 'targetPage.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - MyTrees</title>
-    <link rel="stylesheet" href="http://mytrees.com/public/register.css">
+    <link rel="stylesheet" href="http://mytrees.com/public/register.css?v=1.0">
 </head>
 <body>
     <div class="leaf"><span>🍂</span></div>

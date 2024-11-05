@@ -8,7 +8,7 @@ require_once 'targetPage.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MyTrees</title>
-    <link rel="stylesheet" href="http://mytrees.com/public/login.css">
+    <link rel="stylesheet" href="http://mytrees.com/public/login.css?v=1.0">
 </head>
 <body>
     

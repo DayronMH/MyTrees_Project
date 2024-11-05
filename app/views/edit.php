@@ -71,7 +71,7 @@ if (!$currentSpecies) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="http://mytrees.com/public/edit.css">
+    <link rel="stylesheet" href="http://mytrees.com/public/edit.css?v=1.0">
     <title>Editar Especie</title>
 </head>
 <body>

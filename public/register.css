@@ -1,13 +1,22 @@
 :root {
-    --primary-color: #4b9023;
-    --primary-light: #81c784;
-    --primary-dark: #1b5e20;
-    --complement-1: #CF3A29;
-    --complement-2: #CFB029;
-    --background-color: #DDDBAE;
-    --container-bg: #d4e6d9;
+    /* Primary Colors */
+    --primary-color: #43a047;    /* Base green color used in gradients */
+    --primary-light: #66bb6a;    /* Lighter green for gradients and accents */
+    --primary-dark: #2e7d32;     /* Darker green for text and borders */
+    
+    /* Secondary/Complement Colors */
+    --complement-1: #1b5e20;     /* Red color used for delete buttons */
+    --complement-2: #f1f0f0;     /* Light grey used in background gradient */
+    
+    /* Background Colors */
+    --background-color: linear-gradient(135deg, #f1f0f0 0%, #ffffff 100%);  /* White used in background gradient */
+    --container-bg: rgba(255, 255, 255, 0.95);  /* Semi-transparent white for cards */
+    
+    /* Additional Colors */
+    --text-primary: #1b5e20;     /* Darkest green for main text */
+    --border-color: rgba(129, 199, 132, 0.2);  /* Transparent green for borders */
+    --shadow-color: rgba(0, 0, 0, 0.08);       /* Shadow color for cards */
 }
-
 @keyframes fall {
     0% {
         top: -10%; /* Start just above the viewport */
@@ -61,7 +70,7 @@ body {
 
 .login-container:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(168, 52, 13, 0.5)
+    box-shadow: 0 10px 25px rgba(92, 176, 56, 0.5)
 }
 
 .left-section, .right-section {
