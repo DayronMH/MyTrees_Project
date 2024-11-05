@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'buy_tree' && 
     <div class="dashboard-container">
         <div class="dashboard-header">
             <h1>Bienvenido <?php echo htmlspecialchars($user['name']); ?></h1>
-            <a href="login.php" class="back-button">Back</a> <!-- Place the button here -->
+            <a href="login.php" class="back-button">Back</a>
             <hr>
             <h2>Árboles Disponibles</h2>
         </div>

@@ -15,9 +15,8 @@ if (!$speciesId) {
     exit();
 }
 
-// Handle POST requests
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check for action in POST request
     if (!isset($_POST['action'])) {
         $_SESSION['error'] = "Acción no especificada";
         header("Location: adminDashboard.php");
@@ -57,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Retrieve current species data
 $currentSpecies = $crud->getSpecieById($speciesId);
 if (!$currentSpecies) {
     $_SESSION['error'] = "No se encontró la especie especificada";
@@ -134,7 +132,6 @@ if (!$currentSpecies) {
         </div>
     </div>
     <script>
-    // Espera 3 segundos (3000 milisegundos) y luego oculta los mensajes
     setTimeout(function() {
         var errorMessage = document.querySelector('.error-message');
         var successMessage = document.querySelector('.success-message');

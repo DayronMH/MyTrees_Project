@@ -14,31 +14,21 @@ class RegisterController
         }
     }
 
-    /**
-     * Register a new user.
-     */
     public function registerUser()
     {
-        // Sanitiza las entradas
         $name = htmlspecialchars(filter_input(INPUT_POST, 'name', FILTER_DEFAULT));
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $password = htmlspecialchars(filter_input(INPUT_POST, 'password', FILTER_DEFAULT));
         $phone = htmlspecialchars(filter_input(INPUT_POST, 'phone', FILTER_DEFAULT));
         $address = htmlspecialchars(filter_input(INPUT_POST, 'address', FILTER_DEFAULT));
         $country = htmlspecialchars(filter_input(INPUT_POST, 'country', FILTER_DEFAULT));
-        // Assuming this is a dropdown select field
 
-        // Input validation (you can add more validation rules as needed)
         if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($address) || empty($country)) {
             setTargetMessage('error', 'Todos los campos son obligatorios');
             exit();
         }
-
-        // Use UsersModel to create a new user
         $userModel = new UsersModel();
-
-        // Check if the user already exists
-        $existingUser = $userModel->handleLogin($email);  // Assuming this method returns user data if found
+        $existingUser = $userModel->handleLogin($email);
         if ($existingUser) {
             setTargetMessage('error', 'El usuario con este correo ya existe.');
             
@@ -61,12 +51,6 @@ class RegisterController
     {
         header('Location: http://mytrees.com/app/views/login.php');
         exit();
-    }
-
-    /**
-     * Set a message to display to the user.
-     */
-  
+    }  
 }
-
 $registerController = new RegisterController();

@@ -16,14 +16,12 @@ class FriendDashboardController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
-        // Inicialización de modelos
+
         $this->userModel = new UsersModel();
         $this->treeModel = new TreesModel();
         $this->speciesModel = new SpeciesModel();
         $this->salesModel = new SalesModel();
 
-        // Obtener usuario de sesión
         if (isset($_SESSION['user_id'])) {
             $this->user = (int)$_SESSION['user_id'];
             $this->purchasedTrees = $this->getTreesByOwnerId($this->user);
@@ -32,7 +30,7 @@ class FriendDashboardController {
             $this->purchasedTrees = [];
         }
 
-        // Procesar acciones de POST
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             switch ($_POST['action']) {
                 case 'buy-tree':

@@ -45,7 +45,6 @@ class AdminDashboardController
                 case 'view_species':
                     if (isset($_POST['species_id'])) {
                         $this->toggleSpeciesVisibility($_POST['species_id']);
-                        // Redirigir a la misma página para refrescar
                         header("Location: " . $_SERVER['PHP_SELF']);
                         exit();
                     }
@@ -59,7 +58,6 @@ class AdminDashboardController
             $_SESSION['visible_species'] = [];
         }
         
-        // Asegúrate de que $speciesId sea un número
         $speciesId = (int)$speciesId;
         
         if (in_array($speciesId, $_SESSION['visible_species'])) {
@@ -68,7 +66,6 @@ class AdminDashboardController
             $_SESSION['visible_species'][] = $speciesId;
         }
     }
-
 
     public function getFriends()
     {

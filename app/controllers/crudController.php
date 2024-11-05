@@ -18,12 +18,10 @@ class CrudController
         $this->updateModel = new treesUpdatesModel() ;
         $this->handlePostActions();
     }
-
     private function handlePostActions()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             switch ($_POST['action']) {
-
                 case 'createTrees':
                     $this->createTree();
                     break;
@@ -41,7 +39,6 @@ class CrudController
                         exit();
                     }
                     break;
-
                 case 'delete_species':
                     if (isset($_POST['species_id'])) {
                         $result = $this->deleteSpecie($_POST['species_id']);
@@ -58,7 +55,6 @@ class CrudController
                     $commercialName = trim($_POST['commercial_name']);
                     $scientificName = trim($_POST['scientific_name']);
                     $speciesId = trim($_POST['species_id']);
-                    // Validar que los campos no estén vacíos
                     if (empty($commercialName) || empty($scientificName)) {
                         $_SESSION['error'] = "Todos los campos son requeridos";
                     } else {
@@ -76,21 +72,15 @@ class CrudController
             }
         }
     }
-
     public function createSpecie($speciesId, $commercial_name, $scientific_name)
     {
         try {
-            // Validar datos de entrada
             if (empty($commercial_name) || empty($scientific_name)) {
                 return ['error' => 'Los nombres comercial y científico son requeridos.'];
             }
-
-            // Verificar si la especie ya existe
             if ($this->speciesModel->hasTreesAssociated($speciesId)) {
                 return ['error' => 'La especie ya existe en la base de datos.'];
             }
-
-            // Crear la especie
             if ($this->speciesModel->createSpecie($commercial_name, $scientific_name)) {
                 $_SESSION['message'] = 'Especie creada correctamente';
                 header('Location: ../views/admindashboard.php');
@@ -109,17 +99,14 @@ class CrudController
         $image_url = $targetDir . $fileName;
         date_default_timezone_set('America/Costa_Rica');
         $updateDate = date("Y-m-d H:i:s");
-    
         if (isset($_POST['available'])) {
             $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
             setTargetMessage('debug', 'Status del árbol: ' . $status);
         }
-    
         if (isset($_POST['height'])) {
             $height = $_POST['height'];
             setTargetMessage('debug', 'Altura del árbol: ' . $height);
         }
-    
         try {
             $height = filter_input(INPUT_POST, 'height', FILTER_SANITIZE_STRING);
             $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
@@ -138,18 +125,13 @@ class CrudController
     public function deleteSpecie($speciesId)
     {
         try {
-            // Verificar si la especie existe
             $specie = $this->speciesModel->getSpeciesById($speciesId);
             if (!$specie) {
                 return ['error' => 'La especie no existe.'];
             }
-
-            // Verificar si tiene árboles asociados
             if ($this->speciesModel->hasTreesAssociated($speciesId)) {
                 return ['error' => 'No se puede eliminar la especie porque tiene árboles asociados.'];
             }
-
-            // Intentar eliminar la especie
             if ($this->speciesModel->deleteSpecie($speciesId)) {
                 return ['success' => 'Especie eliminada correctamente'];
             } else {
@@ -159,8 +141,6 @@ class CrudController
             return ['error' => 'Error en el servidor: ' . $e->getMessage()];
         }
     }
-
-    // Método para obtener una especie por ID (nombre consistente)
     public function getSpecieById($id)
     {
         return $this->speciesModel->getSpeciesById($id);
@@ -181,7 +161,6 @@ class CrudController
     private function createTree()
     {
         try {
-            // Validar y obtener los datos del formulario
             $speciesId = filter_var($_POST['species_id'] ?? null, FILTER_VALIDATE_INT);
             $location = trim($_POST['location'] ?? '');
             $price = filter_var($_POST['price'] ?? 0, FILTER_VALIDATE_FLOAT);            
@@ -189,7 +168,6 @@ class CrudController
             $targetDir = "http://mytrees.com/public/images/";
             $photo_url =  $targetDir . $fileName ;
             echo $fileName;
-            // Validación de campos requeridos
             if (!$speciesId) {
                 throw new Exception('El ID de la especie es requerido y debe ser válido');
             }
@@ -199,11 +177,6 @@ class CrudController
             if ($price <= 0) {
                 throw new Exception('El precio debe ser mayor a 0');
             }
-
-           
-
-
-            // Crear árbol en la base de datos
             $success = $this->treesModel->createTreeBasic(
                 $speciesId,
                 $location,
@@ -214,7 +187,6 @@ class CrudController
             if (!$success) {
                 throw new Exception('Error al crear el árbol en la base de datos');
             }
-
             setTargetMessage('success', 'Árbol creado correctamente');
             header("Location: ../views/createTree.php");
             exit();

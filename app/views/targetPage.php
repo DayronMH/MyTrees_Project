@@ -89,7 +89,7 @@ function setTargetMessage($type, $message) {
         transform: translateY(-20px);
     }
 }
-/* Media Queries para responsividad */
+
 @media (max-width: 768px) {
     .message-container {
         width: 95%;
@@ -107,17 +107,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const messages = document.querySelectorAll('.message');
     
     messages.forEach(message => {
-        // Agregar la clase fade-out antes de eliminar
+
         setTimeout(() => {
             message.classList.add('fade-out');
         }, 2500);
         
-        // Eliminar después de la animación
+
         setTimeout(() => {
             message.remove();
         }, 3000);
         
-        // Permitir cerrar haciendo clic
+
         message.addEventListener('click', function() {
             this.classList.add('fade-out');
             setTimeout(() => {

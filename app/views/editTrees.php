@@ -2,27 +2,20 @@
 session_start();
 require_once '../models/treesModel.php';
 require_once './targetPage.php';
-
 $trees = new TreesModel();
-
-// Validación del ID
 if (isset($_GET['id'])) {
     $treeId = htmlspecialchars($_GET['id'], ENT_QUOTES);
 } else {
     header('Location: ../views/trees.php');
     exit;
 }
-
-// Manejar POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['action'])) {
         setTargetMessage('error', "Acción no especificada");
         header("Location: trees.php");
         exit();
     }
-
     if ($_POST['action'] === 'edit_tree') {
-        // Obtener los valores del formulario
         $height = filter_input(INPUT_POST, 'height', FILTER_SANITIZE_STRING);
         $specie = filter_input(INPUT_POST, 'specie', FILTER_SANITIZE_STRING);
         $location = filter_input(INPUT_POST, 'location', FILTER_SANITIZE_STRING);
@@ -39,19 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
 $tree = $trees->getTreeById($treeId);
-
 if (!$tree) {
     setTargetMessage('error', "No encontramos el árbol");
     header("Location: trees.php");
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,5 +117,4 @@ if (!$tree) {
         </div>
     </div>
 </body>
-
 </html>

@@ -12,7 +12,6 @@ $speciesModel = new speciesModel();
 
 $trees = new TreesModel();
 
-// Validación del ID
 if (isset($_GET['id'])) {
     $treeId = htmlspecialchars($_GET['id'], ENT_QUOTES);
 } else {
@@ -20,7 +19,6 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-// Manejar POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['action'])) {
         setTargetMessage('error', "Acción no especificada");
