@@ -49,10 +49,7 @@ if (empty($trees)) {
         <div class="view-header">
             <h1>Árboles de <?php echo htmlspecialchars($trees[0]['owner_name'] ?? ''); ?></h1>
             <div class="header-buttons">
-                <a href="editUser.php?friend_id=<?php echo urlencode($friend_id); ?>" class="edit-user-button">
-                    Editar Usuario
-                </a>
-                <a href="adminDashboard.php" class="back-button">← Volver al Dashboard</a>
+                <a href="adminDashboard.php" class="back-button">Volver al Dashboard</a>
             </div>
         </div>
 

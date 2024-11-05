@@ -67,6 +67,12 @@ class treesUpdatesModel extends BaseModel
         $result = $this->executeQuery($query, [':tree_id' => $tree_id]);
         return !empty($result) ? $result[0] : null; // Return the first result or null if empty
     }
+    public function getOutdatedTrees(): array
+    {
+        $query = "SELECT * FROM trees WHERE 'update_date' < DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+        return $this->executeQuery($query);
+    }
+    
 
     /**
      * Executes a query and fetches the results.

@@ -195,7 +195,7 @@ body {
 }
 :focus {
     outline: 0;
-    border-color: #2260ff;
+    border-color: #0c9a32;
     box-shadow: 0 0 0 4px #b5c9fc;
   }
   
@@ -217,10 +217,10 @@ body {
   }
   
   .mydict input[type="radio"]:checked + span {
-    box-shadow: 0 0 0 0.0625em #0043ed;
+    box-shadow: 0 0 0 0.0625em #048a11;
     background-color: #dee7ff;
     z-index: 1;
-    color: #0043ed;
+    color: #188b2f;
   }
   
   label span {
@@ -232,7 +232,7 @@ body {
     margin-left: .0625em;
     box-shadow: 0 0 0 0.0625em #b5bfd9;
     letter-spacing: .05em;
-    color: #3e4963;
+    color: #3e6346;
     text-align: center;
     transition: background-color .5s ease;
   }
@@ -259,7 +259,7 @@ body {
 }
 
 .back-button::before {
-    content: "←";
+    content: "";
     font-size: 1.2em;
     transition: transform 0.3s ease;
 }
@@ -270,6 +270,62 @@ body {
     box-shadow: 0 4px 8px rgba(46, 139, 87, 0.2);
 }
 
+
+.mydict label span {
+    display: block;
+    cursor: pointer;
+    background-color: #ffffff;
+    padding: 0.5em 1em;
+    position: relative;
+    box-shadow: 0 0 0 0.0625em #96ec857f;
+    letter-spacing: .05em;
+    color: #2c7a51;
+    text-align: center;
+    transition: all 0.3s ease;
+    border-radius: 6px; /* Cambiado para un look más moderno */
+    font-size: 0.95em;
+}
+
+.mydict label span:hover {
+    background-color: #f0f9f4;
+    box-shadow: 0 0 0 0.0625em #3cb371;
+    transform: translateY(-1px);
+}
+
+/* Focus styles para accesibilidad */
+.mydict input[type="radio"]:focus + span {
+    outline: none;
+    box-shadow: 0 0 0 0.0625em #2c7a51, 0 0 0 0.1875em rgba(44, 122, 81, 0.2);
+}
+
+/* Animación suave al seleccionar */
+.mydict input[type="radio"]:checked + span {
+    animation: select-bounce 0.2s ease;
+}
+
+@keyframes select-bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+    100% { transform: translateY(-1px); }
+}
+
+/* Estilo responsivo para móviles */
+@media (max-width: 768px) {
+    .mydict div {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .mydict label {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .mydict label span {
+        width: 100%;
+        border-radius: 6px;
+    }
+}
 /* Media queries */
 @media (max-width: 768px) {
     .container {

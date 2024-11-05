@@ -186,8 +186,8 @@ class CrudController
             $location = trim($_POST['location'] ?? '');
             $price = filter_var($_POST['price'] ?? 0, FILTER_VALIDATE_FLOAT);            
             $fileName = basename($_FILES['treepic']['name']);
-            $targetDir = $_SERVER['DOCUMENT_ROOT'] . "http://mytrees.com/public/images/";
-            $photo_url = $targetDir . $fileName;
+            $targetDir = "http://mytrees.com/public/images/";
+            $photo_url =  $targetDir . $fileName ;
             echo $fileName;
             // Validación de campos requeridos
             if (!$speciesId) {

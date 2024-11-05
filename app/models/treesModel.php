@@ -27,7 +27,7 @@ class TreesModel extends BaseModel
         ]);
         
     }
-
+   
     public function editTree($treeId, $specie, $height, $location, $available) {
         try {
             $query = "UPDATE trees t 

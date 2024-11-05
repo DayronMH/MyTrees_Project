@@ -204,6 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'buy_tree' && 
     <div class="trees-container">
             <?php foreach ($getAvailableTrees as $tree): ?>
                 <div class="tree-card">
+                    <?php echo $tree['photo_url']; ?>
                     <img src="<?php echo htmlspecialchars($tree['photo_url']); ?>" alt="Árbol" class="tree-image">
                     <div class="tree-info">
                         <span class="tree-name"><?php echo htmlspecialchars($tree['commercial_name']); ?></span>
