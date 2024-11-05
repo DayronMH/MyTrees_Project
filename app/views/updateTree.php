@@ -46,61 +46,65 @@ if (!$tree) {
 
     <title>Actualizar Nuevo Arbol</title>
 </head>
-<form method="POST" action="" enctype="multipart/form-data">
-    <div class="form-tree">
-        <div class="form-group"></div>
-        <div class="edit-header">
-            <h1>Actualizar ÁRBOL</h1>
-            <a href="trees.php" class="back-button">← VOLVER AL DASHBOARD</a>
-        </div>
 
-        <div class="form-trees">
-            <form method="POST" action="" enctype="multipart/form-data">
-
-                <input type="hidden" name="tree_id" value="<?php echo htmlspecialchars($treeId); ?>">
-
-                <div class="form-group">
-                    <label for="height">Altura:</label>
-                    <input
-                        type="text"
-                        id="height"
-                        name="height"
-                        value="<?php echo isset($tree[0]['height']) ? htmlspecialchars($tree[0]['height']) : ''; ?>"
-                        required
-                        class="form-input">
+<body>
+    <div class="container">
+        <form method="POST" action="" enctype="multipart/form-data">
+            <div class="form-tree">
+                <div class="form-group"></div>
+                <div class="edit-header">
+                    <h1>Actualizar ÁRBOL</h1>
+                    <a href="trees.php" class="back-button">← VOLVER AL DASHBOARD</a>
                 </div>
 
+                <div class="form-trees">
+                    <form method="POST" action="" enctype="multipart/form-data">
 
-                <div class="mydict">
-                    <div>
-                        <label>
-                            <input type="radio" name="available" value="1" <?php echo (!isset($tree[0]['available']) || $tree[0]['available'] == 1) ? 'checked' : ''; ?>>
-                            <span>Disponible</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="available" value="0" <?php echo (isset($tree[0]['available']) && $tree[0]['available'] == 0) ? 'checked' : ''; ?>>
-                            <span>Vendido</span>
-                        </label>
-                    </div>
+                        <input type="hidden" name="tree_id" value="<?php echo htmlspecialchars($treeId); ?>">
+
+                        <div class="form-group">
+                            <label for="height">Altura:</label>
+                            <input
+                                type="text"
+                                id="height"
+                                name="height"
+                                value="<?php echo isset($tree[0]['height']) ? htmlspecialchars($tree[0]['height']) : ''; ?>"
+                                required
+                                class="form-input">
+                        </div>
+
+
+                        <div class="mydict">
+                            <div>
+                                <label>
+                                    <input type="radio" name="available" value="1" <?php echo (!isset($tree[0]['available']) || $tree[0]['available'] == 1) ? 'checked' : ''; ?>>
+                                    <span>Disponible</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="available" value="0" <?php echo (isset($tree[0]['available']) && $tree[0]['available'] == 0) ? 'checked' : ''; ?>>
+                                    <span>Vendido</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-tree">
+                            <label for="treePic">Tree Picture</label>
+                            <input type="file" class="form-control" name="treeUpd" id="treeUpd">
+                        </div>
+
+
+                        <div class="form-actions">
+                            <button type="submit" name="action" value="updateTrees" class="submit-button">
+                                Actualizar
+                            </button>
+
+                            <button type="button" class="cancel-button" onclick="window.location.href='trees.php'">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-tree">
-                    <label for="treePic">Tree Picture</label>
-                    <input type="file" class="form-control" name="treeUpd" id="treeUpd">
-                </div>
-
-
-                <div class="form-actions">
-                    <button type="submit" name="action" value="updateTrees" class="submit-button">
-                        Actualizar
-                    </button>
-
-                    <button type="button" class="cancel-button" onclick="window.location.href='trees.php'">
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
+            </div>
     </div>
-    </body>
+</body>
 
 </html>

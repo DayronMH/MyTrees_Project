@@ -1,11 +1,24 @@
 <?php
 require_once 'baseModel.php';
+require_once '../views/targetPage.php';
 
 class treesUpdatesModel extends BaseModel
 {
     public function __construct()
     {
         parent::__construct('tree_updates');
+    }
+
+    public function getTreePhoto($treeId){
+        $query = "SELECT photo_url FROM trees WHERE id = :tree_id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':tree_id', $treeId, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return $result['photo_url'];
+        }
+        return null;
     }
 
     /**
@@ -19,17 +32,45 @@ class treesUpdatesModel extends BaseModel
      * @return bool
      */
     public function createTreeUpdate(int $tree_id, float $height, string $image_url, string $status, string $updateDate): bool
-    {
-        $query = "INSERT INTO `tree_updates` (`tree_id`, `height`, `image_url`, `status`, `update_date`) 
-                  VALUES (:tree_id, :height, :image_url, :status, :updateDate)";
-        return $this->executeNonQuery($query, [
+{
+    try {
+        // Update the tree's height and photo URL
+        $updatePhotoQuery = "UPDATE `trees` SET `height` = :height, `photo_url` = :image_url WHERE id = :tree_id";
+        $success = $this->executeNonQuery($updatePhotoQuery, [
+            ':height' => $height,
+            ':image_url' => $image_url,
+            ':tree_id' => $tree_id,
+        ]);
+
+        if (!$success) {
+            setTargetMessage("error", "Error updating tree photo in database.");
+            return false; // Early exit on failure
+        }
+
+        // Insert the tree update record
+        $createUpdateQuery = "INSERT INTO `tree_updates` (`tree_id`, `height`, `image_url`, `status`, `update_date`)  
+                              VALUES (:tree_id, :height, :image_url, :status, :updateDate)";
+        $success = $this->executeNonQuery($createUpdateQuery, [
             ':tree_id' => $tree_id,
             ':height' => $height,
             ':image_url' => $image_url,
             ':status' => $status,
             ':updateDate' => $updateDate,
         ]);
+
+        if (!$success) {
+            setTargetMessage("error", "Error inserting tree update into database.");
+            return false; // Early exit on failure
+        }
+
+        return true; // Both operations succeeded
+    } catch (Exception $e) {
+        throw new Exception("Error creating tree update: " . $e->getMessage());
     }
+}
+
+        
+    
 
     /**
      * Executes a non-query SQL statement

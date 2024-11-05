@@ -122,11 +122,16 @@ class CrudController
      */
     public function updateTree($tree_id)
     {
-        $fileName = basename($_FILES['treeUpd']['name']);
-        $targetDir = $_SERVER['DOCUMENT_ROOT'] . "http://mytrees.com/public/images/";
-        $image_url = $targetDir . $fileName;
         date_default_timezone_set('America/Costa_Rica');
         $updateDate = date("Y-m-d H:i:s");
+        if ($_FILES['treeUpd']['name']) {
+            $fileName = basename($_FILES['treeUpd']['name']);
+            $targetDir = "http://mytrees.com/public/images/";
+            $image_url = $targetDir . $fileName;
+        } else {
+            // Usar la imagen existente
+            $image_url = $this->updateModel->getTreePhoto($tree_id);
+        }
         if (isset($_POST['available'])) {
             $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
             setTargetMessage('debug', 'Status del árbol: ' . $status);
@@ -139,7 +144,7 @@ class CrudController
             $height = filter_input(INPUT_POST, 'height', FILTER_SANITIZE_STRING);
             $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
             $result = $this->updateModel->createTreeUpdate($tree_id, $height, $image_url, $status, $updateDate);
-    
+            setTargetMessage('error',$result);
             if ($result) {
                 setTargetMessage('success', 'Árbol actualizado correctamente');
             } else {
@@ -151,6 +156,52 @@ class CrudController
         }
     }
 
+
+     /**
+     * Creates a new tree in the database
+     *
+     * Validates species ID, location, and price, handles file upload, and calls the `treesModel` to create the tree
+     * Sets session messages and redirects based on success or failure
+     */
+    private function createTree()
+    {
+        try {
+            $speciesId = filter_var($_POST['species_id'] ?? null, FILTER_VALIDATE_INT);
+            $location = trim($_POST['location'] ?? '');
+            $price = filter_var($_POST['price'] ?? 0, FILTER_VALIDATE_FLOAT);            
+            $fileName = basename($_FILES['treepic']['name']);
+            $targetDir = "http://mytrees.com/public/images/";
+            $photo_url =  $targetDir . $fileName ;
+            echo $fileName;
+            if (!$speciesId) {
+                throw new Exception('El ID de la especie es requerido y debe ser válido');
+            }
+            if (empty($location)) {
+                throw new Exception('La ubicación es requerida');
+            }
+            if ($price <= 0) {
+                throw new Exception('El precio debe ser mayor a 0');
+            }
+            $success = $this->treesModel->createTreeBasic(
+                $speciesId,
+                $location,
+                $price,
+                $photo_url,
+            );
+
+            if (!$success) {
+                throw new Exception('Error al crear el árbol en la base de datos');
+            }
+            setTargetMessage('success', 'Árbol creado correctamente');
+            header("Location: ../views/createTree.php");
+            exit();
+        } catch (Exception $e) {
+            setTargetMessage('error', $e->getMessage());
+            header("Location: ../views/createTree.php");
+            exit();
+        }
+    }
+    
      /**
      * Deletes a species from the database
      *
@@ -208,50 +259,5 @@ class CrudController
         $_SESSION['specie'] = $tree['commercial_name'];
         $_SESSION['location'] = $tree['location'];
         $_SESSION['available'] = $tree['available'];
-    }
-
-     /**
-     * Creates a new tree in the database
-     *
-     * Validates species ID, location, and price, handles file upload, and calls the `treesModel` to create the tree
-     * Sets session messages and redirects based on success or failure
-     */
-    private function createTree()
-    {
-        try {
-            $speciesId = filter_var($_POST['species_id'] ?? null, FILTER_VALIDATE_INT);
-            $location = trim($_POST['location'] ?? '');
-            $price = filter_var($_POST['price'] ?? 0, FILTER_VALIDATE_FLOAT);            
-            $fileName = basename($_FILES['treepic']['name']);
-            $targetDir = "http://mytrees.com/public/images/";
-            $photo_url =  $targetDir . $fileName ;
-            echo $fileName;
-            if (!$speciesId) {
-                throw new Exception('El ID de la especie es requerido y debe ser válido');
-            }
-            if (empty($location)) {
-                throw new Exception('La ubicación es requerida');
-            }
-            if ($price <= 0) {
-                throw new Exception('El precio debe ser mayor a 0');
-            }
-            $success = $this->treesModel->createTreeBasic(
-                $speciesId,
-                $location,
-                $price,
-                $photo_url,
-            );
-
-            if (!$success) {
-                throw new Exception('Error al crear el árbol en la base de datos');
-            }
-            setTargetMessage('success', 'Árbol creado correctamente');
-            header("Location: ../views/createTree.php");
-            exit();
-        } catch (Exception $e) {
-            setTargetMessage('error', $e->getMessage());
-            header("Location: ../views/createTree.php");
-            exit();
-        }
     }
 }

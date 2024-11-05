@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #e0f2e9 0%, #96ec857f 100%);
+    background: linear-gradient(135deg, #e0f2e9 0%, #fcfdfc7f 100%);
     min-height: 100vh;
     overflow-y: auto;
 }
@@ -166,22 +166,30 @@ body {
 
 .submit-button {
     background-color: #3cb371;
+    border :2px solid #ffffff;
+    color:#ffffff;
 }
 
 .submit-button:hover {
-    background-color: #2e8b57;
+    background-color: #7f8c8d00;
+    border :2px solid #3cb371;
+    color:#3cb371;
     transform: translateY(-2px);
 }
 
 .cancel-button {
-    background-color: #95a5a6;
+    background-color: #848686;
+    border :2px solid #ffffff;
+    color:#ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
 .cancel-button:hover {
-    background-color: #7f8c8d;
+    background-color: #7f8c8d00;
+    border :2px solid #848686;
+    color:#848686;
     transform: translateY(-2px);
 }
 :focus {
@@ -190,16 +198,18 @@ body {
     box-shadow: 0 0 0 4px #b5c9fc;
   }
   .delete-btn{
-    background-color: #f1f3ed00;
-    border :2px solid #671717;
-    color:#671717;
+    background-color: #a61a1a;
+    border :2px solid #ffffff;
+    color:#ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
 .delete-btn:hover {
-    background-color: #7f8c8d;
+    border :2px solid #a61a1a;
+    color:#a61a1a;
+    background-color: #7f8c8d00;
     transform: translateY(-2px);
 }
   
