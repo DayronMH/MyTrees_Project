@@ -132,6 +132,11 @@ class UsersModel extends BaseModel
         return $this->executeQuery($query);
     }
 
+    public function getAdmins(){
+        $query = "SELECT * FROM `users` WHERE `role` = 'admin'";
+        return $this->executeQuery($query);
+    }
+
     /**
      * Retrieves a user by their ID
      *
