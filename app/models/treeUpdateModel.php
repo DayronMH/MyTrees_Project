@@ -69,7 +69,7 @@ class treesUpdatesModel extends BaseModel
     }
     public function getOutdatedTrees(): array
     {
-        $query = "SELECT * FROM trees WHERE 'update_date' < DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+        $query =   $query = "SELECT * FROM Tree_Updates WHERE update_date < NOW() - INTERVAL 30 DAY";
         return $this->executeQuery($query);
     }
     

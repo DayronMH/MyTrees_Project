@@ -128,6 +128,10 @@ class UsersModel extends BaseModel
         $query = "SELECT * FROM `users` WHERE `role` = 'friend'";
         return $this->executeQuery($query);
     }
+    public function getAdmins(){
+        $query = "SELECT * FROM `users` WHERE `role` = 'admin'";
+        return $this->executeQuery($query);
+    }
     public function getUserById($id): ?array
     {
         $query = "SELECT * FROM `users` WHERE id = :id";
