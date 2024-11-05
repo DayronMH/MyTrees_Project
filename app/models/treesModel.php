@@ -6,15 +6,7 @@ class TreesModel extends BaseModel
     {
         parent::__construct('trees');
     }
-    /**
-     * Creates a new tree with default values for owner, height, and availability.
-     *
-     * @param int $species_id The ID of the species.
-     * @param string $location The location of the tree.
-     * @param float $price The price of the tree.
-     * @param string $photo_url The URL of the tree's photo.
-     * @return bool Returns true on success, false on failure.
-     */
+
     public function createTreeBasic(int $species_id, string $location, float $price, string $photo_url): bool
     {
         $query = "INSERT INTO `trees` (`species_id`, `location`, `price`, `photo_url`)
@@ -63,24 +55,10 @@ class TreesModel extends BaseModel
             $stmt = $this->db->prepare($query);
             return $stmt->execute($params);
         } catch (PDOException $e) {
-            // Handle the error, log it, or rethrow it
             throw new Exception("Database query failed: " . $e->getMessage());
         }
     }
     
-
-    /**
-     * Creates a new tree with all specified fields.
-     *
-     * @param int $species_id The ID of the species.
-     * @param int $owner_id The ID of the owner.
-     * @param float $height The height of the tree.
-     * @param string $location The location of the tree.
-     * @param bool $available Availability status of the tree.
-     * @param float $price The price of the tree.
-     * @param string $photo_url The URL of the tree's photo.
-     * @return bool Returns true on success, false on failure.
-     */
     public function createTree(int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): bool
     {
         $query = "INSERT INTO `trees` (`species_id`, `owner_id`, `height`, `location`, `available`, `price`, `photo_url`)
@@ -96,19 +74,6 @@ class TreesModel extends BaseModel
         ]);
     }
 
-    /**
-     * Updates a specific tree by ID.
-     *
-     * @param int $id The ID of the tree.
-     * @param int $species_id The ID of the species.
-     * @param int $owner_id The ID of the owner.
-     * @param float $height The height of the tree.
-     * @param string $location The location of the tree.
-     * @param bool $available Availability status of the tree.
-     * @param float $price The price of the tree.
-     * @param string $photo_url The URL of the tree's photo.
-     * @return bool Returns true on success, false on failure.
-     */
     public function updateTree(int $id, int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): array
     {
         $query = "UPDATE trees  SET species_id = :species_id,   owner_id = :owner_id,   height = :height,  location = :location,
@@ -124,12 +89,6 @@ class TreesModel extends BaseModel
         return $result > 0;
     }
 
-
-    /**
-     * Retrieves all available trees.
-     *
-     * @return array Returns an array of available trees.
-     */
     public function countAvailableTrees(): int
     {
         $query = "SELECT COUNT(*) as availableTreesCount
@@ -142,11 +101,7 @@ class TreesModel extends BaseModel
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return (int) $result['availableTreesCount'];
     }
-    /**
-     * Retrieves all sold trees.
-     *
-     * @return array Returns an array of sold trees.
-     */
+
     public function countSoldTrees(): int
     {
         $query = "SELECT COUNT(*) as soldTreesCount
@@ -160,12 +115,6 @@ class TreesModel extends BaseModel
         return (int) $result['soldTreesCount'];
     }
 
-    /**
-     * Retrieves trees by species.
-     *
-     * @param int $species_id The ID of the species.
-     * @return array Returns an array of trees by species.
-     */
     public function getTreesBySpecies(int $species_id): array
     {
         $query = "SELECT * FROM Trees WHERE species_id = :species_id ORDER BY height DESC";
@@ -198,7 +147,6 @@ class TreesModel extends BaseModel
                   WHERE t.id = :id";
         return $this->executeQuery($query, [':id' => $treeId]);
     }
-
 
     public function getTrees(): array
     {

@@ -84,5 +84,4 @@ class AdminDashboardController
         $_SESSION['commercial_names'] = $this->speciesModel->getCommercialNames();
         $_SESSION['scientific_names'] = $this->speciesModel->getScientificNames();
     }
-
 }
