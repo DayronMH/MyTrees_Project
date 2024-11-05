@@ -7,12 +7,28 @@ class speciesModel extends BaseModel
     {
         parent::__construct('species');
     }
-
     /**
      * Retrieves all species from the database.
      *
      * @return array Returns an array of species records.
      */
+    public function createSpecie(string $commercial_name, string $scientific_name): bool
+    {
+        date_default_timezone_set('America/Costa_Rica'); // Cambia la zona horaria según tu ubicación
+
+
+        $date = date('Y-m-d H:i:s');
+        
+        $query = "INSERT INTO `species` (`commercial_name`, `scientific_name`, `availability_date`)
+                  VALUES (:commercial_name, :scientific_name, :availability_date)";
+
+        return $this->executeNonQuery($query, [
+            ':commercial_name' => $commercial_name,
+            ':scientific_name' => $scientific_name,
+            ':availability_date' => $date
+        ]);
+    }
+
     public function getAllSpecies(): array
     {
         $query = "SELECT id, commercial_name, scientific_name FROM species"; // Asegúrate de que el nombre de la tabla sea correcto.
@@ -85,6 +101,87 @@ class speciesModel extends BaseModel
     {
         $query = "DELETE FROM species WHERE id = :species_id";
         return $this->executeQuery($query, [':species_id' => $speciesId]);
+    }
+    public function getCommercialNames()
+    {
+        $query = "SELECT id, commercial_name FROM Species";
+        return $this->executeQuery($query);
+    }
+    public function getScientificNames()
+    {
+        $query = "SELECT id, scientific_name FROM Species ";
+        return $this->executeQuery($query);
+    }
+
+    public function deleteSpecie(int $id): array
+{
+    try {
+        // Primero verificamos si hay árboles asociados
+        if ($this->hasTreesAssociated($id)) {
+            // Si hay árboles asociados, intentamos eliminarlos primero
+            $deleteRelatedTreesQuery = "DELETE FROM `trees` WHERE `species_id` = :species_id";
+            $relatedTreesDeleted = $this->executeQuery($deleteRelatedTreesQuery, [':species_id' => $id]);
+            
+            if (!$relatedTreesDeleted) {
+                return [
+                    'error' => 'No se pudieron eliminar los árboles asociados a esta especie'
+                ];
+            }
+        }
+        
+        // Una vez que no hay árboles (ya sea porque se eliminaron o porque no había),
+        // procedemos a eliminar la especie
+        $deleteSpeciesQuery = "DELETE FROM `species` WHERE `id` = :id";
+        $speciesDeleted = $this->executeQuery($deleteSpeciesQuery, [':id' => $id]);
+        
+        if ($speciesDeleted) {
+            return [
+                'success' => 'La especie y sus árboles asociados fueron eliminados correctamente'
+            ];
+        } else {
+            return [
+                'error' => 'No se pudo eliminar la especie'
+            ];
+        }
+    } catch (PDOException $e) {
+        // Log del error para el administrador
+        error_log("Error al eliminar especie: " . $e->getMessage());
+        
+        return [
+            'error' => 'Ocurrió un error al procesar la eliminación'
+        ];
+    }
+}
+
+public function hasTreesAssociated($speciesId): bool 
+{
+    try {
+        $query = "SELECT COUNT(*) FROM `trees` WHERE `species_id` = :species_id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':species_id' => $speciesId]);
+        return $stmt->fetchColumn() > 0;
+    } catch (PDOException $e) {
+        // Log del error para el administrador
+        error_log("Error al verificar árboles asociados: " . $e->getMessage());
+        return false;
+    }
+}
+
+
+    public function editSpecies($speciesId, $commercialName, $scientificName)
+    {
+        $stmt = $this->db->prepare("UPDATE species SET commercial_name = ?, scientific_name = ? WHERE id = ?");
+        return $stmt->execute([$commercialName, $scientificName, $speciesId]);
+    }
+    private function executeNonQuery(string $query, array $params = []): bool
+    {
+        try {
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Handle the error, log it, or rethrow it
+            throw new Exception("Database query failed: " . $e->getMessage());
+        }
     }
 
     /**

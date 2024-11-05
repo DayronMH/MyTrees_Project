@@ -1,7 +1,6 @@
 <?php
 require_once 'baseModel.php';
 
-
 class TreesModel extends BaseModel
 {
     public function __construct()
@@ -26,13 +25,55 @@ class TreesModel extends BaseModel
     {
         $query = "INSERT INTO `trees` (`species_id`, `location`, `price`, `photo_url`)
                   VALUES (:species_id, :location, :price, :photo_url)";
-        return $this->executeQuery($query, [
+        return $this->executeNonQuery($query, [
             ':species_id' => $species_id,
             ':location' => $location,
             ':price' => $price,
             ':photo_url' => $photo_url
         ]);
+        
     }
+   
+    public function editTree($treeId, $specie, $height, $location, $available) {
+        try {
+            $query = "UPDATE trees t 
+                      JOIN species s ON t.species_id = s.id 
+                      SET t.height = :height,
+                          t.location = :location,
+                          t.available = :available,
+                          s.commercial_name = :commercial_name
+                      WHERE t.id = :id";
+            
+            $stmt = $this->db->prepare($query);
+            $result = $stmt->execute([
+                ':id' => $treeId,
+                ':height' => $height,
+                ':location' => $location,
+                ':available' => $available,
+                ':commercial_name' => $specie
+            ]);
+            
+            if ($result) {
+                return ['success' => 'Árbol y especie actualizados correctamente'];
+            } else {
+                return ['error' => 'Error al actualizar el árbol y la especie'];
+            }
+            
+        } catch (PDOException $e) {
+            return ['error' => 'Error al actualizar: ' . $e->getMessage()];
+        }
+    }
+    private function executeNonQuery(string $query, array $params = []): bool
+    {
+        try {
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Handle the error, log it, or rethrow it
+            throw new Exception("Database query failed: " . $e->getMessage());
+        }
+    }
+    
 
     /**
      * Creates a new tree with all specified fields.
@@ -74,34 +115,55 @@ class TreesModel extends BaseModel
      * @param string $photo_url The URL of the tree's photo.
      * @return bool Returns true on success, false on failure.
      */
-    public function updateTree(int $id, int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): bool
+    public function updateTree(int $id, int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): array
     {
-        $query = "UPDATE `trees` 
-                  SET `species_id` = :species_id, `owner_id` = :owner_id, `height` = :height, 
-                      `location` = :location, `available` = :available, `price` = :price, 
-                      `photo_url` = :photo_url
-                  WHERE `id` = :id";
-        return $this->executeQuery($query, [
-            ':id' => $id,
-            ':species_id' => $species_id,
-            ':owner_id' => $owner_id,
-            ':height' => $height,
-            ':location' => $location,
-            ':available' => $available,
-            ':price' => $price,
-            ':photo_url' => $photo_url
-        ]);
+        $query = "UPDATE trees  SET species_id = :species_id,   owner_id = :owner_id,   height = :height,  location = :location,
+         available = :available,  price = :price,  photo_url = :photo_url  WHERE id = :id";
+        return $this->executeQuery($query, [':species_id' => $species_id, ':owner_id' => $owner_id, ':height' => $height, ':location' => $location,
+         ':available' => $available, ':price' => $price, ':photo_url' => $photo_url, ':id' => $id]);
     }
+
+    public function buyTree(int $id, int $owner_id): bool
+    {
+        $query = "UPDATE trees  SET owner_id = :owner_id, available = FALSE  WHERE id = :id";
+        $result = $this->executeQuery($query, [':owner_id' => $owner_id,':id' => $id]);
+        return $result > 0;
+    }
+
 
     /**
      * Retrieves all available trees.
      *
- * @return array Returns an array of available trees.
+     * @return array Returns an array of available trees.
      */
-    public function getAvailableTrees(): array
+    public function countAvailableTrees(): int
     {
-        $query = "SELECT * FROM Trees WHERE available = TRUE ORDER BY price ASC";
-        return $this->executeQuery($query);
+        $query = "SELECT COUNT(*) as availableTreesCount
+              FROM `trees` 
+              WHERE available = 1";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) $result['availableTreesCount'];
+    }
+    /**
+     * Retrieves all sold trees.
+     *
+     * @return array Returns an array of sold trees.
+     */
+    public function countSoldTrees(): int
+    {
+        $query = "SELECT COUNT(*) as soldTreesCount
+              FROM `trees` 
+              WHERE available = 0";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) $result['soldTreesCount'];
     }
 
     /**
@@ -116,20 +178,37 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':species_id' => $species_id]);
     }
 
+    public function getTreesByOwner($owner_id): array
+    {
+        $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
+                  FROM Trees t 
+                  JOIN Species s ON t.species_id = s.id 
+                  LEFT JOIN Users u ON t.owner_id = u.id 
+                  WHERE t.owner_id = :id";
+        return $this->executeQuery($query, [':id' => $owner_id]);
+    }
+    public function getEditableTreeById($tree_id): array
+    {
+        $query = "SELECT t.id, t.height, s.commercial_name, t.location, t.available 
+                  FROM trees t 
+                  JOIN species s ON t.species_id = s.id 
+                  WHERE t.id = :tree_id";
+        return $this->executeQuery($query, [':tree_id' => $tree_id]);
+    }
+
     /**
      * Retrieves information about a tree by ID.
      *
      * @param int $id The ID of the tree.
      * @return array Returns an array of tree information.
      */
-    public function getTreeById(int $id): array
-    {
+    public function getTreeById(int $treeId): array{
         $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
                   FROM Trees t 
                   JOIN Species s ON t.species_id = s.id 
                   LEFT JOIN Users u ON t.owner_id = u.id 
                   WHERE t.id = :id";
-        return $this->executeQuery($query, [':id' => $id]);
+        return $this->executeQuery($query, [':id' => $treeId]);
     }
 
     /**
@@ -192,5 +271,35 @@ class TreesModel extends BaseModel
             // Handle the error, log it, or rethrow it
             throw new Exception("Database query failed: " . $e->getMessage());
         }
+    }
+    
+    public function getAvailableTrees(): array
+    {
+        $query = "SELECT * FROM `trees` WHERE `available` = TRUE";
+        return $this->executeQuery($query);
+    }
+    public function getPurchasedTrees(): array
+    {
+        $query = "SELECT * FROM `trees` WHERE `available` = False";
+        return $this->executeQuery($query);
+    }
+
+    public function getAvailableTreesWithSpecies() {
+        $query = "SELECT t.*, s.commercial_name, s.scientific_name, s.availability_date FROM Trees t 
+        JOIN Species s ON t.species_id = s.id WHERE t.available = TRUE"; 
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
+    
+
+    public function getPurchasedTreesByUser(int $userId) {
+        $sql = "SELECT * FROM Trees t 
+            JOIN species s ON t.species_id = s.id  WHERE owner_id = :userId";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

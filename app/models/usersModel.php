@@ -91,14 +91,13 @@ class UsersModel extends BaseModel
      * @param string $email The user's email.
      * @return array|null Returns user data if found, null otherwise.
      */
-    public function handleLogin(string $email): ?array
+    public function handleLogin(string $email)
     {
         $query = "SELECT * FROM `users` WHERE `email` = :email";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
-        // Devuelve el resultado como un array o null si no se encuentra el usuario
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result 
         ?: null; // Devuelve null si no hay resultados
@@ -111,8 +110,21 @@ class UsersModel extends BaseModel
         
         // Asegurarte de que estás retornando solo el valor del conteo
         return (int)$result[0]['count'];
+
     }
 
+    public function countFriends(): int
+    {
+        $query = "SELECT COUNT(*) as friend_count 
+              FROM `users` 
+              WHERE `role` = 'friend'";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) $result['friend_count'];
+    }
     /**
      * Retrieves all users.
      *
@@ -122,6 +134,20 @@ class UsersModel extends BaseModel
     {
         $query = "SELECT * FROM `users`";
         return $this->executeQuery($query);
+    }
+    public function getFriends(){
+        $query = "SELECT * FROM `users` WHERE `role` = 'friend'";
+        return $this->executeQuery($query);
+    }
+    public function getUserById($id): ?array
+    {
+        $query = "SELECT * FROM `users` WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':id' => $id]);
+        
+        // Usar fetch en lugar de fetchAll para obtener un solo registro
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
     }
 
     /**
@@ -142,11 +168,37 @@ class UsersModel extends BaseModel
             throw new Exception("Database query failed: " . $e->getMessage());
         }
     }
-    public function getUserById($id)
+
+    public function createFirstAdmin($role): bool 
     {
-        $query = $this->db->prepare("SELECT * FROM users " . " WHERE id = :id");
-        $query->bindParam(':id', $id);
-        $query->execute();
-        return $query->fetch(PDO::FETCH_ASSOC);
+        // Check for previous admins
+        $checkAdminQuery = "SELECT COUNT(*) as admin_count FROM `users` WHERE `role` = 'admin'";
+        $result = $this->executeQuery($checkAdminQuery);
+        $adminExists = $result[0]['admin_count'] > 0;
+
+        if (!$adminExists && $role === 'admin') {
+            $name = "Admin";
+            $email = "Admin@gmail.com";
+            $password = "123";
+            $phone = "123";
+            $address = "123";
+            $country = $country = "123";
+        }
+
+        // Hash the password before storing it
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `phone`, `address`, `country`)
+                VALUES (:name, :email, :password, :role, :phone, :address, :country)";
+
+        return $this->executeNonQuery($query, [
+            ':name' => $name,
+            ':email' => $email,
+            ':password' => $hashedPassword,
+            ':role' => $role,
+            ':phone' => $phone,
+            ':address' => $address,
+            ':country' => $country
+        ]);
     }
 }
