@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Admin Dashboard View
  * 
@@ -14,26 +15,29 @@
  */
 
 session_start();
+
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
-require_once 'targetPage.php';
-
-// Initialize dashboard controller
-$dashboard = new AdminDashboardController();
-
-// Process post actions
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $dashboard->handlePostActions();
-}
 
 // Authentication check
 if (!isset($_SESSION['username'])) {
     header('Location: http://mytrees');
     exit();
 }
+
+// Initialize dashboard controller
+$dashboard = new AdminDashboardController();
+
+// Process POST actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $dashboard->handlePostActions();
+}
+
+require_once 'targetPage.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,23 +95,21 @@ if (!isset($_SESSION['username'])) {
                 $commercial_names = $_SESSION['commercial_names'] ?? [];
                 $scientific_names = $_SESSION['scientific_names'] ?? [];
 
-                for ($i = 0; $i < count($commercial_names); $i++):
-                    $commercial = $commercial_names[$i]['commercial_name'];
-                    $scientific = $scientific_names[$i]['scientific_name'];
-                    $speciesId = $commercial_names[$i]['id'];
+                foreach ($commercial_names as $index => $commercial_name):
+                    $commercial = htmlspecialchars($commercial_name['commercial_name']);
+                    $scientific = htmlspecialchars($scientific_names[$index]['scientific_name']);
+                    $speciesId = htmlspecialchars($commercial_name['id']);
                     $isVisible = isset($_SESSION['visible_species']) && in_array($speciesId, $_SESSION['visible_species']);
                 ?>
                     <div class="species-card">
                         <div class="species-info">
-                            <h3 class="species-name"><?php echo htmlspecialchars($commercial); ?></h3>
+                            <h3 class="species-name"><?php echo $commercial; ?></h3>
                             <div class="species-content">
-                                <p class="species-description" 
-                                   style="display: <?php echo $isVisible ? 'block' : 'none'; ?>">
-                                    <strong>Nombre Científico:</strong>
-                                    <?php echo htmlspecialchars($scientific); ?>
+                                <p class="species-description" style="display: <?php echo $isVisible ? 'block' : 'none'; ?>">
+                                    <strong>Nombre Científico:</strong> <?php echo $scientific; ?>
                                 </p>
                             </div>
-                            
+
                             <div class="species-actions">
                                 <form method="POST" action="" class="view-form">
                                     <input type="hidden" name="species_id" value="<?php echo $speciesId; ?>">
@@ -116,18 +118,16 @@ if (!isset($_SESSION['username'])) {
                                     </button>
                                 </form>
                                 <button onclick="window.location.href='../views/edit.php?id=<?php echo $speciesId; ?>'"
-                                        class="action-button edit-btn">
+                                    class="action-button edit-btn">
                                     Editar
                                 </button>
                             </div>
                         </div>
                     </div>
-                <?php endfor; ?>
+                <?php endforeach; ?>
+                <div class="button-container">
 
-                <button onclick="window.location.href='../views/createSpecie.php'"
-                        class="create-btn">
-                    Crear Especie
-                </button>
+                </div>
             </div>
         </div>
 
@@ -141,12 +141,35 @@ if (!isset($_SESSION['username'])) {
                 <?php
                 $friends = $_SESSION['friends'] ?? [];
                 foreach ($friends as $friend): ?>
-                    <a href="trees.php?friend_id=<?php echo htmlspecialchars($friend['id']); ?>" 
-                       class="friend-link">
+                    <a href="trees.php?friend_id=<?php echo htmlspecialchars($friend['id']); ?>" class="friend-link">
                         <h3 class="friend-name"><?php echo htmlspecialchars($friend['name']); ?></h3>
                     </a>
                 <?php endforeach; ?>
             </div>
+        </div>
+        <br>
+        <div class="button-container">
+            <div class="dashboard-header">
+                <h2>Agregar </h2>
+            </div>
+
+
+            <button onclick="window.location.href='../views/createTree.php'"
+                class="create-btn"
+                name="action"
+                value="create_tree">
+                Arbol
+            </button>
+            <div class="dashboard-header">
+                <h2>Agregar</h2>
+            </div>
+
+
+
+            <button onclick="window.location.href='../views/createSpecie.php'"
+                class="create-btn">
+                Especie
+            </button>
         </div>
 
         <!-- Logout Button -->
@@ -155,4 +178,5 @@ if (!isset($_SESSION['username'])) {
         </div>
     </div>
 </body>
+
 </html>
