@@ -2,7 +2,9 @@
 session_start();
 require_once '../models/treesModel.php';
 require_once './targetPage.php';
+// Instantiate controllers and models for handling operations
 $trees = new TreesModel();
+
 if (isset($_GET['id'])) {
     $treeId = htmlspecialchars($_GET['id'], ENT_QUOTES);
 } else {

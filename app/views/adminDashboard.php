@@ -13,6 +13,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Instantiate controllers and models for handling operations
 $dashboard = new AdminDashboardController();
 sendTreesNotificationsTest();
 

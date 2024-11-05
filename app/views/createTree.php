@@ -4,6 +4,8 @@ require_once '../controllers/adminDashboardController.php';
 require_once './targetPage.php';
 require_once '../controllers/crudController.php';
 require_once '../models/speciesModel.php';
+
+// Instantiate controllers and models for handling operations
 $controller = new AdminDashboardController();
 $crud = new crudController();
 $speciesModel = new speciesModel();

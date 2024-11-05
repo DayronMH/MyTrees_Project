@@ -5,19 +5,19 @@ require_once '../models/treesModel.php';
 require_once '../controllers/salesController.php';
 require_once '../controllers/treeController.php';
 
+// Instantiate controllers and models for handling operations
 $friendDashboardController = new FriendDashboardController();
 $salesController = new SalesController();
 $treeController = new TreeController();
-
 $userId = $_SESSION['user_id'] ?? null;
 $friend_id = $_GET['friend_id'] ?? null;
+$treesModel = new TreesModel();
 
 if (is_null($friend_id)) {
     header('Location: adminDashboard.php');
     exit;
 }
 
-$treesModel = new TreesModel();
 $trees = $treesModel->getTreesByOwner($friend_id);
 
 if (empty($trees)) {

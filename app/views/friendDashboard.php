@@ -5,6 +5,7 @@ require_once '../models/treesModel.php';
 require_once '../controllers/salesController.php';
 require_once '../controllers/treeController.php';
 
+// Instantiate controllers and models for handling operations
 $friendDashboardController = new FriendDashboardController();
 $salesController = new SalesController();
 $treeController = new TreeController();

@@ -4,6 +4,7 @@ session_start();
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 
+// Instantiate controllers and models for handling operations
 $controller = new AdminDashboardController();
 $crud = new crudController();
 ?>

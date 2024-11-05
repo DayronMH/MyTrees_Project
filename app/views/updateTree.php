@@ -5,11 +5,11 @@ require_once './targetPage.php';
 require_once '../models/treesModel.php';
 require_once '../controllers/crudController.php';
 require_once '../models/speciesModel.php';
+
+// Instantiate controllers and models for handling operations
 $controller = new AdminDashboardController();
 $crud = new crudController();
 $speciesModel = new speciesModel();
-
-
 $trees = new TreesModel();
 
 if (isset($_GET['id'])) {
