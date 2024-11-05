@@ -51,6 +51,7 @@ class loginController {
                 $_SESSION['user_id'] = $user['id'];
 
                 if ($user['role'] === 'admin') {
+                    sendTreesNotificationsTest();
                     setTargetMessage('success', 'Bienvenido, Administrador');
                     header('Location: http://mytrees.com/app/views/adminDashboard.php');
                     exit();

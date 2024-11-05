@@ -4,8 +4,7 @@ session_start();
 
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
-require_once 'targetPage.php';
-require_once '../../scripts/script.php'; 
+require_once 'targetPage.php'; 
 
 if (!isset($_SESSION['user_id'])) {
     setTargetMessage('error', 'Username must be');
@@ -15,7 +14,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Instantiate controllers and models for handling operations
 $dashboard = new AdminDashboardController();
-sendTreesNotificationsTest();
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dashboard->handlePostActions();
@@ -145,6 +144,8 @@ require_once 'targetPage.php';
                 value="create_tree">
                 Arbol
             </button>
+
+            
             <div class="dashboard-header">
                 <h2>Agregar</h2>
             </div>

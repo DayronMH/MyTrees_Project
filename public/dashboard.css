@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: content-box;
+    box-sizing: border-box;
 }
 
 body {
@@ -16,8 +16,7 @@ body {
 
 .dashboard-header {
     text-align: center;
-    padding: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     position: relative;
     color: #1b5e20;
     text-transform: uppercase;
@@ -31,7 +30,9 @@ body {
 }
 
 .dashboard-header h2 {
-    margin-top: 20px;
+    
+    padding-bottom: 0;
+    margin-top: 0px;
     color: #388e3c;
     font-size: 1.5em;
 }
@@ -232,7 +233,8 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 20px 0;
+    padding: 1px 0;
+    margin-left: 0;
 }
 
 .create-btn {
@@ -240,10 +242,10 @@ body {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
-    padding: 15px 30px;
+    margin-left: -1em;
     background: linear-gradient(45deg, #2e7d32, #43a047);
     color: white;
+    padding: 2px 1em 2px;
     border: none;
     border-radius: 10px;
     font-size: 1.1em;
@@ -360,6 +362,43 @@ body {
     transform: translateY(-1px);
     border: 2px solid #1b5e20;
 }
+.stat-card,
+.species-card,
+.friend-link {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(129, 199, 132, 0.2);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.stat-card:hover,
+.species-card:hover,
+.friend-link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Stat Number and Title */
+.stat-number {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-title,
+.species-name {
+    color: #2e7d32;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 
 @media (max-width: 768px) {
     .friends-container {
@@ -393,6 +432,7 @@ body {
         padding: 10px;
     }
 
+    
     .species-card {
         padding: 15px;
     }
@@ -412,28 +452,134 @@ body {
         margin: 20px auto;
     }
 }
+.action-button,
+.view-btn,
+.edit-btn,
+.delete-btn,
+.create-btn,
+.back-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-@media (max-width: 480px) {
-    .friends-container {
-        gap: 10px;
-        padding: 10px;
+.view-btn {
+    background-color: #43a047;
+    color: white;
+}
+
+.view-btn:hover {
+    background-color: #2e7d32;
+}
+@media (max-width: 768px) {
+    .dashboard-header h1 {
+        font-size: 28px;
     }
-    
-    .friend-link {
-        padding: 12px;
+
+    .dashboard-header h2 {
+        font-size: 1.2em;
     }
-    
-    .dashboard-header {
-        padding: 20px 10px;
+
+    .stat-number {
+        font-size: 36px;
     }
-    
-    .stat-card {
-        padding: 20px;
+
+    .stat-title {
+        font-size: 16px;
+    }
+
+    .species-name {
+        font-size: 1.6em;
     }
 
     .create-btn {
-        width: 95%;
-        padding: 12px 20px;
-        margin: 15px auto;
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .stats-container,
+    .species-container,
+    .friends-container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .dashboard-header h2 {
+        font-size: 1.2em;
+        margin-left: 10%;
+    }
+    body {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .dashboard-header {
+        padding: 0px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1. 5em;
+    }
+
+    .dashboard-header h2 {
+        font-size: 1.2em;
+    }
+
+    .dashboard-header hr {
+        width: 90%;
+    }
+
+    .stats-container,
+    .species-container,
+    .friends-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .stat-card,
+    .species-card,
+    .friend-link {
+        padding: 15px;
+    }
+
+    .stat-number {
+        font-size: 36px;
+    }
+
+    .stat-title {
+        font-size: 14px;
+    }
+
+    .species-name {
+        font-size: 1.5em;
+    }
+
+    .species-description {
+        font-size: 0.9em;
+    }
+
+    .action-button,
+    .view-btn,
+    .edit-btn,
+    .delete-btn,
+    .create-btn,
+    .back-button {
+        font-size: 0.8em;
+        padding: 8px 12px;
+    }
+
+    .button-container .create-btn {
+        min-width: 150px;
+    }
+
+    .back-button {
+        top: 15px;
+        left: 10px;
     }
 }

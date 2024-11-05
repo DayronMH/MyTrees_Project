@@ -2,6 +2,7 @@
 require_once '../../app/models/treeUpdateModel.php';
 require_once '../../app/models/usersModel.php';
 require_once '../../app/models/treesModel.php';
+require_once '../../app/views/targetPage.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -26,7 +27,6 @@ function sendTreesNotifications()
             $list .= "ID: {$tree['tree_id']} - Especie: {$tree['commercial_name']} - Última actualización: {$tree['update_date']}\n------------------------\n";
         }
         $to = $admins[0]['email'];
-        echo $admins[0]['email'];
         $subject = "Subject of the email";
         $headers = "From: mytrees.com\r\n";
         $message = "Estimado Administrador,\n\n";
@@ -35,9 +35,9 @@ function sendTreesNotifications()
         $message .= "\nPor favor, revise y actualice la información.\n";
 
         if (mail($to, $subject, $message, $headers)) {
-            echo "Email enviado correctamente.";
+            setTargetMessage('success', 'Correo enviado correctamente');
         } else {
-            echo "Error al enviar el correo.";
+            setTargetMessage('error', 'Error al enviar correo');
         }
 
     } catch (Exception $e) {
@@ -75,9 +75,9 @@ function sendTreesNotificationsTest()
         $message .= "\nPor favor, revise y actualice la información.\n";
 
         if (mail($to, $subject, $message, $headers)) {
-            echo "Email enviado correctamente.";
+            setTargetMessage('success', 'Correo enviado correctamente');
         } else {
-            echo "Error al enviar el correo.";
+            setTargetMessage('error', 'Error al enviar correo');
         }
 
     } catch (Exception $e) {
