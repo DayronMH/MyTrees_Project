@@ -305,7 +305,7 @@ body {
     transition: opacity 0.3s ease;
 }
 .dashboard-section {
-    margin-Top: 50px; /* Ajusta el valor según sea necesario */
+    margin-Top: 50px;
 }
 .friend-link:hover {
     transform: translateY(-5px);
