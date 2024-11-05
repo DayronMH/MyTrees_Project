@@ -5,6 +5,14 @@ require_once '../../scripts/script.php';
 
 
 class loginController {
+
+     /**
+     * Constructor for the controller
+     * 
+     * Starts a session if none exists and checks for incoming POST requests with actions:
+     *   - 'login': calls the static `authLogin` method for user login
+     *   - 'register': calls the static `routeRegister` method to redirect to the registration page
+     */
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -17,6 +25,15 @@ class loginController {
             }
         }
     }
+
+     /**
+     * Handles user login form submission
+     *
+     * Extracts email and password from the POST request, validates if they are empty,
+     * calls the `UsersModel` to retrieve user information by email
+     * Verifies the password using `password_verify` and sets session data for successful login
+     * Redirects the user to the appropriate dashboard based on their role ('admin' or 'friend')
+     */
     public static function authLogin() {
         $userModel = new UsersModel();
         $email = $_POST['email'];
@@ -58,6 +75,10 @@ class loginController {
             exit(); 
         }
     }
+
+     /**
+     * Redirects the user to the registration page
+     */
     public static function routeRegister() {
         header('Location: http://mytrees.com/app/views/register.php');
         exit();

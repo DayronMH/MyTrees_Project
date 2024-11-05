@@ -5,6 +5,14 @@ require_once "../models/treesModel.php";
 require_once "../models/speciesModel.php";
 
 class UpdateController {
+
+     /**
+     * Processes an update request from a form submission
+     *
+     * This function handles incoming POST requests and updates the specified model instance
+     * It extracts the model name and ID from the POST data, creates an instance of the corresponding model,
+     * and calls the `update` method on the model with the updated data
+     */
     public function processUpdate() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $model = $_POST['model'] ?? '';

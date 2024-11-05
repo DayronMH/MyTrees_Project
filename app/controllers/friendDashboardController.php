@@ -12,6 +12,15 @@ class FriendDashboardController {
     private $user;
     public $purchasedTrees;
 
+
+     /**
+     * Constructor for the controller
+     *
+     * Starts a session if necessary, initializes models for users, trees, species, and sales
+     * Fetches purchased trees for the logged-in user (if any) based on the session user ID
+     * Handles a potential incoming POST request with the 'action' parameter:
+     * - 'buy-tree': currently redirects to the homepage 
+     */
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -40,14 +49,28 @@ class FriendDashboardController {
         }
     }
 
+     /**
+     * Retrieves a list of available trees with their corresponding species information
+     *
+     */
     public function getAvailableTrees() {
         return $this->treeModel->getAvailableTreesWithSpecies();
     }
 
+     /**
+     * Retrieves a list of trees purchased by a specific user.
+     *
+     */
     public function getTreesByOwnerId(int $userId) {
        return $this->treeModel->getPurchasedTreesByUser($userId);
     }
 
+     /**
+     * Attempts to purchase a tree for a user
+     *
+     * Checks if the tree is available, creates a sale record in the database, and marks the tree as sold
+     * Returns `true` on success, `false` otherwise
+     */
     public function buyTree($userId, $treeId) {
         if ($this->salesModel->isTreeAvailable($treeId)) {
             if ($this->salesModel->createSale($userId, $treeId)) {
@@ -58,6 +81,10 @@ class FriendDashboardController {
         return false;
     }
 
+     /**
+     * Retrieves user information by ID
+     *
+     */
     public function getUserById($UserId) {
 
         return $this->userModel->getUserById($UserId);

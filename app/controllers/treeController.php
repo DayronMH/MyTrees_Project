@@ -4,6 +4,11 @@ require_once '../models/treesModel.php';
 
 class TreeController {
 
+     /**
+     * Constructor for the controller
+     * 
+     * Checks for incoming POST requests and dispatches them to appropriate methods based on the 'action' parameter
+     */
     public function __construct() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['action'])) {
@@ -19,6 +24,11 @@ class TreeController {
         }
     }
 
+     /**
+     * Handles the purchase of a tree
+     *  
+     * @return void
+     */
     public function buyTree() {
         $treeId = filter_input(INPUT_POST, 'tree_id', FILTER_VALIDATE_INT);
         $userId = $_SESSION['user_id'];

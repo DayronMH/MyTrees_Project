@@ -3,6 +3,13 @@ require_once '../models/usersModel.php';
 require_once '../views/targetPage.php';
 class RegisterController
 {
+     /**
+     * Constructor for the controller
+     * 
+     * Handles incoming POST requests and dispatches them to appropriate methods based on the 'action' parameter:
+     *   - 'register': calls `registerUser` to register a new user
+     *   - 'login': calls `redirectToLogin` to redirect to the login page
+     */
     public function __construct()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,6 +21,13 @@ class RegisterController
         }
     }
 
+     /**
+     * Processes user registration form submission
+     *
+     * Extracts user information from the POST request, validates it, checks for existing email,
+     * and calls the `UsersModel` to create a new user. Sets session messages based on success or failure
+     * and redirects the user accordingly
+     */
     public function registerUser()
     {
         $name = htmlspecialchars(filter_input(INPUT_POST, 'name', FILTER_DEFAULT));
@@ -47,6 +61,9 @@ class RegisterController
         exit();
     }
 
+     /**
+     * Redirects the user to the login page
+     */
     public function redirectToLogin()
     {
         header('Location: http://mytrees.com/app/views/login.php');

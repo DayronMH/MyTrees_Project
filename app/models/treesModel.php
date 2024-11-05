@@ -19,7 +19,18 @@ class TreesModel extends BaseModel
         ]);
         
     }
-   
+
+     /**
+     * Updates a tree and its associated species information.
+     *
+     * @param int $treeId
+     * @param string $specie
+     * @param float $height
+     * @param string $location
+     * @param bool $available The new availability status of the tree
+     *
+     * @return array
+     */
     public function editTree($treeId, $specie, $height, $location, $available) {
         try {
             $query = "UPDATE trees t 
@@ -49,6 +60,14 @@ class TreesModel extends BaseModel
             return ['error' => 'Error al actualizar: ' . $e->getMessage()];
         }
     }
+
+     /**
+     * Executes a non-query SQL statement and returns a boolean indicating success
+     *
+     * @param string $query 
+     * @param array $params
+     * @return bool 
+     */
     private function executeNonQuery(string $query, array $params = []): bool
     {
         try {
@@ -59,6 +78,18 @@ class TreesModel extends BaseModel
         }
     }
     
+     /**
+     * Creates a new tree record in the database.
+     *
+     * @param int $species_id
+     * @param int $owner_id
+     * @param float $height
+     * @param string $location
+     * @param bool $available
+     * @param float $price
+     * @param string $photo_url
+     * @return bool 
+     */
     public function createTree(int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): bool
     {
         $query = "INSERT INTO `trees` (`species_id`, `owner_id`, `height`, `location`, `available`, `price`, `photo_url`)
@@ -74,6 +105,19 @@ class TreesModel extends BaseModel
         ]);
     }
 
+     /**
+     * Updates an existing tree record in the database
+     *
+     * @param int $id
+     * @param int $species_id
+     * @param int $owner_id
+     * @param float $height 
+     * @param string $location
+     * @param bool $available
+     * @param float $price 
+     * @param string $photo_url
+     * @return array 
+     */
     public function updateTree(int $id, int $species_id, int $owner_id, float $height, string $location, bool $available, float $price, string $photo_url): array
     {
         $query = "UPDATE trees  SET species_id = :species_id,   owner_id = :owner_id,   height = :height,  location = :location,
@@ -82,6 +126,13 @@ class TreesModel extends BaseModel
          ':available' => $available, ':price' => $price, ':photo_url' => $photo_url, ':id' => $id]);
     }
 
+     /**
+     * Updates a tree's owner and availability status to reflect a purchase
+     *
+     * @param int $id The
+     * @param int $owner_id
+     * @return bool
+     */
     public function buyTree(int $id, int $owner_id): bool
     {
         $query = "UPDATE trees  SET owner_id = :owner_id, available = FALSE  WHERE id = :id";
@@ -89,6 +140,11 @@ class TreesModel extends BaseModel
         return $result > 0;
     }
 
+     /**
+     * Counts the number of available trees in the database
+     *
+     * @return int The total number of trees currently marked as available
+     */
     public function countAvailableTrees(): int
     {
         $query = "SELECT COUNT(*) as availableTreesCount
@@ -102,6 +158,11 @@ class TreesModel extends BaseModel
         return (int) $result['availableTreesCount'];
     }
 
+     /**
+     * Counts the number of trees currently marked as sold (not available) in the database
+     *
+     * @return int The total number of trees with 'available' status set to false
+     */
     public function countSoldTrees(): int
     {
         $query = "SELECT COUNT(*) as soldTreesCount
@@ -115,12 +176,24 @@ class TreesModel extends BaseModel
         return (int) $result['soldTreesCount'];
     }
 
+     /**
+     * Retrieves a list of trees belonging to a specific species.
+     *
+     * @param int $species_id 
+     * @return array 
+     */
     public function getTreesBySpecies(int $species_id): array
     {
         $query = "SELECT * FROM Trees WHERE species_id = :species_id ORDER BY height DESC";
         return $this->executeQuery($query, [':species_id' => $species_id]);
     }
 
+     /**
+     * Retrieves a list of trees owned by a specific user.
+     *
+     * @param int $owner_id
+     * @return array 
+     */
     public function getTreesByOwner($owner_id): array
     {
         $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
@@ -131,6 +204,13 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':id' => $owner_id]);
     }
     
+
+     /**
+     * Retrieves a list of trees owned by a specific user
+     *
+     * @param int $owner_id 
+     * @return array
+     */
     public function getEditableTreeById($tree_id): array
     {
         $query = "SELECT t.id, t.height, s.commercial_name, t.location, t.available 
@@ -140,6 +220,13 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':tree_id' => $tree_id]);
     }
 
+
+     /**
+     * Retrieves detailed information about a specific tree
+     *
+     * @param int $treeId
+     * @return array
+     */
     public function getTreeById(int $treeId): array{
         $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
                   FROM Trees t 
@@ -149,17 +236,30 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':id' => $treeId]);
     }
 
+
+     /**
+     * Retrieves a list of all trees in the database
+     *
+     * @return array
+     */
     public function getTrees(): array
     {
         $query = "SELECT * FROM `trees`";
         return $this->executeQuery($query);
     }
 
+     /**
+     * Deletes a tree from the database
+     *
+     * @param int $id
+     * @return bool 
+     */
     public function deleteTree(int $id): bool
     {
         $query = "DELETE FROM `trees` WHERE `id` = :id";
         return $this->executeQuery($query, [':id' => $id]);
     }
+
 
     private function executeQuery(string $query, array $params = []): mixed
     {
@@ -172,12 +272,22 @@ class TreesModel extends BaseModel
         }
     }
     
+     /**
+     * Retrieves a list of trees currently marked as available for purchase
+     *
+     * @return array
+     */
     public function getAvailableTrees(): array
     {
         $query = "SELECT * FROM `trees` WHERE `available` = TRUE";
         return $this->executeQuery($query);
     }
 
+     /**
+     * Retrieves a list of available trees with additional information about their species
+     *
+     * @return array
+     */
     public function getAvailableTreesWithSpecies() {
         $query = "SELECT t.*, s.commercial_name, s.scientific_name, s.availability_date FROM Trees t 
         JOIN Species s ON t.species_id = s.id WHERE t.available = TRUE"; 
@@ -186,18 +296,35 @@ class TreesModel extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
 
+     /**
+     * Retrieves a list of trees owned by a specific user, including species details
+     *
+     * @param int $userId
+     * @return array 
+     */
     public function getPurchasedTreesByUser(int $userId): array
     {
         $sql = "SELECT * FROM Trees t JOIN species s ON t.species_id = s.id WHERE owner_id = :userId";
         return $this->executeQuery($sql, [':userId' => $userId]);
     }
 
+     /**
+     * Retrieves a list of all trees in the database, including species details
+     *
+     * @return array 
+     */
     public function getAllTrees(): array
     {
         $query = "SELECT * FROM `trees`";
         return $this->executeQuery($query);
     }
 
+
+     /**
+     * Retrieves a list of all trees with their species information (aliases included)
+     *
+     * @return array
+     */
     public function getAllTreesWithSpecies(): array
     {
         $query = "SELECT Trees.id AS tree_id,Trees.height,Trees.location,Trees.available,Trees.price,Trees.photo_url,Species.id AS
@@ -205,6 +332,11 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query);
     }
 
+     /**
+     * Retrieves a list of all trees with their species information and associated updates (if any)
+     *
+     * @return array
+     */
     public function getAllTreesWithSpeciesAndUpdates(): array
     {
         $query = "SELECT Trees.id AS tree_id,Species.commercial_name,Tree_Updates.update_date FROM Trees

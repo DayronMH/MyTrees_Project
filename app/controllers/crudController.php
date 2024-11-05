@@ -8,6 +8,13 @@ class CrudController
     private $speciesModel;
     private $treesModel;
     private $updateModel;
+
+     /**
+     * Constructor for the controller
+     *
+     * Starts a session if necessary, initializes models for species, trees, and tree updates
+     * Calls a private method `handlePostActions` to handle incoming POST requests
+     */
     public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -18,6 +25,12 @@ class CrudController
         $this->updateModel = new treesUpdatesModel() ;
         $this->handlePostActions();
     }
+
+     /**
+     * Handles incoming POST requests based on the action parameter
+     *
+     * It sets session messages for success or error and redirects the user accordingly
+     */
     private function handlePostActions()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -72,6 +85,14 @@ class CrudController
             }
         }
     }
+
+     /**
+     * Creates a new species in the database
+     *
+     * Validates species name emptiness, checks for existing trees associated with the species (to prevent deletion),
+     * and calls the `SpeciesModel` to create the species
+     * Sets session messages and redirects based on success or failure
+     */
     public function createSpecie($speciesId, $commercial_name, $scientific_name)
     {
         try {
@@ -92,6 +113,13 @@ class CrudController
             return ['error' => 'Error en el servidor: ' . $e->getMessage()];
         }
     }
+
+     /**
+     * Updates an existing tree in the database
+     *
+     * Handles file upload, validates data, and calls the `treesUpdatesModel` to update the tree information
+     * Sets session messages for success or failure and redirects the user
+     */
     public function updateTree($tree_id)
     {
         $fileName = basename($_FILES['treeUpd']['name']);
@@ -122,6 +150,13 @@ class CrudController
             return ['error' => 'Error en el servidor: ' . $e->getMessage()];
         }
     }
+
+     /**
+     * Deletes a species from the database
+     *
+     * Checks for existing associated trees and prevents deletion if there are any
+     * Calls the `SpeciesModel` to delete the species and sets session messages for success or failure
+     */
     public function deleteSpecie($speciesId)
     {
         try {
@@ -141,15 +176,31 @@ class CrudController
             return ['error' => 'Error en el servidor: ' . $e->getMessage()];
         }
     }
+
+     /**
+     * Retrieves a specific species information by ID
+     *
+     */
     public function getSpecieById($id)
     {
         return $this->speciesModel->getSpeciesById($id);
     }
+
+     /**
+     * Retrieves a list of commercial names for species
+     *
+     * Likely delegates the data retrieval to the `SpeciesModel`
+     */
     public function getSpeciesNames($id)
     {
         return $this->speciesModel->getCommercialNames();
     }
 
+     /**
+     * Retrieves information for an editable tree by ID.
+     *
+     * Fetches tree data and sets session variables for pre-populating an edit form
+     */
     public function getEditableTreeById($treeId)
     {
         $tree = $this->getEditableTreeById($treeId);
@@ -158,6 +209,13 @@ class CrudController
         $_SESSION['location'] = $tree['location'];
         $_SESSION['available'] = $tree['available'];
     }
+
+     /**
+     * Creates a new tree in the database
+     *
+     * Validates species ID, location, and price, handles file upload, and calls the `treesModel` to create the tree
+     * Sets session messages and redirects based on success or failure
+     */
     private function createTree()
     {
         try {
