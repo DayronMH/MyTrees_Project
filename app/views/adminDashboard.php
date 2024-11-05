@@ -1,36 +1,19 @@
 <?php
 
-/**
- * Admin Dashboard View
- * 
- * This file displays the main administrative dashboard interface.
- * It shows statistics, species management, and registered friends.
- * 
- * PHP version 7.4+
- * 
- * @category View
- * @package  MyTrees
- * @author   Your Name
- * @license  MIT License
- */
-
 session_start();
 
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 require_once 'targetPage.php';
 
-// Authentication check
 if (!isset($_SESSION['user_id'])) {
     setTargetMessage('error', 'Username must be');
     header('Location: http://mytrees.com');
     exit();
 }
 
-// Initialize dashboard controller
 $dashboard = new AdminDashboardController();
 
-// Process POST actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dashboard->handlePostActions();
 }
@@ -49,14 +32,13 @@ require_once 'targetPage.php';
 
 <body>
     <div class="dashboard-container">
-        <!-- Header Section -->
+
         <div class="dashboard-header">
             <h1>Bienvenido <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
             <hr>
             <h2>Estadísticas</h2>
         </div>
 
-        <!-- Statistics Cards Section -->
         <div class="stats-container">
             <div class="stat-card">
                 <div class="stat-content">
@@ -86,7 +68,6 @@ require_once 'targetPage.php';
             </div>
         </div>
 
-        <!-- Species Management Section -->
         <div class="dashboard-section">
             <div class="dashboard-header">
                 <h2>Especies</h2>
@@ -133,7 +114,6 @@ require_once 'targetPage.php';
             </div>
         </div>
 
-        <!-- Friends List Section -->
         <div class="dashboard-section">
             <div class="dashboard-header">
                 <h2>Amigos Registrados:</h2>
@@ -174,7 +154,6 @@ require_once 'targetPage.php';
             </button>
         </div>
 
-        <!-- Logout Button -->
         <div class="dashboard-footer">
             <a href="login.php" class="back-button">← Cerrar Sesión</a>
         </div>

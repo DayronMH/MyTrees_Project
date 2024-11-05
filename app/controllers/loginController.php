@@ -7,7 +7,6 @@ class loginController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['action'] == 'login') {
                 self::authLogin();
@@ -16,7 +15,6 @@ class loginController {
             }
         }
     }
-    
     public static function authLogin() {
         $userModel = new UsersModel();
         $email = $_POST['email'];
@@ -28,7 +26,6 @@ class loginController {
             header('Location: http://mytrees.com/app/views/login.php');
             exit();
         }
-
         if ($user) {
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
@@ -57,7 +54,6 @@ class loginController {
             exit(); 
         }
     }
-
     public static function routeRegister() {
         header('Location: http://mytrees.com/app/views/register.php');
         exit();

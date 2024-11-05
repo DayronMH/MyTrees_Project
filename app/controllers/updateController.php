@@ -18,8 +18,6 @@ class UpdateController {
             
             $className = ucfirst($model) . 'Model';
             $modelInstance = new $className();
-            
-            // Remover campos que no queremos actualizar
             unset($_POST['model'], $_POST['id']);
             
             $result = $modelInstance->update($id, $_POST);
@@ -29,7 +27,6 @@ class UpdateController {
             } else {
                 $_SESSION['error'] = "Error en la actualización";
             }
-            
             header("Location: " . $_SERVER['HTTP_REFERER']);
             exit;
         }

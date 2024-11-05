@@ -7,18 +7,11 @@ class speciesModel extends BaseModel
     {
         parent::__construct('species');
     }
-    /**
-     * Retrieves all species from the database.
-     *
-     * @return array Returns an array of species records.
-     */
+
     public function createSpecie(string $commercial_name, string $scientific_name): bool
     {
-        date_default_timezone_set('America/Costa_Rica'); // Cambia la zona horaria según tu ubicación
-
-
+        date_default_timezone_set('America/Costa_Rica');
         $date = date('Y-m-d H:i:s');
-        
         $query = "INSERT INTO `species` (`commercial_name`, `scientific_name`, `availability_date`)
                   VALUES (:commercial_name, :scientific_name, :availability_date)";
 
@@ -35,12 +28,6 @@ class speciesModel extends BaseModel
         return $this->executeQuery($query);
     }
 
-    /**
-     * Retrieves a species by its ID.
-     *
-     * @param int $speciesId The ID of the species.
-     * @return array|bool Returns the species record as an associative array, or false on failure.
-     */
     public function getSpeciesById(int $speciesId)
     {
         $query = "SELECT id, commercial_name, scientific_name FROM Species WHERE id = :species_id";
@@ -60,9 +47,7 @@ class speciesModel extends BaseModel
     public function deleteSpecie(int $id): array
 {
     try {
-        // Primero verificamos si hay árboles asociados
         if ($this->hasTreesAssociated($id)) {
-            // Si hay árboles asociados, intentamos eliminarlos primero
             $deleteRelatedTreesQuery = "DELETE FROM `trees` WHERE `species_id` = :species_id";
             $relatedTreesDeleted = $this->executeQuery($deleteRelatedTreesQuery, [':species_id' => $id]);
             
@@ -72,9 +57,6 @@ class speciesModel extends BaseModel
                 ];
             }
         }
-        
-        // Una vez que no hay árboles (ya sea porque se eliminaron o porque no había),
-        // procedemos a eliminar la especie
         $deleteSpeciesQuery = "DELETE FROM `species` WHERE `id` = :id";
         $speciesDeleted = $this->executeQuery($deleteSpeciesQuery, [':id' => $id]);
         
@@ -88,9 +70,7 @@ class speciesModel extends BaseModel
             ];
         }
     } catch (PDOException $e) {
-        // Log del error para el administrador
         error_log("Error al eliminar especie: " . $e->getMessage());
-        
         return [
             'error' => 'Ocurrió un error al procesar la eliminación'
         ];
@@ -105,7 +85,6 @@ public function hasTreesAssociated($speciesId): bool
         $stmt->execute([':species_id' => $speciesId]);
         return $stmt->fetchColumn() > 0;
     } catch (PDOException $e) {
-        // Log del error para el administrador
         error_log("Error al verificar árboles asociados: " . $e->getMessage());
         return false;
     }
@@ -123,18 +102,10 @@ public function hasTreesAssociated($speciesId): bool
             $stmt = $this->db->prepare($query);
             return $stmt->execute($params);
         } catch (PDOException $e) {
-            // Handle the error, log it, or rethrow it
             throw new Exception("Database query failed: " . $e->getMessage());
         }
     }
 
-    /**
-     * Executes a query and returns results.
-     *
-     * @param string $query The SQL query to execute.
-     * @param array|null $params The parameters to bind to the query, if any.
-     * @return array|bool Returns fetched records or false on failure.
-     */
     private function executeQuery(string $query, array $params = null)
     {
         try {
@@ -142,7 +113,6 @@ public function hasTreesAssociated($speciesId): bool
             $stmt->execute($params ?? []);
             return $params ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // Log error or handle accordingly
             return false;
         }
     }

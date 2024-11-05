@@ -1,6 +1,6 @@
 <?php
 
-require_once '../models/treesModel.php'; // Assuming treeModel.php handles tree data access
+require_once '../models/treesModel.php';
 
 class TreeController {
 
@@ -13,7 +13,6 @@ class TreeController {
                         $this->buyTree();
                         break;
                     default:
-                        // Handle unknown actions
                         break;
                 }
             }
@@ -27,24 +26,17 @@ class TreeController {
 
         if ($treeId && $userId) {
             $treesModel = new TreesModel();
-    
-            // Update the tree with the user ID and available status
             $success = $treesModel->buyTree($treeId, $userId);
     
             if ($success) {
-                // Redirect to success page or reload current page
-                header('Location: ' . $_SERVER['HTTP_REFERER']); // Redirect to previous page
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
                 exit();
             } else {
-                // Handle update failure (e.g., display error message)
-                echo "Error: Failed to buy the tree."; // Placeholder error message
+                echo "Error: Failed to buy the tree.";
             }
         } else {
-            // Handle invalid data (e.g., missing ID)
-            echo "Error: Invalid data received."; // Placeholder error message
+            echo "Error: Invalid data received.";
         }
     }
 }
-
-// Create an instance of the TreeController
 $treeController = new TreeController();

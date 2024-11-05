@@ -1,24 +1,9 @@
 <?php
-/**
- * Create New Species View
- * 
- * This file allows the admin to create a new species entry.
- * 
- * PHP version 7.4+
- * 
- * @category View
- * @package  MyTrees
- * @author   Your Name
- * @license  MIT License
- */
-
 session_start();
 
-// Include necessary controllers
 require_once '../controllers/adminDashboardController.php';
 require_once '../controllers/crudController.php';
 
-// Initialize controllers
 $controller = new AdminDashboardController();
 $crud = new crudController();
 ?>

@@ -62,8 +62,7 @@ $species = $speciesModel->getAllSpecies() ;
             </div>
             <?php endforeach;?>
         </div>
-
-        <!-- Quita el form adicional y solo deja el input -->
+        
         <div class="form-tree">
             <label for="treePic">Tree Picture</label>
             <input type="file" class="form-control" name="treepic" id="treepic">

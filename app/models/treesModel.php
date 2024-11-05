@@ -190,12 +190,6 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':tree_id' => $tree_id]);
     }
 
-    /**
-     * Retrieves information about a tree by ID.
-     *
-     * @param int $id The ID of the tree.
-     * @return array Returns an array of tree information.
-     */
     public function getTreeById(int $treeId): array{
         $query = "SELECT t.id, t.height, t.location, t.price, t.photo_url, t.available, s.commercial_name, s.scientific_name, u.name AS owner_name 
                   FROM Trees t 
@@ -205,36 +199,19 @@ class TreesModel extends BaseModel
         return $this->executeQuery($query, [':id' => $treeId]);
     }
 
-    /**
-     * Retrieves information about all trees.
-     *
-     * @return array Returns an array of all trees.
-     */
+
     public function getTrees(): array
     {
         $query = "SELECT * FROM `trees`";
         return $this->executeQuery($query);
     }
 
-    /**
-     * Deletes a tree by its ID.
-     *
-     * @param int $id The ID of the tree.
-     * @return bool Returns true on success, false on failure.
-     */
     public function deleteTree(int $id): bool
     {
         $query = "DELETE FROM `trees` WHERE `id` = :id";
         return $this->executeQuery($query, [':id' => $id]);
     }
 
-    /**
-     * Executes a query and fetches the results.
-     *
-     * @param string $query The SQL query to execute.
-     * @param array $params The parameters to bind to the query.
-     * @return mixed Returns the result of the query execution.
-     */
     private function executeQuery(string $query, array $params = []): mixed
     {
         try {
@@ -242,7 +219,6 @@ class TreesModel extends BaseModel
             $stmt->execute($params);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // Handle the error, log it, or rethrow it
             throw new Exception("Database query failed: " . $e->getMessage());
         }
     }

@@ -5,26 +5,21 @@ require_once '../models/treesModel.php';
 require_once '../controllers/salesController.php';
 require_once '../controllers/treeController.php';
 
-// Initialize controllers
 $friendDashboardController = new FriendDashboardController();
 $salesController = new SalesController();
 $treeController = new TreeController();
 
-// Get user data
 $userId = $_SESSION['user_id'] ?? null;
 $friend_id = $_GET['friend_id'] ?? null;
 
-// Redirect if no friend_id
 if (is_null($friend_id)) {
     header('Location: adminDashboard.php');
     exit;
 }
 
-// Get trees data
 $treesModel = new TreesModel();
 $trees = $treesModel->getTreesByOwner($friend_id);
 
-// Check if trees exist
 if (empty($trees)) {
     echo "<script>
     alert('Este amigo no tiene árboles');
