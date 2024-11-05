@@ -252,11 +252,6 @@ class TreesModel extends BaseModel
         $query = "SELECT * FROM `trees` WHERE `available` = TRUE";
         return $this->executeQuery($query);
     }
-    public function getPurchasedTrees(): array
-    {
-        $query = "SELECT * FROM `trees` WHERE `available` = False";
-        return $this->executeQuery($query);
-    }
 
     public function getAvailableTreesWithSpecies() {
         $query = "SELECT t.*, s.commercial_name, s.scientific_name, s.availability_date FROM Trees t 
@@ -265,15 +260,10 @@ class TreesModel extends BaseModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
-    
 
-    public function getPurchasedTreesByUser(int $userId) {
-        $sql = "SELECT * FROM Trees t 
-            JOIN species s ON t.species_id = s.id  WHERE owner_id = :userId";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-        $stmt->execute();
-    
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function getPurchasedTreesByUser(int $userId): array
+    {
+        $sql = "SELECT * FROM Trees t JOIN species s ON t.species_id = s.id WHERE owner_id = :userId";
+        return $this->executeQuery($sql, [':userId' => $userId]);
     }
 }
