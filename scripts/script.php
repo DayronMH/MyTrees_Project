@@ -7,6 +7,12 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+/**
+ * Sends email notifications about outdated trees to administrators
+ *
+ * This function retrieves a list of outdated trees, fetches administrator emails,
+ * and sends an email with a list of tree IDs, species names, and last update dates
+ */
 function sendTreesNotifications()
 {
     try {
@@ -40,6 +46,13 @@ function sendTreesNotifications()
     }
 }
 
+/**
+ * Sends a test email notification for development purposes
+ *
+ * This function retrieves a list of all trees with their species and update information,
+ * follows similar logic to sendTreesNotifications for building the email content,
+ * and sends an email to administrators
+ */
 function sendTreesNotificationsTest()
 {
     try {
@@ -72,6 +85,3 @@ function sendTreesNotificationsTest()
         error_log("Error en notificación de árboles: " . $e->getMessage());
     }
 }
-
-//sendTreesNotificationsTest();
-//sendTreesNotifications();
