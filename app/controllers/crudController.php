@@ -134,17 +134,14 @@ class CrudController
         }
         if (isset($_POST['available'])) {
             $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
-            setTargetMessage('debug', 'Status del árbol: ' . $status);
         }
         if (isset($_POST['height'])) {
             $height = $_POST['height'];
-            setTargetMessage('debug', 'Altura del árbol: ' . $height);
         }
         try {
             $height = filter_input(INPUT_POST, 'height', FILTER_SANITIZE_STRING);
             $status = isset($_POST['available']) && $_POST['available'] === '1' ? 1 : 0;
             $result = $this->updateModel->createTreeUpdate($tree_id, $height, $image_url, $status, $updateDate);
-            setTargetMessage('error',$result);
             if ($result) {
                 setTargetMessage('success', 'Árbol actualizado correctamente');
             } else {

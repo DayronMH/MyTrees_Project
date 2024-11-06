@@ -4,7 +4,7 @@ require_once '../controllers/friendDashboardController.php';
 require_once '../models/treesModel.php';
 require_once '../controllers/salesController.php';
 require_once '../controllers/treeController.php';
-
+require_once 'targetPage.php';
 // Instantiate controllers and models for handling operations
 $friendDashboardController = new FriendDashboardController();
 $salesController = new SalesController();
@@ -21,10 +21,8 @@ if (is_null($friend_id)) {
 $trees = $treesModel->getTreesByOwner($friend_id);
 
 if (empty($trees)) {
-    echo "<script>
-    alert('Este amigo no tiene árboles');
-            window.location.href = 'adminDashboard.php';
-          </script>";
+    setTargetMessage("error","Este usuario no posee árboles");
+    header('Location: adminDashboard.php');
     exit();
 }
 ?>
@@ -35,7 +33,7 @@ if (empty($trees)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../public/tree.css">
+    <link rel="stylesheet" href="../../public/tree.css?v=1.0">
     <title>Árboles de <?php echo htmlspecialchars($trees[0]['owner_name'] ?? ''); ?></title>
 </head>
 

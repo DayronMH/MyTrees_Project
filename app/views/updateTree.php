@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../controllers/adminDashboardController.php';
-require_once './targetPage.php';
+require_once 'targetPage.php';
 require_once '../models/treesModel.php';
 require_once '../controllers/crudController.php';
 require_once '../models/speciesModel.php';
@@ -15,6 +15,7 @@ $trees = new TreesModel();
 if (isset($_GET['id'])) {
     $treeId = htmlspecialchars($_GET['id'], ENT_QUOTES);
 } else {
+    setTargetMessage("error","ID no encontrada");
     header('Location: ../views/trees.php');
     exit;
 }
