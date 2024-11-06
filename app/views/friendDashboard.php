@@ -4,7 +4,13 @@ require_once '../controllers/friendDashboardController.php';
 require_once '../models/treesModel.php';
 require_once '../controllers/salesController.php';
 require_once '../controllers/treeController.php';
+require_once 'targetPage.php';
 
+if (!isset($_SESSION['user_id'])) {
+    setTargetMessage('error', 'User must be');
+    header('Location: http://mytrees.com');
+    exit();
+}
 // Instantiate controllers and models for handling operations
 $friendDashboardController = new FriendDashboardController();
 $salesController = new SalesController();

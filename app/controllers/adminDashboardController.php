@@ -23,6 +23,7 @@ class AdminDashboardController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+    
         $this->userModel = new UsersModel();
         $this->treeModel = new TreesModel();
         $this->speciesModel = new SpeciesModel();

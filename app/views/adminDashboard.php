@@ -7,7 +7,7 @@ require_once '../controllers/crudController.php';
 require_once 'targetPage.php'; 
 
 if (!isset($_SESSION['user_id'])) {
-    setTargetMessage('error', 'Username must be');
+    setTargetMessage('error', 'User must be');
     header('Location: http://mytrees.com');
     exit();
 }
