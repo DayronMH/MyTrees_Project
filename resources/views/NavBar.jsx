@@ -32,7 +32,7 @@ export const Navbar = () => {
           <h1 className="mb-0">
             <Link to="/" className="navbar-brand">
               <img
-                src="../public/images/logo.png"
+                src="../../public/images/logo.png"
                 alt="logo"
                 className="logo-img"
               />

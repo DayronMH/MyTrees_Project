@@ -6,10 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>MyTrees Project</title>
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @vite(['resources/styles/app.scss', 'resources/js/app.jsx'])
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">
+    </div>
 </body>
 </html>
 

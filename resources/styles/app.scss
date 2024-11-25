@@ -1,0 +1,124 @@
+body {
+    line-height: 1.5;
+  }
+  
+  // Layout principal
+  .app-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  // Estilos del Header/Navbar vertical
+  .header {
+    @include mix.header-nav;
+    
+    &-styler {
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+    }
+  }
+  .container{
+    display: flex;
+    flex-direction: column;
+    gap: var.$spacing-xs;
+  }
+  .nav-container {
+    @include mix.nav-menu;
+    
+  }
+  .btn-nav{
+    @include mix.button-base;
+    
+  }
+  
+  .header-nav{
+    @include mix.header-nav;
+  }
+  .navbar-brand {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    color: var.$dark-color;
+    margin-bottom: var.$spacing-lg;
+    
+    &:hover {
+      color: var.$primary-color;
+    }
+  }
+  
+  .logo-img {
+    width: 140px;
+    height: 90px;
+    object-fit: cover;
+    transition: var.$transition-base;
+    
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+  .hp-image{
+    @include mix.center;
+    width: 20%;
+    height: 20%;
+  }
+  .hb-img{
+    width: 300px;
+    height: 300px;
+  
+  }
+  // Navegación vertical
+  nav {
+  @include mix.nav-menu;
+  }
+  
+  // Usuario logueado
+  .user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var.$spacing-sm;
+    margin-top: auto;
+    padding-top: var.$spacing-lg;
+    border-top: 1px solid var.$border-color;
+    
+    .name {
+      color: var.$dark-color;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+  .div-counter {
+    @include mix.counter;
+  } 
+  .btn {
+    @include mix.button-base;
+    
+  
+  }
+  
+  // Contenido principal
+  .main-content {
+    margin-left: var.$sidebar-width;
+    width: calc(100% - #{var.$sidebar-width});
+    min-height: 100vh;
+    padding: var.$spacing-lg;
+    
+  
+  }
+  
+  // Utilidades
+  .d-flex { display: flex; }
+  .align-items-center { align-items: center; }
+  .justify-content-center { justify-content: center; }
+  .flex-column { flex-direction: column; }
+  .gap-3 { gap: var.$spacing-md; }
+  .mb-0 { margin-bottom: 0; }
+  .mb-2 { margin-bottom: var.$spacing-xs; }
+  .mb-3 { margin-bottom: var.$spacing-md; }
+  .mb-4 { margin-bottom: var.$spacing-lg; }
+  .me-2 { margin-right: var.$spacing-xs; }
+  .me-3 { margin-right: var.$spacing-md; }
+  .mt-auto { margin-top: auto; }
+  .text-dark { color: var.$dark-color; }
+  .text-center { text-align: center; }
+  .fw-semibold { font-weight: 600; }
+  .w-100 { width: 100%; }

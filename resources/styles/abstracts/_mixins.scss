@@ -1,0 +1,105 @@
+@use 'variables' as var;
+@use 'sass:math';
+
+// Mixin para centrar elementos en el contenedor
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  text-align: center;
+}
+
+// Mixin para el contador
+@mixin counter {
+  display: flex;
+  background-color: var.$gray-100;
+  border-radius: var.$border-radius;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.201);
+  max-width: 150px;
+  width: 100%;
+  height: auto; 
+  @include center;
+  flex-direction: column;
+  gap: var.$spacing-xs;
+
+  .text {
+    font-size: var.$font-size-base;
+    font-weight: 600;
+    color: var.$primary-green;
+    margin-bottom: var.$spacing-md; /* Espacio entre el texto y el contador */
+  }
+
+  .counter {
+    font-size: 4em;
+    font-weight: bold;
+    color: var.$primary-green;
+  }
+}
+
+// Mixin para el menú de navegación
+@mixin nav-menu {
+  background-color: var.$gray-100;
+  flex-direction: column;
+  padding: var.$spacing-lg var.$spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: var.$spacing-lg;
+
+  align-items: center;
+}
+
+// Mixin para el header de navegación
+@mixin header-nav {
+  width: var.$sidebar-width;
+  height: 100%;
+  border-right: 1px solid var.$border-color;
+  padding: var.$spacing-sm 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: var.$gray-100;
+}
+
+@mixin button-base {
+  display: flex;
+  align-items: center;
+  padding: var.$padding;
+  background-color: var.$gray-100;
+  color: var.$gray-700;
+  border-radius: var.$border-radius;
+  font-size: var.$font-size-s;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  i {
+    font-size: var.$icon-size;
+    margin-right: var.$spacing-xs;
+  }
+
+  &:hover {
+    background-color: var.$white;
+    color: var.$primary-color;
+  }
+}
+
+// Mixin contenedor
+@mixin container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var.$spacing-md;
+}
+
+// Mixin responsive
+@mixin responsive($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: var.$breakpoint-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: var.$breakpoint-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: var.$breakpoint-lg) { @content; }
+  }
+}

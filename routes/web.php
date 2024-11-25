@@ -1,13 +1,10 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-// Ruta para la página principal
-Route::get('/', function () {
-    return view('app');
-});
+// Rutas de la aplicación
+Route::get('/', fn() => view('app'));
+Route::get('/login', fn() => view('app'));
+Route::get('/register', fn() => view('app'));
 
-// Ruta para capturar todas las demás rutas (SPA)
-Route::get('/{any?}', function () {
-    return view('app');
-})->where('any', '.*');
-
+// Ruta comodín para capturar todas las rutas de la SPA
+Route::get('/{any?}', fn() => view('app'))->where('any', '.*');

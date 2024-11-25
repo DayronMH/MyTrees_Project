@@ -1,6 +1,6 @@
 <?php
 
-require_once '../models/treesModel.php';
+require_once '../Models/TreesModel.php';
 
 class TreeController {
 
@@ -29,6 +29,10 @@ class TreeController {
      *  
      * @return void
      */
+    public function purchasedTrees(){
+        $treesModel = new TreesModel();
+        return $treesModel->get
+    }
     public function buyTree() {
         $treeId = filter_input(INPUT_POST, 'tree_id', FILTER_VALIDATE_INT);
         $userId = $_SESSION['user_id'];
