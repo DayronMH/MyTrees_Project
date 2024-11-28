@@ -3,30 +3,33 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 export const Navbar = () => {
   const { state } = useLocation();
-  const [count, setCount] = useState(0);
+  const [soldCount, setSoldCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api?route=data');
-        const data = await response.json();
-        setCount(data.plantedTrees);
+        const response = await fetch('api/get-sold-trees');
+        const textResponse = await response.text(); // Obtenemos la respuesta como texto
+        
+        console.log('Texto recibido:', textResponse); // Imprime la respuesta completa para ver qué contiene
+        
+        // Ahora intentamos convertirlo a JSON
+        const data = JSON.parse(textResponse); // Intentamos hacer el parseo manual
+        
+        console.log('Datos recibidos:', data);
+        setSoldCount(data.soldTrees);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error al obtener datos:', error);
+        setSoldCount(0);
       }
     };
-
+  
     fetchData();
   }, []);
-
+  
   return (
     <div className="app-container">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-        ></link>
-      </head>
+    <h1>Holaaaaaaaaaaaaaa</h1>
       <header className="header header-nav">
         <div className="nav-container">
           <h1 className="mb-0">
@@ -41,9 +44,9 @@ export const Navbar = () => {
 
           <nav>
             <div className="div-counter">
-              <span className="counter">{count}</span>
+              <span className="counter">{soldCount}</span> {/* Muestra la cantidad de árboles vendidos */}
               <br />
-              <h3 className="text">Arboles Plantados</h3>
+              <h3 className="text">Árboles Vendidos</h3> {/* Título actualizado */}
             </div>
             <Link to="/about" className="btn btn-nav">
               <i className="fas fa-info-circle"></i> Acerca de nosotros

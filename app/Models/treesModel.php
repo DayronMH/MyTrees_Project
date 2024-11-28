@@ -8,10 +8,7 @@ use speciesModel;
 
 class TreesModel extends Model
 {
-    // Nombre de la tabla (opcional si sigue la convención de Laravel)
     protected $table = 'trees';
-
-    // Campos que se pueden asignar masivamente
     protected $fillable = [
         'species_id', 
         'location', 
@@ -21,6 +18,10 @@ class TreesModel extends Model
         'available',
         'owner_id'
     ];
+    public static function countSoldTrees()
+    {
+        return self::where('available', false)->count();
+    }
 
     // Relación con Species
     public function species()
@@ -69,12 +70,6 @@ class TreesModel extends Model
     public static function countAvailableTrees()
     {
         return self::where('available', true)->count();
-    }
-
-    // Contar árboles vendidos
-    public static function countSoldTrees()
-    {
-        return self::where('available', false)->count();
     }
 
     // Obtener árboles disponibles con especies
