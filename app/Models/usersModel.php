@@ -1,12 +1,39 @@
 <?php
-require_once 'baseModel.php';
 
-class UsersModel extends BaseModel
+namespace app\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use PDO;
+use Exception;
+
+class usersModel extends Model
 {
-    public function __construct()
-    {
-        parent::__construct('users');
-    }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'role', 'phone', 'address', 'country'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+    ];
 
     /**
      * Creates a new user
@@ -22,18 +49,19 @@ class UsersModel extends BaseModel
      */
     public function createUser(string $name, string $email, string $password, string $role, string $phone, string $address, string $country): bool
     {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $query = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `phone`, `address`, `country`) 
-                  VALUES (:name, :email, :password, :role, :phone, :address, :country)";
-        return $this->executeNonQuery($query, [
-            ':name' => $name,
-            ':email' => $email,
-            ':password' => $hashedPassword,
-            ':role' => $role,
-            ':phone' => $phone,
-            ':address' => $address,
-            ':country' => $country
-        ]);
+        try {
+            return (bool) self::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($password),
+                'role' => $role,
+                'phone' => $phone,
+                'address' => $address,
+                'country' => $country
+            ]);
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -49,33 +77,17 @@ class UsersModel extends BaseModel
      */
     public function createFriendUser(string $name, string $email, string $password, string $phone, string $address, string $country): bool
     {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $query = "INSERT INTO `users` (`name`, `email`, `password`, `phone`, `address`, `country`) 
-                  VALUES (:name, :email, :password, :phone, :address, :country)";
-        return $this->executeNonQuery($query, [
-            ':name' => $name,
-            ':email' => $email,
-            ':password' => $hashedPassword,
-            ':phone' => $phone,
-            ':address' => $address,
-            ':country' => $country
-        ]);
-    }
-
-    /**
-     * Executes a non-query SQL statement
-     *
-     * @param string $query
-     * @param array $params
-     * @return bool
-     */
-    private function executeNonQuery(string $query, array $params = []): bool
-    {
         try {
-            $stmt = $this->db->prepare($query);
-            return $stmt->execute($params);
-        } catch (PDOException $e) {
-            throw new Exception("Database query failed: " . $e->getMessage());
+            return (bool) self::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($password),
+                'phone' => $phone,
+                'address' => $address,
+                'country' => $country
+            ]);
+        } catch (Exception $e) {
+            return false;
         }
     }
 
@@ -87,11 +99,7 @@ class UsersModel extends BaseModel
      */
     public function handleLogin(string $email)
     {
-        $query = "SELECT * FROM `users` WHERE `email` = :email";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return self::where('email', $email)->first();
     }
 
     /**
@@ -101,13 +109,7 @@ class UsersModel extends BaseModel
      */
     public function countFriends(): int
     {
-        $query = "SELECT COUNT(*) as friend_count 
-              FROM `users` 
-              WHERE `role` = 'friend'";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return (int) $result['friend_count'];
+        return self::where('role', 'friend')->count();
     }
 
     /**
@@ -117,8 +119,7 @@ class UsersModel extends BaseModel
      */
     public function getUsers(): array
     {
-        $query = "SELECT * FROM `users`";
-        return $this->executeQuery($query);
+        return self::all()->toArray();
     }
 
     /**
@@ -128,19 +129,17 @@ class UsersModel extends BaseModel
      */
     public function getFriends()
     {
-        $query = "SELECT * FROM `users` WHERE `role` = 'friend'";
-        return $this->executeQuery($query);
+        return self::where('role', 'friend')->get()->toArray();
     }
-
 
     /**
      * Retrieves all admins
      *
      * @return array
      */
-    public function getAdmins(){
-        $query = "SELECT * FROM `users` WHERE `role` = 'admin'";
-        return $this->executeQuery($query);
+    public function getAdmins()
+    {
+        return self::where('role', 'admin')->get()->toArray();
     }
 
     /**
@@ -151,29 +150,8 @@ class UsersModel extends BaseModel
      */
     public function getUserById($id): ?array
     {
-        $query = "SELECT * FROM `users` WHERE id = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([':id' => $id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ?: null;
-    }
-
-    /**
-     * Executes a query and returns the result set
-     *
-     * @param string $query
-     * @param array $params
-     * @return array
-     */
-    private function executeQuery(string $query, array $params = []): array
-    {
-        try {
-            $stmt = $this->db->prepare($query);
-            $stmt->execute($params);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            throw new Exception("Database query failed: " . $e->getMessage());
-        }
+        $user = self::find($id);
+        return $user ? $user->toArray() : null;
     }
 
     /**
@@ -184,30 +162,21 @@ class UsersModel extends BaseModel
      */
     public function createFirstAdmin($role): bool 
     {
-        $checkAdminQuery = "SELECT COUNT(*) as admin_count FROM `users` WHERE `role` = 'admin'";
-        $result = $this->executeQuery($checkAdminQuery);
-        $adminExists = $result[0]['admin_count'] > 0;
+        // Check if admin exists
+        $adminExists = self::where('role', 'admin')->exists();
 
         if (!$adminExists && $role === 'admin') {
-            $name = "Admin";
-            $email = "Admin@gmail.com";
-            $password = "123";
-            $phone = "123";
-            $address = "123";
-            $country = "123";
+            return (bool) self::create([
+                'name' => "Admin",
+                'email' => "Admin@gmail.com",
+                'password' => Hash::make("123"),
+                'role' => $role,
+                'phone' => "123",
+                'address' => "123",
+                'country' => "123"
+            ]);
         }
-        
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $query = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `phone`, `address`, `country`)
-                  VALUES (:name, :email, :password, :role, :phone, :address, :country)";
-        return $this->executeNonQuery($query, [
-            ':name' => $name,
-            ':email' => $email,
-            ':password' => $hashedPassword,
-            ':role' => $role,
-            ':phone' => $phone,
-            ':address' => $address,
-            ':country' => $country
-        ]);
+
+        return false;
     }
 }

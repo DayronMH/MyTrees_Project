@@ -9,17 +9,10 @@ export const Navbar = () => {
     const fetchData = async () => {
       try {
         const response = await fetch('api/get-sold-trees');
-        const textResponse = await response.text(); // Obtenemos la respuesta como texto
-        
-        console.log('Texto recibido:', textResponse); // Imprime la respuesta completa para ver qué contiene
-        
-        // Ahora intentamos convertirlo a JSON
-        const data = JSON.parse(textResponse); // Intentamos hacer el parseo manual
-        
-        console.log('Datos recibidos:', data);
+        const textResponse = await response.text();
+        const data = JSON.parse(textResponse);
         setSoldCount(data.soldTrees);
       } catch (error) {
-        console.error('Error al obtener datos:', error);
         setSoldCount(0);
       }
     };
@@ -29,7 +22,6 @@ export const Navbar = () => {
   
   return (
     <div className="app-container">
-    <h1>Holaaaaaaaaaaaaaa</h1>
       <header className="header header-nav">
         <div className="nav-container">
           <h1 className="mb-0">

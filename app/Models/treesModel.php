@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +32,7 @@ class TreesModel extends Model
     // Relación con User (owner)
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(UsersModel::class, 'owner_id');
     }
 
     // Método para crear un árbol básico
