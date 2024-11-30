@@ -1,7 +1,7 @@
 <?php
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TreesController;
-
+use app\Http\Controllers\TreesController;
+use App\Http\Controllers\UsersController;
 Route::get('get-sold-trees', [TreesController::class, 'getSoldTrees']);
+Route::post('add-new-user', [UsersController::class, 'addNewFriendUser']);
+

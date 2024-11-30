@@ -23,11 +23,6 @@ class TreesModel extends Model
         return self::where('available', false)->count();
     }
 
-    // Relación con Species
-    public function species()
-    {
-        return $this->belongsTo(speciesModel::class, 'species_id');
-    }
 
     // Relación con User (owner)
     public function owner()

@@ -1,12 +1,10 @@
 <?php
-namespace App\Http\Controllers;
+namespace app\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TreesModel;
+use app\Models\TreesModel;
 use Illuminate\Support\Facades\Auth;
 Class TreesController {
-
-    
      public function getSoldTrees()
      {
          $soldTreesCount = TreesModel::countSoldTrees();
