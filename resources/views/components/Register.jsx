@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -8,23 +10,23 @@ export const Register = () => {
     phone: '',
     address: '',
     country: ''
-  })
+  });
 
-  const [errors, setErrors] = useState({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setErrors({})
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrors({});
 
     try {
       const response = await fetch('api/add-new-user', {
@@ -35,25 +37,24 @@ export const Register = () => {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
         body: JSON.stringify(formData)
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
-        // Registro exitoso
-        console.log('Usuario registrado:', data)
-        alert('Registro exitoso')
+        console.log('Usuario registrado:', data);
+        alert('Registro exitoso');
+        navigate('/login');
       } else {
-        // Manejar errores de validación
-        setErrors(data.errors || {})
+        setErrors(data.errors || {});
       }
     } catch (error) {
-      console.error('Error:', error)
-      alert('Ocurrió un error inesperado')
+      console.error('Error:', error);
+      alert('Ocurrió un error inesperado');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="register-container">
@@ -146,14 +147,14 @@ export const Register = () => {
 
         <button 
           type="submit" 
-          className="submit-btn" 
+          className={`submit-button ${isSubmitting ? 'disabled' : ''}`}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Registrando...' : 'Registrarse'}
+          <span>{isSubmitting ? 'Registrando...' : 'Registrarse'}</span>
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

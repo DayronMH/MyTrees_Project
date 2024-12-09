@@ -1,0 +1,219 @@
+.update-trees-container {
+    max-width: 600px;
+    margin: var.$spacing-lg auto;
+    padding: var.$spacing-md;
+    background-color: var.$white;
+    border: 1px solid var.$border-color;
+    border-radius: var.$border-radius-lg;
+    font-family: var.$font-primary;
+  
+    h1 {
+      font-size: var.$font-size-lg;
+      color: var.$gray-800;
+      margin-bottom: var.$spacing-sm;
+      text-align: center;
+    }
+  
+    .error-message {
+      background-color: var.$dark-color;
+      color: var.$white;
+      padding: var.$spacing-sm;
+      border-radius: var.$border-radius;
+      margin-bottom: var.$spacing-sm;
+      text-align: center;
+    }
+  
+    .success-message {
+      background-color: var.$success-green;
+      color: var.$white;
+      padding: var.$spacing-sm;
+      border-radius: var.$border-radius;
+      margin-bottom: var.$spacing-sm;
+      text-align: center;
+    }
+  
+    form {
+      .form-group {
+        margin-bottom: var.$spacing-sm;
+  
+        label {
+          display: block;
+          font-size: var.$font-size-base;
+          color: var.$gray-700;
+          margin-bottom: var.$spacing-xs;
+        }
+  
+        input,
+        textarea {
+          width: 100%;
+          padding: var.$padding;
+          border: 1px solid var.$border-color;
+          border-radius: var.$border-radius;
+          font-size: var.$font-size-base;
+          color: var.$gray-800;
+          background-color: var.$gray-50;
+  
+          &:focus {
+            border-color: var.$primary-color;
+            outline: none;
+            box-shadow: 0 0 5px var.$primary-color;
+          }
+        }
+  
+        textarea {
+          resize: none;
+        }
+  
+        .file-input {
+          margin-top: var.$spacing-sm;
+        }
+      }
+  
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: var.$spacing-md;
+  
+        button {
+          padding: var.$spacing-xs var.$spacing-md;
+          font-size: var.$font-size-base;
+          border: none;
+          border-radius: var.$border-radius;
+          cursor: pointer;
+          transition: var.$transition-base;
+  
+          &.save-btn {
+            background-color: var.$secondary-green;
+            color: var.$white;
+  
+            &:hover {
+              background-color: var.$accent-green;
+            }
+  
+            &:disabled {
+              background-color: var.$gray-200;
+              cursor: not-allowed;
+            }
+          }
+  
+          &.cancel-btn {
+            background-color: var.$secondary-green;
+            color: var.$gray-50;
+  
+            &:hover {
+              background-color: var.$gray-100;
+              color: var.$gray-700;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+.create-specie-container {
+    max-width: 600px;
+    margin: var.$spacing-lg auto;
+    padding: var.$spacing-md;
+    background-color: var.$white;
+    border: 1px solid var.$border-color;
+    border-radius: var.$border-radius-lg;
+    font-family: var.$font-primary;
+  
+    h1 {
+      font-size: var.$font-size-lg;
+      color: var.$gray-800;
+      margin-bottom: var.$spacing-sm;
+      text-align: center;
+    }
+  
+    .error-message {
+      background-color: var.$dark-color;
+      color: var.$white;
+      padding: var.$spacing-sm;
+      border-radius: var.$border-radius;
+      margin-bottom: var.$spacing-sm;
+      text-align: center;
+    }
+  
+    .success-message {
+      background-color: var.$success-green;
+      color: var.$white;
+      padding: var.$spacing-sm;
+      border-radius: var.$border-radius;
+      margin-bottom: var.$spacing-sm;
+      text-align: center;
+    }
+  
+    form {
+      .form-group {
+        margin-bottom: var.$spacing-sm;
+  
+        label {
+          display: block;
+          font-size: var.$font-size-base;
+          color: var.$gray-700;
+          margin-bottom: var.$spacing-xs;
+        }
+  
+        input, 
+        textarea {
+          width: 100%;
+          padding: var.$padding;
+          border: 1px solid var.$border-color;
+          border-radius: var.$border-radius;
+          font-size: var.$font-size-base;
+          color: var.$gray-800;
+          background-color: var.$gray-50;
+  
+          &:focus {
+            border-color: var.$primary-color;
+            outline: none;
+            box-shadow: 0 0 5px var.$primary-color;
+          }
+        }
+  
+        textarea {
+          resize: none;
+        }
+      }
+  
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+  
+        button {
+          padding: var.$spacing-xs var.$spacing-md;
+          font-size: var.$font-size-base;
+          border: none;
+          border-radius: var.$border-radius;
+          cursor: pointer;
+          transition: var.$transition-base;
+  
+          &.create-btn {
+            background-color: var.$secondary-green;
+            color: var.$white;
+  
+            &:hover {
+              background-color: var.$accent-green;
+            }
+  
+            &:disabled {
+              background-color: var.$gray-200;
+              cursor: not-allowed;
+            }
+          }
+  
+          &.cancel-btn {
+            background-color: var.$secondary-green;
+            color: var.$gray-50;
+  
+            &:hover {
+              background-color: var.$gray-100;
+              color: var.$gray-700;
+            }
+          }
+        }
+      }
+    }
+  }
+  

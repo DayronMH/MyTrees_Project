@@ -15,7 +15,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'http://127.0.0.1:8000', // Dirección de tu backend de Laravel
+                target: 'http://127.0.0.1:8000',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, '') // Remueve "/api" de la URL
             }

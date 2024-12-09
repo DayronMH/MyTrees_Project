@@ -1,0 +1,94 @@
+.container {
+    margin: 0 auto;
+    padding: var.$spacing-md;
+    font-family: var.$font-primary;
+  
+    h1 {
+      font-size: var.$font-size-lg;
+      font-weight: bold;
+      color: var.$primary-green;
+      margin-bottom: var.$spacing-sm;
+    }
+  
+    .grid {
+      display: grid;
+      gap: var.$spacing-sm;
+  
+      @media (min-width: var.$breakpoint-sm) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+  
+      @media (min-width: var.$breakpoint-lg) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  
+    .border {
+      border: 1px solid var.$border-color;
+      border-radius: var.$border-radius;
+      padding: var.$spacing-sm;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: var.$white;
+  
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: var.$transition-base;
+      }
+    }
+  
+    .tree_image {
+      width: 100%;
+      height: 12rem; // Ajuste de altura
+      object-fit: cover;
+      border-radius: var.$border-radius;
+      margin-bottom: var.$spacing-xs;
+    }
+  
+    h2 {
+      font-size: var.$font-size-base;
+      font-weight: 600;
+      color: var.$gray-700;
+      margin-bottom: var.$spacing-xs;
+    }
+  
+    .space-y-2 {
+      p {
+        margin-bottom: var.$spacing-xs;
+        font-size: var.$font-size-s;
+        color: var.$gray-700;
+  
+        strong {
+          color: var.$gray-800;
+        }
+      }
+    }
+  
+    .flex {
+      display: flex;
+      gap: var.$spacing-xs;
+  
+      .edit-btn,
+      .update-btn {
+        flex: 1;
+        padding: var.$spacing-xs;
+        font-size: var.$font-size-s;
+        border: 1px solid var.$primary-color;
+        border-radius: var.$border-radius;
+        background-color: var.$primary-color;
+        color: var.$white;
+        text-align: center;
+        cursor: pointer;
+        transition: var.$transition-base;
+  
+        &:hover {
+          background-color: var.$primary-green;
+        }
+  
+        a {
+          text-decoration: none;
+          color: inherit;
+        }
+      }
+    }
+  }
+  

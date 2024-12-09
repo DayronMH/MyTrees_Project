@@ -1,0 +1,296 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .dashboard-container {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ 
+        font-family: 'Arial', sans-serif;
+        width: calc(100% - var.$sidebar-width ); 
+        margin-left: var.$sidebar-width; 
+        margin-right: 10em;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+  }
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 2.5rem;
+    color: #1B8D8F;
+  }
+  
+  .dashboard-header h2 {
+    font-size: 1.8rem;
+    color: #555;
+  }
+  
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 60px;
+  }
+  
+  .stat-card {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+  }
+  
+  .stat-card .stat-number {
+    font-size: 2.5rem;
+    color: #1B8D8F;
+    font-weight: bold;
+  }
+  
+  .stat-card .stat-title {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 10px;
+  }
+  
+  .dashboard-section {
+    margin-bottom: 60px;
+  }
+  
+  .dashboard-section h2 {
+    font-size: 2rem;
+    color: #1B8D8F;
+    margin-bottom: 20px;
+  }
+  
+  .species-container, .friends-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  
+  .species-card, .friend-link {
+    flex: 0 0 calc(33.33% - 20px);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .species-card:hover, .friend-link:hover {
+    transform: translateY(-5px);
+  }
+  
+  .species-name {
+    font-size: 1.4rem;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .species-actions {
+    margin-top: 15px;
+  }
+  
+  .species-actions .action-button {
+    padding: 8px 20px;
+    background-color: #1B8D8F;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .species-actions .action-button:hover {
+    background-color: #158A8A;
+  }
+  
+  .friend-link {
+    display: block;
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .friend-link:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .button-container {
+    padding-top: 100px;
+    display: flex;
+    flex-direction:row;
+    gap: var.$spacing-md;
+    margin-top: 40px;
+  }
+  
+  .button-container .create-btn {
+    flex: 0 0 32%;
+    background-color: var.$primary-green;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-container .create-btn:hover {
+    background-color: #158A8A;
+  }
+  
+  .species-actions {
+    margin-top: 15px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.species-actions .view-btn,
+.species-actions .edit-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.species-actions .view-btn {
+    background-color: var.$primary-green;
+    color: white;
+}
+
+.species-actions .view-btn:hover {
+    background-color: var.$primary-green;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.species-actions .edit-btn {
+    background-color: var.$secondary-green;
+    color: white;
+}
+
+.species-actions .edit-btn:hover {
+    background-color: var.$secondary-green;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Aumenta la accesibilidad con un enfoque más claro */
+.species-actions .view-btn:focus,
+.species-actions .edit-btn:focus {
+    outline: 2px solid var.$primary-green;
+    outline-offset: 2px;
+}
+
+  .dashboard-footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  .dashboard-footer .back-button {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #555;
+    padding: 12px 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  .dashboard-footer .back-button:hover {
+    background-color: #f1f1f1;
+  }
+  
+  @media (max-width: 991px) {
+    .dashboard-container {
+      padding: 30px 15px;
+    }
+  
+    .dashboard-header h1 {
+      font-size: 2rem;
+    }
+  
+    .dashboard-header h2 {
+      font-size: 1.5rem;
+    }
+  
+    .stats-container {
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  
+    .stat-card {
+      flex-basis: calc(50% - 10px);
+    }
+  
+    .species-card, .friend-link {
+      flex-basis: calc(50% - 15px);
+    }
+  
+    .button-container {
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  
+    .button-container .create-btn {
+      flex-basis: 100%;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+  
+    .dashboard-header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+  
+    .dashboard-header h2 {
+      font-size: 1.3rem;
+      position: static;
+    }
+  
+    .stat-card {
+      flex-basis: 100%;
+    }
+  
+    .species-card, .friend-link {
+      flex-basis: 100%;
+    }
+  }

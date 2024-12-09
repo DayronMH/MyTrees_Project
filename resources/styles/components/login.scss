@@ -1,0 +1,124 @@
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var.$gray-50;
+    font-family: var.$font-primary;
+  }
+  
+  .login-container {
+    background-color: var.$white;
+    border-radius: var.$border-radius-lg;
+    box-shadow: 0 4px 6px rgba(var.$dark-color, 0.1);
+    width: 100%;
+    align-items: center;
+    max-width: 400px;
+    padding: var.$spacing-lg;
+    transition: var.$transition-base;
+  
+    @media (max-width: var.$breakpoint-sm) {
+      margin: 0 var.$spacing-sm;
+      padding: var.$spacing-md;
+    }
+  
+    &:hover {
+      box-shadow: 0 10px 15px rgba(var.$dark-color, 0.15);
+    }
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .login-title {
+    color: var.$primary-color;
+    text-align: center;
+    margin-bottom: var.$spacing-md;
+    font-size: var.$font-size-lg;
+  }
+  
+  .error-message {
+    background-color: rgba(#FF6B6B, 0.1);
+    color: #D63031;
+    border-radius: var.$border-radius;
+    padding: var.$padding;
+    margin-bottom: var.$spacing-sm;
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: var.$spacing-md;
+  
+    label {
+      display: block;
+      margin-bottom: var.$spacing-xs;
+      color: var.$gray-700;
+      font-size: var.$font-size-s;
+    }
+  
+    input {
+      width: 92%;
+      margin-right:30px;
+      padding: var.$padding;
+      border: 1px solid var.$border-color;
+      border-radius: var.$border-radius;
+      font-size: var.$font-size-base;
+      transition: var.$transition-base;
+      color: var.$gray-800;
+  
+      &:focus {
+        outline: none;
+        border-color: var.$primary-color;
+        box-shadow: 0 0 0 2px rgba(var.$primary-color, 0.2);
+      }
+  
+      &:disabled {
+        background-color: var.$gray-100;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+    }
+  }
+  
+  .login-button {
+    background-color: var.$primary-color;
+    color: var.$white;
+    border: none;
+    border-radius: var.$border-radius;
+    padding: var.$padding;
+    font-size: var.$font-size-base;
+    cursor: pointer;
+    transition: var.$transition-base;
+    margin-top: var.$spacing-sm;
+  
+    &:hover {
+      background-color: var.$secondary-green;
+    }
+  
+    &.disabled,
+    &:disabled {
+      background-color: var.$gray-200;
+      cursor: not-allowed;
+    }
+  }
+  
+  h4 {
+    text-align: center;
+    color: var.$gray-700;
+    margin-top: var.$spacing-md;
+    font-size: var.$font-size-s;
+  }
+  
+  a {
+    color: var.$accent-green;
+    text-align: center;
+    text-decoration: none;
+    transition: var.$transition-base;
+  
+    &:hover {
+      color: var.$primary-green;
+      text-decoration: underline;
+    }
+  }

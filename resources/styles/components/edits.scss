@@ -1,0 +1,119 @@
+/* Estilos generales para formularios de edición y creación */
+.edit-specie-container, .edit-tree-container, .add-tree-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #1B8D8F;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .save-btn, .cancel-btn {
+    background-color: #1B8D8F;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-btn:hover, .cancel-btn:hover {
+    background-color: #158A8A;
+  }
+  
+  .cancel-btn {
+    background-color: #f1f1f1;
+    color: #555;
+  }
+  
+  .error, .success {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .success {
+    color: green;
+  }
+  
+  @media (max-width: 991px) {
+    .edit-specie-container, .edit-tree-container, .add-tree-container {
+      padding: 30px 15px;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    .form-group input, .form-group select, .form-group textarea {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .edit-specie-container, .edit-tree-container, .add-tree-container {
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 1.8rem;
+    }
+  
+    .form-group label {
+      font-size: 1rem;
+    }
+  
+    .form-group input, .form-group select, .form-group textarea {
+      font-size: 0.9rem;
+    }
+  }
+  

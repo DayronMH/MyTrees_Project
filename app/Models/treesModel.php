@@ -4,10 +4,9 @@ namespace app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use speciesModel;
-
 class TreesModel extends Model
 {
+    public $timestamps = false;
     protected $table = 'trees';
     protected $fillable = [
         'species_id', 
@@ -23,14 +22,6 @@ class TreesModel extends Model
         return self::where('available', false)->count();
     }
 
-
-    // Relación con User (owner)
-    public function owner()
-    {
-        return $this->belongsTo(UsersModel::class, 'owner_id');
-    }
-
-    // Método para crear un árbol básico
     public static function createTreeBasic(int $species_id, string $location, float $price, string $photo_url)
     {
             return self::create([
@@ -41,11 +32,13 @@ class TreesModel extends Model
         ]);
     }
 
-    // Método para editar árbol
+    public static function getTreeById($id)
+    {
+        return self::find($id);
+    }
     public function updateTreeDetails($specie, $height, $location, $available)
     {
         return DB::transaction(function () use ($specie, $height, $location, $available) {
-            // Actualizar el árbol
             $this->update([
                 'height' => $height,
                 'location' => $location,
@@ -61,7 +54,6 @@ class TreesModel extends Model
         });
     }
 
-    // Contar árboles disponibles
     public static function countAvailableTrees()
     {
         return self::where('available', true)->count();
@@ -75,11 +67,19 @@ class TreesModel extends Model
             ->get();
     }
 
-    // Obtener árboles por propietario
-    public static function getTreesByOwner(int $owner_id)
+    public static function deleteTree($id)
     {
-        return self::with(['species', 'owner'])
-            ->where('owner_id', $owner_id)
-            ->get();
+        $tree = self::find($id);
+
+        if ($tree) {
+            return $tree->delete();
+        }
+
+        return false;
     }
+    public static function getTreesByOwner($ownerId)
+    {
+        return self::where('owner_id', $ownerId)->get();
+    }
+  
 }

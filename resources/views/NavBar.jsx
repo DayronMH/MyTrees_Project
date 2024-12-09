@@ -21,13 +21,13 @@ export const Navbar = () => {
   }, []);
   
   return (
-    <div className="app-container">
+    <div className="main">
       <header className="header header-nav">
         <div className="nav-container">
           <h1 className="mb-0">
             <Link to="/" className="navbar-brand">
               <img
-                src="../../public/images/logo.png"
+                src="/images/logo.png"
                 alt="logo"
                 className="logo-img"
               />
