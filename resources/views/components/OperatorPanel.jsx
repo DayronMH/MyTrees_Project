@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const OperatorPanel = () => {
     const [availableCount, setAvailableCount] = useState(0);
     const [friendsCount, setFriendsCount] = useState(0);
-    const [friends, setFriends] = useState([]);
+    const [soldTrees, setSoldTrees] = useState([]); // Nuevo estado para los árboles vendidos
     const [userName, setUserName] = useState("");
 
     useEffect(() => {
@@ -25,12 +25,13 @@ export const OperatorPanel = () => {
             }
         };
 
-        fetch("/api/get-friends")
+        // Fetch para los árboles vendidos
+        fetch("/api/get-sold-trees-with-user")
             .then((response) => response.json())
             .then((data) => {
-                setFriends(data);
+                setSoldTrees(data); // Establecer los árboles vendidos
             })
-            .catch((error) => console.error("Error fetching friends:", error));
+            .catch((error) => console.error("Error fetching sold trees:", error));
 
         fetchData();
     }, []);
@@ -68,34 +69,53 @@ export const OperatorPanel = () => {
 
             <div className="dashboard-section">
                 <div className="dashboard-header">
-                    <h2>Amigos Registrados:</h2>
+                    <h2>Árboles Vendidos:</h2>
                 </div>
 
-                <div className="friends-container">
-                    {friends.map((friend) => (
-                        <a
-                            href={`/friendTrees?friend_id=${friend.id}`}
-                            className="friend-link"
-                            key={friend.id}
-                        >
-                            <h3 className="friend-name">{friend.name}</h3>
-                        </a>
+                <div className="sold-trees-container">
+                    {soldTrees.map((tree) => (
+                        <div className="stat-card" key={tree.tree_id}>
+                            <div className="stat-content">
+                                <div className="stat-number">{tree.commercial_name}</div>
+                                <div className="stat-title">Árbol Vendido</div>
+                                <div className="stat-owner">
+                                    <strong>Dueño:</strong> {tree.owner_name}
+                                </div>
+                            </div>
+
+                            {/* Botones para Actualizar y Ver historial */}
+                            <div className="button-container">
+                                <button className="update-btn">
+                                    <Link
+                                        to={`/updateTrees/${tree.tree_id}`}
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "inherit",
+                                        }}
+                                    >
+                                        Actualizar
+                                    </Link>
+                                </button>
+
+                                <button className="log-btn">
+                                    <Link
+                                        to={`/treeLog/${tree.tree_id}`}
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "inherit",
+                                        }}
+                                    >
+                                        Ver historial del árbol
+                                    </Link>
+                                </button>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
 
-            <div className="button-container">
-                <button onClick={handleAddTree} className="create-btn">
-                    Crear Árbol
-                </button>
-
-                <button onClick={handleAddSpecie} className="create-btn">
-                    Crear Especie
-                </button>
-            </div>
-
             <div className="dashboard-footer">
-                <a href="login.php" className="back-button">
+                <a href="/" className="back-button">
                     ← Cerrar Sesión
                 </a>
             </div>

@@ -31,7 +31,12 @@
       margin-bottom: var.$spacing-sm;
       text-align: center;
     }
-  
+
+    .form-label {
+      max-width: 200px;
+      max-height: 200px;
+    }
+
     form {
       .form-group {
         margin-bottom: var.$spacing-sm;

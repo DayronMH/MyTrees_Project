@@ -21,7 +21,9 @@ import {
     EditTree,
     UpdateTrees,
     OperatorPanel,
-    AddUser
+    AddUser,
+    TreeLog,
+    LogOut
 } from "../views/components";
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -55,15 +57,26 @@ export const App = () => {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/logOut" element={<LogOut />} />
                 <Route path="/register" element={<Register />} />
                 <Route
+                    path="/treeLog/:id"
+                    element={
+                        <ProtectedRoute allowedRoles={["admin","operator"]}>
+                            <TreeLog/>
+                        </ProtectedRoute>
+                    }
+                />
+               
+               <Route
                     path="/updateTrees/:id"
                     element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
+                        <ProtectedRoute allowedRoles={["admin","operator"]}>
                             <UpdateTrees/>
                         </ProtectedRoute>
                     }
                 />
+               
                  <Route
                     path="/friendTrees"
                     element={

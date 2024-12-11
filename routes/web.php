@@ -14,3 +14,6 @@ Route::get('/editTree', fn() => view('app'));
 Route::get('/updateTrees', fn() => view('app'));
 Route::get('/operatorPanel', fn() => view('app'));
 Route::get('/addUser', fn() => view('app'));
+Route::get('/treeLogin', fn() => view('app'));
+Route::get('/soldTreesList', fn() => view('app'));
+Route::get('/logOut', fn() => view('app'));

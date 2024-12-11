@@ -3,6 +3,7 @@ namespace app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TUpdatesModel extends Model
 {
@@ -36,4 +37,9 @@ class TUpdatesModel extends Model
     {
         return self::all();
     }
+    public static function getTUpdatesByTreeId($treeId)
+    {
+        return self::where('tree_id', $treeId)->first();
+    }
+
 }

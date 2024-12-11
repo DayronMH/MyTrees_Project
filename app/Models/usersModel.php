@@ -63,7 +63,7 @@ class UsersModel extends Model
     }
     public static function getUserByEmail($email)
     {
-        return self::select('name','email', 'password', 'role')
+        return self::select('id','name','email', 'password', 'role')
             ->where('email', $email)
             ->first();
     }

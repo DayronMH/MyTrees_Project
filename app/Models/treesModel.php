@@ -4,6 +4,7 @@ namespace app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+
 class TreesModel extends Model
 {
     public $timestamps = false;
@@ -54,6 +55,32 @@ class TreesModel extends Model
         });
     }
 
+    public function buyTree($treeId, $ownerId)
+    {
+        return DB::transaction(function () use ($treeId, $ownerId) {
+            // Obtener el árbol por su ID
+            $tree = $this->find($treeId);
+    
+            // Validar si el árbol existe y está disponible
+            if (!$tree) {
+                return ['success' => false, 'message' => 'El árbol no existe.'];
+            }
+    
+            if ($tree->available == 0) {
+                return ['success' => false, 'message' => 'El árbol no está disponible para la compra.'];
+            }
+    
+            // Actualizar el árbol: asignar el propietario y marcar como no disponible
+            $tree->update([
+                'owner_id' => $ownerId,
+                'available' => 0, // Marcado como no disponible
+            ]);
+    
+            return ['success' => true, 'message' => 'Compra realizada con éxito.'];
+        });
+    }
+    
+
     public static function countAvailableTrees()
     {
         return self::where('available', true)->count();
@@ -62,10 +89,34 @@ class TreesModel extends Model
     // Obtener árboles disponibles con especies
     public static function getAvailableTreesWithSpecies()
     {
-        return self::with('species')
-            ->where('available', true)
-            ->get();
+        return DB::table('trees')
+        ->join('species', 'trees.species_id', '=', 'species.id')
+        ->where('trees.available', true)
+        ->select(
+            'trees.id as tree_id',
+            'trees.height',
+            'trees.location',
+            'trees.photo_url',
+            'trees.price',
+            'species.commercial_name',
+        )
+        ->get();
     }
+  
+public static function getSoldTreesWithOwnerAndSpecies()
+{
+    return DB::table('trees')
+        ->join('species', 'trees.species_id', '=', 'species.id')
+        ->join('users', 'trees.owner_id', '=', 'users.id')
+        ->where('trees.available', false)
+        ->select(
+            'trees.id as tree_id',
+            'species.commercial_name',
+            'users.name as owner_name',
+            'users.id as owner_id'
+        )
+        ->get();
+}
 
     public static function deleteTree($id)
     {

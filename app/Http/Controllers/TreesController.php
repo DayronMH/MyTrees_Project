@@ -107,6 +107,13 @@ class TreesController
             return response()->json(['message' => 'Error al crear el árbol'], 500);
         }
     }
+    public function getSoldTreesWithOwnerAndSpecies()
+    {
+        $trees = TreesModel::getSoldTreesWithOwnerAndSpecies();
+
+        return response()->json($trees);
+    }
+    
         public function getTreesById($id)
     {
         try {
@@ -137,6 +144,53 @@ class TreesController
             return response()->json(['message' => 'Error interno del servidor'], 500);
         }
     }
+    public function buyTree(Request $request, $tree_id)
+{
+    try {
+        // Validar los datos de entrada
+        $validated = $request->validate([
+            'owner_id' => 'required|integer|exists:users,id', // owner_id debe existir en la tabla users
+        ]);
+
+        // Buscar el árbol por ID
+        $tree = TreesModel::find($tree_id);
+
+        if (!$tree) {
+            return response()->json([
+                'success' => false,
+                'error' => 'El árbol no existe.',
+            ], 404);
+        }
+
+        // Verificar si el árbol está disponible
+        if ($tree->available === 0) {
+            return response()->json([
+                'success' => false,
+                'error' => 'El árbol no está disponible para la compra.',
+            ], 400);
+        }
+
+        // Actualizar los datos del árbol con el owner_id recibido
+        $tree->update([
+            'owner_id' => $validated['owner_id'],
+            'available' => 0, // Marcar como no disponible
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Árbol comprado exitosamente.',
+        ], 200);
+    } catch (\Exception $e) {
+        // Manejo de errores
+        return response()->json([
+            'success' => false,
+            'error' => 'Error al procesar la compra.',
+            'details' => config('app.debug') ? $e->getMessage() : null,
+        ], 500);
+    }
+}
+
+
     public function getSoldTrees()
     {
         $soldTreesCount = TreesModel::countSoldTrees();

@@ -11,3 +11,5 @@ export { default as EditTree } from './EditTree.jsx';
 export { default as UpdateTrees}  from './UpdateTrees.jsx'; 
 export { default as OperatorPanel}  from './OperatorPanel.jsx';
 export { default as AddUser } from './AddUser.jsx'; 
+export { default as TreeLog } from './TreeLog.jsx'; 
+export { default as LogOut} from './LogOut.jsx';

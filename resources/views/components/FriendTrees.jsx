@@ -5,8 +5,6 @@ const FriendTrees = () => {
     const [trees, setTrees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
-
     useEffect(() => {
         const fetchTrees = async () => {
             try {
@@ -17,22 +15,22 @@ const FriendTrees = () => {
                     throw new Error("ID de amigo no proporcionado");
                 }
 
-                const response = await fetch(
-                    `/api/get-trees-by-owner/${friendId}`
-                );
-                if (!response.ok) {
-                    throw new Error("No se pudieron cargar los árboles");
-                }
+                    const response = await fetch(
+                        `/api/get-trees-by-owner/${friendId}`
+                    );
+                    if (!response.ok) {
+                        throw new Error("No se pudieron cargar los árboles");
+                    }
 
-                const data = await response.json();
-                setTrees(data);
+                    const data = await response.json();
+                    setTrees(data);
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
                 setLoading(false);
             }
         };
-
+    
         fetchTrees();
     }, []);
 
@@ -111,7 +109,17 @@ const FriendTrees = () => {
                                     >
                                         Actualizar
                                     </Link>
-                                </button>                             
+                                </button>   
+                                <button className="update-btn flex-1 px-2 py-1 text-xs">
+                                    <Link
+                                        to={`/treeLog/${tree.id}`}
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "inherit",
+                                        }}
+                                    >
+                                        Ver historial del árbol                                  </Link>
+                                </button>                           
                                 </div>
                         </div>
                     </div>

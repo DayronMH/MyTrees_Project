@@ -17,19 +17,34 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Benefits Section */}
       <section className="benefits-section">
-        <h2 className="benefits-title">¿Por qué plantar un árbol con nosotros?</h2>
-        <div className="benefits-grid">
-          {[
-            { title: 'Personalización', desc: 'Elige el árbol que deseas plantar' },
-            { title: 'Contribución', desc: 'Contribuye al cuidado del medio ambiente' },
-            { title: 'Seguimiento', desc: 'Recibe un seguimiento sobre tu árbol plantado' }
-          ].map((benefit, index) => (
-            <div key={index} className="benefit-item">
-              <div className="benefit-icon-container">
-                <img src="/images/personalized.png" alt={benefit.title} className="benefit-icon" />
-              </div>
+  <h2 className="benefits-title">¿Por qué plantar un árbol con nosotros?</h2>
+  <div className="benefits-grid">
+    {[
+      {
+        title: 'Personalización',
+        desc: 'Elige el árbol que deseas plantar',
+        icon: 'images/personalized.png', // Ícono para "Personalización"
+      },
+      {
+        title: 'Contribución',
+        desc: 'Contribuye al cuidado del medio ambiente',
+        icon: 'images/contribution.webp', // Ícono para "Contribución"
+      },
+      {
+        title: 'Seguimiento',
+        desc: 'Recibe un seguimiento sobre tu árbol plantado',
+        icon: 'images/tracking.webp', // Ícono para "Seguimiento"
+      },
+    ].map((benefit, index) => (
+      <div key={index} className="benefit-item">
+        <div className="benefit-icon-container">
+          <img
+            src={benefit.icon}
+            alt={benefit.title}
+            className="benefit-icon"
+          />
+        </div>
               <h3 className="benefit-title">{benefit.title}</h3>
               <p className="benefit-description">{benefit.desc}</p>
             </div>
@@ -37,7 +52,6 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* How It Works Section */}
       <section className="how-it-works-section">
         <h2 className="how-it-works-title">¿Cómo funciona?</h2>
         <div className="how-it-works-grid">
@@ -55,7 +69,6 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <section className="testimonials-section">
         <h2 className="testimonials-title">Testimonios</h2>
         <div className="testimonial-card">
@@ -66,12 +79,10 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
       <section className="cta-section">
         <h2 className="cta-title">¿Listo para hacer la diferencia?</h2>
       </section>
 
-      {/* Footer */}
       <footer className="footer">
         <p className="footer-contact">Contacto: info@empresa.com</p>
         <p className="footer-social">Síguenos en redes sociales</p>

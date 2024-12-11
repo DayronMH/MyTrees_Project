@@ -40,9 +40,6 @@ export const Navbar = () => {
               <br />
               <h3 className="text">Árboles Vendidos</h3> {/* Título actualizado */}
             </div>
-            <Link to="/about" className="btn btn-nav">
-              <i className="fas fa-info-circle"></i> Acerca de nosotros
-            </Link>
           </nav>
           {state?.logged ? (
             <div className="user">

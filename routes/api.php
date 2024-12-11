@@ -6,6 +6,7 @@ use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\UsersController;
 Route::get('get-sold-trees', [TreesController::class, 'getSoldTrees']);
 Route::get('get-available-trees', [TreesController::class, 'getAvailableTrees']);
+Route::get('get-tree-updates-by-id/{treeId}', [TUpdatesController::class, 'getTreeUpdateById']);
 Route::get('get-specie/{id}', [SpeciesController::class, 'getSpeciesById']);
 Route::get('get-tree/{id}', [TreesController::class, 'getTreesById']);
 Route::get('get-all-species', [SpeciesController::class, 'getAllSpecies']);
@@ -25,6 +26,7 @@ Route::get('get-trees-by-owner/{ownerId}', [TreesController::class, 'getTreesByO
 Route::post('update-tree/{id}', [TreesController::class, 'updateTrees']);
 Route::get('authUser', [UsersController::class, 'authUser']);
 Route::get('get-updates', [TUpdatesController::class, 'getAllUpdates']);
-
+Route::get('get-sold-trees-with-user', [TreesController::class,'getSoldTreesWithOwnerAndSpecies']);
+Route::post('buy-tree/{treeId}', [TreesController::class, 'buyTree']);
 
 
